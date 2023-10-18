@@ -17,7 +17,10 @@ function ForgotPassword() {
   return (
     <div className="forgot-password-container">
       <form onSubmit={handleSubmit} className="forgot-password-form">
-        <img src={logoImage} alt="Logo" />
+        <div className="forgot-password-company-info">
+          <img src={logoImage} alt="Company Logo" />
+          <p>Fetherstill Inc</p>
+        </div>
         <div className="input-group">
           <input
             type="name"

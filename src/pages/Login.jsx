@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import '../css/Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoImage from '../assets/companylogo.png';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -18,13 +19,20 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add your login logic here
+    const isAuthenticated = true;
+
+    if (isAuthenticated) {
+      navigate('/dashboard'); // Navigate to the dashboard
+    }
   };
 
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <img src={logoImage} alt="Logo" />
+        <div className="login-company-info">
+          <img src={logoImage} alt="Company Logo" />
+          <p>Fetherstill Inc</p>
+        </div>
         <div className="input-group">
           <input
             type="text"
