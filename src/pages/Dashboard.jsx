@@ -20,6 +20,10 @@ function Dashboard() {
         navigate('/change-password')
     };
 
+    const handleFileUpload = () => {
+        // Add your file upload logic here
+    };
+
     const tableData = [
         {
             Iteration: 1,
@@ -53,6 +57,61 @@ function Dashboard() {
             MinValue: 920,
             MaxValue: 1070,
             Delta: 70,
+        },
+        {
+            Iteration: 4,
+            CPUTime: 100,
+            PhysTime: 80,
+            Travels: 500,
+            Value: 1000,
+            AvValue: 950,
+            MinValue: 900,
+            MaxValue: 1050,
+            Delta: 50,
+        },
+        {
+            Iteration: 5,
+            CPUTime: 100,
+            PhysTime: 80,
+            Travels: 500,
+            Value: 1000,
+            AvValue: 950,
+            MinValue: 900,
+            MaxValue: 1050,
+            Delta: 50,
+        },
+        {
+            Iteration: 6,
+            CPUTime: 100,
+            PhysTime: 80,
+            Travels: 500,
+            Value: 1000,
+            AvValue: 950,
+            MinValue: 900,
+            MaxValue: 1050,
+            Delta: 50,
+        },
+        {
+            Iteration: 7,
+            CPUTime: 100,
+            PhysTime: 80,
+            Travels: 500,
+            Value: 1000,
+            AvValue: 950,
+            MinValue: 900,
+            MaxValue: 1050,
+            Delta: 50,
+        },
+        {
+            Iteration: 8,
+            CPUTime: 100,
+            PhysTime: 80,
+            Travels: 500,
+            Value: 1000,
+            AvValue: 950,
+            MinValue: 900,
+            MaxValue: 1050,
+            Delta: 50,
         },
     ];
 
@@ -90,7 +149,6 @@ function Dashboard() {
                         )}
                     </div>
                 </div>
-                <br />
                 <div className="table-container">
                     <table>
                         <thead>
@@ -122,6 +180,10 @@ function Dashboard() {
                             ))}
                         </tbody>
                     </table>
+                </div>
+                <div className="file-upload">
+                    <input type="file" accept=".csv" onChange={handleFileUpload} />
+                    <button>Upload CSV</button>
                 </div>
             </main>
         </div>
