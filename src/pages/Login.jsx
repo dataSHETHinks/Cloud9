@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import '../css/Login.css'; // Import your CSS file for styling
+import '../css/Login.css';
+import { Link } from 'react-router-dom';
+import logoImage from '../assets/companylogo.png';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -16,34 +18,30 @@ function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-  };
-
-  const handleForgotPassword = () => {
-    
+    // Add your login logic here
   };
 
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <h2>Login</h2>
+        <img src={logoImage} alt="Logo" />
         <div className="input-group">
-          <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
             name="username"
+            placeholder="Username"
             value={username}
             onChange={handleInputChange}
             required
           />
         </div>
         <div className="input-group">
-          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
             name="password"
+            placeholder="Password"
             value={password}
             onChange={handleInputChange}
             required
@@ -51,7 +49,7 @@ function Login() {
         </div>
         <button type="submit">Login</button>
         <div className="forgot-password">
-          <a href="#forgot-password" onClick={handleForgotPassword}>Forgot Password?</a>
+          <Link to="/forgot-password">Forgot Password?</Link>
         </div>
       </form>
     </div>
