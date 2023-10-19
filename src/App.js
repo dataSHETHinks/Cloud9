@@ -4,16 +4,18 @@ import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import ChangePassword from './pages/ChangePassword';
+import AuthenticateRoute from './AuthenticateRoute';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route exact path="/" element={<Login />} />
+          <Route exact path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/" element={<AuthenticateRoute><Dashboard /></AuthenticateRoute>} />
+          <Route path="/change-password" element={<AuthenticateRoute><ChangePassword /></AuthenticateRoute>} />
+          <Route path='*' element={<div>404 Page Not Found</div>} />
         </Routes>
       </div>
     </BrowserRouter>
