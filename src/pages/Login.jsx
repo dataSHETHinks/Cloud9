@@ -26,19 +26,15 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // localStorage.setItem("accessToken","123")
-    // navigate('/');
-    console.log(username)
-    console.log(password)
+
     api('POST', '/login/',
       {
         "username": username,
         "password": password
       })
       .then((response) => {
-        console.log('POST Request Response:', response);
-        // localStorage.setItem("accessToken",response.access_token)
-        // navigate('/');
+        localStorage.setItem("accessToken",response.access_token)
+        navigate('/');
       })
       .catch((error) => {
         console.error('POST Request Error:', error);

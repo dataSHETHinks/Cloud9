@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../css/ForgotPassword.css';
 import logoImage from '../assets/companylogo.png';
+import api from '../apiConfig';
 
 function ForgotPassword() {
   const [username, setUsername] = useState('');
@@ -11,7 +12,16 @@ function ForgotPassword() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Password reset request for username: ${username}`);
+    api('POST', '/forget_password/',
+      {
+        "usernameOrEmail": username
+      })
+      .then((response) => {
+        console.log('POST Request Response:', response);
+      })
+      .catch((error) => {
+        console.error('POST Request Error:', error);
+      });
   };
 
   return (
