@@ -33,7 +33,7 @@ function Login() {
         "password": password
       })
       .then((response) => {
-        localStorage.setItem("accessToken",response.access_token)
+        localStorage.setItem("accessToken",response.data.access_token)
         navigate('/');
       })
       .catch((error) => {

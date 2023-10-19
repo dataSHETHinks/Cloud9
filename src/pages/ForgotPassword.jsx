@@ -18,6 +18,7 @@ function ForgotPassword() {
       })
       .then((response) => {
         console.log('POST Request Response:', response);
+        alert(`Your rest password code is ${response.code}`)
       })
       .catch((error) => {
         console.error('POST Request Error:', error);
