@@ -20,10 +20,6 @@ function Login() {
     }
   };
 
-  // const handleLogin = (event) => {
-  //   navigate('/dashboard');
-  // }
-
   const handleLogin = (e) => {
     e.preventDefault();
 

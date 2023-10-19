@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import '../css/ChangePassword.css';
 import logoImage from '../assets/companylogo.png';
+import api from '../apiConfig';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function ChangePassword() {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const fromForgotPassword = queryParams.get('fromForgotPassword');
 
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
@@ -16,12 +22,19 @@ function ChangePassword() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Add password change logic here
         if (newPassword === confirmNewPassword) {
-            // Passwords match, perform password change
-            alert('Password changed successfully!');
+            api('POST', '/user/change_password/', {
+                "password": newPassword,
+                "fromForgotPassword": fromForgotPassword
+            })
+                .then((response) => {
+                    alert(`${response.data.message}`);
+                    navigate('/');
+                })
+                .catch((error) => {
+                    console.error('POST Request Error:', error);
+                });
         } else {
-            // Passwords do not match, show an error
             alert('Passwords do not match. Please try again.');
         }
     };
