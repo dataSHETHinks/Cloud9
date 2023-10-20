@@ -16,7 +16,9 @@ function Dashboard() {
     const [allFiles, setAllFiles] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
     const navigate = useNavigate();
+    const [selectedFile, setSelectedFile] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [uploadedFileName, setUploadedFileName] = useState('');
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -69,12 +71,12 @@ function Dashboard() {
     }, []);
 
     const handleFileClick = (file) => {
-        alert(`${file.title} click`)
-        // setIsFileDropdown(false);
+        setSelectedFile(file)
+        setIsFileDropdownOpen(false)
+        // getFileDataByFileInfo()
     }
 
     const handleCategoryClick = (category) => {
-        console.log(`selected categorty ${category.id} ${category.name}`);
         setSelectedCategory(category);
         setIsCategoryDropdown(false);
     }
@@ -82,41 +84,33 @@ function Dashboard() {
     const handleFileUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
-            console.log(`file ${selectedFile}`)
-            console.log(selectedFile.size)
-            console.log("Uploaded file name: " + selectedFile.name);
-            console.log("Uploaded category name: " + selectedCategory.id);
-            // const data = {
-            //     file_category: selectedCategory.id,
-            //     file_name: selectedFile.name,
-            //     file_type: "csv"
-            // }
-            // JSON.stringify(data)
-            // api('POST', '/data/upload_file/', {
-            //     "uploaded_file": `${selectedFile.name}`,
-            //     "data": data
-            // })
-            //     .then((response) => {
-            //         alert(`${response.data.message}`)
-            //     })
-            //     .catch((error) => {
-            //         console.error('POST Request Error:', error);
-            //     });
+            const fileType = selectedFile.name.split('.').pop().toLowerCase();
+
+            const fileNameWithoutExtension = selectedFile.name.split('.')[0];
+
             const formData = new FormData();
             formData.append('uploaded_file', selectedFile);
             formData.append('data', JSON.stringify({
                 file_category: selectedCategory.id,
-                file_name: selectedFile.name,
-                file_type: "csv"
+                file_name: fileNameWithoutExtension,
+                file_type: fileType
             }));
 
-            api('POST', '/data/upload_file/', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
-            })
+            api('POST', '/data/upload_file/', formData, 'multipart/form-data')
+                .then((response) => {
+                    alert(`${response.data.message}`)
+                    setUploadedFileName(selectedFile.name);
+                })
+                .catch((error) => {
+                    console.error('POST Request Error:', error);
+                });
         }
     };
+
+    // const getFileDataByFileInfo = () => {
+
+    // }
+
 
     const tableData = [
         {
@@ -360,7 +354,7 @@ function Dashboard() {
                                 className="btn btn-outline-dark btn-sm border border-dark dropdown-toggle mb-0"
                                 onClick={toggleFileDropdown}
                             >
-                                Select a file
+                                {selectedFile === null ? 'Select a file' : selectedFile.title}
                             </button>
                             <ul className={`dropdown-menu ${isFileDropdownOpen ? 'show' : ''}`}
                                 style={{ backgroundColor: 'white' }}>
@@ -383,7 +377,7 @@ function Dashboard() {
                                 className="btn btn-outline-dark btn-sm border border-dark dropdown-toggle mb-0"
                                 onClick={toggleCategoryDropdown}
                             >
-                                Select a category
+                                {selectedCategory === null ? 'Select a category' : selectedCategory.name}
                             </button>
                             <ul className={`dropdown-menu ${isCategoryDropdownOpen ? 'show' : ''}`}
                                 style={{ backgroundColor: 'white' }}>
@@ -413,7 +407,9 @@ function Dashboard() {
                                 <img src={browseplaceholder} alt="Upload File" style={{ width: "100px", height: "100px", borderRadius: "80px" }} />
                                 <br />
                                 <br />
-                                <h3>Click to upload</h3>
+                                <h3>
+                                    {uploadedFileName || "Click to upload"}
+                                </h3>
                             </label>
 
                         </div>
