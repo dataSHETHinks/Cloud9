@@ -128,12 +128,16 @@ td {
 
 th,
 td {
-  padding: 8px;
-  text-align: left;
+  padding: 2px;
+  text-align: center;
 }
 
 th {
   background-color: #f2f2f2;
+}
+
+tbody{
+  border-width: 1;
 }
 
 .dropdown-menu {

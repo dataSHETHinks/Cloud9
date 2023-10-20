@@ -19,6 +19,7 @@ function Dashboard() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [uploadedFileName, setUploadedFileName] = useState('');
+    const [fileData, setFileData] = useState(null);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -73,7 +74,7 @@ function Dashboard() {
     const handleFileClick = (file) => {
         setSelectedFile(file)
         setIsFileDropdownOpen(false)
-        // getFileDataByFileInfo()
+        getFileDataByFileInfo(file)
     }
 
     const handleCategoryClick = (category) => {
@@ -107,203 +108,212 @@ function Dashboard() {
         }
     };
 
-    // const getFileDataByFileInfo = () => {
+    const getFileDataByFileInfo = async (file) => {
+        console.log(file)
+        console.log(file.id)
 
-    // }
+        api('GET', `/data/get_file_data/?id=${file.id}`)
+            .then((response) => {
+                localStorage.setItem("fileData", response.data.data.data)
+                setFileData(response.data.data.data);
+            })
+            .catch((error) => {
+                console.error('POST Request Error:', error);
+            });
+    }
+
+    // const tableData = [
+    //     {
+    //         Iteration: 1,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 2,
+    //         CPUTime: 110,
+    //         PhysTime: 90,
+    //         Travels: 520,
+    //         Value: 1020,
+    //         AvValue: 960,
+    //         MinValue: 910,
+    //         MaxValue: 1060,
+    //         Delta: 60,
+    //     },
+    //     {
+    //         Iteration: 3,
+    //         CPUTime: 120,
+    //         PhysTime: 100,
+    //         Travels: 540,
+    //         Value: 1040,
+    //         AvValue: 970,
+    //         MinValue: 920,
+    //         MaxValue: 1070,
+    //         Delta: 70,
+    //     },
+    //     {
+    //         Iteration: 4,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 5,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 6,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 7,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
+    //     {
+    //         Iteration: 8,
+    //         CPUTime: 100,
+    //         PhysTime: 80,
+    //         Travels: 500,
+    //         Value: 1000,
+    //         AvValue: 950,
+    //         MinValue: 900,
+    //         MaxValue: 1050,
+    //         Delta: 50,
+    //     },
 
 
-    const tableData = [
-        {
-            Iteration: 1,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 2,
-            CPUTime: 110,
-            PhysTime: 90,
-            Travels: 520,
-            Value: 1020,
-            AvValue: 960,
-            MinValue: 910,
-            MaxValue: 1060,
-            Delta: 60,
-        },
-        {
-            Iteration: 3,
-            CPUTime: 120,
-            PhysTime: 100,
-            Travels: 540,
-            Value: 1040,
-            AvValue: 970,
-            MinValue: 920,
-            MaxValue: 1070,
-            Delta: 70,
-        },
-        {
-            Iteration: 4,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 5,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 6,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 7,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-        {
-            Iteration: 8,
-            CPUTime: 100,
-            PhysTime: 80,
-            Travels: 500,
-            Value: 1000,
-            AvValue: 950,
-            MinValue: 900,
-            MaxValue: 1050,
-            Delta: 50,
-        },
-
-
-    ];
+    // ];
 
     return (
         <div className="dashboard-container">
@@ -345,7 +355,6 @@ function Dashboard() {
                     </div>
                 </div>
                 <div style={{ overflowY: 'auto', height: 'calc(100vh - 58px)' }}>
-                    {/* justifyContent: 'space-between', display: 'flex', */}
                     <div style={{ marginLeft: "20px", marginTop: "10px", display: "flex", alignItems: "flex-start" }}>
                         <h3>Uploaded files:</h3>
                         <div className="btn-group" style={{ marginLeft: "15px", marginTop: "5px" }}>
@@ -414,39 +423,80 @@ function Dashboard() {
 
                         </div>
                     </div>
-
-                    {/* <div className="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Iteration</th>
-                                    <th>CPUTime</th>
-                                    <th>PhysTime</th>
-                                    <th>Travels</th>
-                                    <th>Value</th>
-                                    <th>AvValue</th>
-                                    <th>MinValue</th>
-                                    <th>MaxValue</th>
-                                    <th>Delta</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {tableData.map((item) => (
-                                    <tr key={item.Iteration}>
-                                        <td>{item.Iteration}</td>
-                                        <td>{item.CPUTime}</td>
-                                        <td>{item.PhysTime}</td>
-                                        <td>{item.Travels}</td>
-                                        <td>{item.Value}</td>
-                                        <td>{item.AvValue}</td>
-                                        <td>{item.MinValue}</td>
-                                        <td>{item.MaxValue}</td>
-                                        <td>{item.Delta}</td>
+                    {/* {fileData && <>
+                        <div className="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Iteration</th>
+                                        <th>CPUTime</th>
+                                        <th>PhysTime</th>
+                                        <th>Travels</th>
+                                        <th>Value</th>
+                                        <th>AvValue</th>
+                                        <th>MinValue</th>
+                                        <th>MaxValue</th>
+                                        <th>Delta</th>
+                                        <th>Criteria</th>
+                                        <th>PrevAvRefValue</th>
+                                        <th>Progress</th>
+                                        <th>CriteriaType</th>
+                                        <th>CriteriaVarType</th>
+                                        <th>CriteriaPercentage</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div> */}
+                                </thead>
+                                <tbody>
+                                    {fileData && Object.keys(fileData).map((key) => {
+                                        const item = fileData[key];
+                                        return <tr key={item.Iteration}>
+                                            <td>{item.Iteration}</td>
+                                            <td>{item.CPUTime}</td>
+                                            <td>{item.PhysTime}</td>
+                                            <td>{item.Travels}</td>
+                                            <td>{item.Value}</td>
+                                            <td>{item.AvValue}</td>
+                                            <td>{item.MinValue}</td>
+                                            <td>{item.MaxValue}</td>
+                                            <td>{item.Delta}</td>
+                                            <td>{item.Criteria}</td>
+                                            <td>{item.PrevAvRefValue}</td>
+                                            <td>{item.Progress}</td>
+                                            <td>{item.CriteriaType}</td>
+                                            <td>{item.CriteriaVarType}</td>
+                                            <td>{item.CriteriaPercentage}</td>
+                                        </tr>
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>} */}
+
+                    {fileData && Object.keys(fileData).length > 0 && (
+                        <div className="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        {Object.keys(fileData[1]).map((column) => (
+                                            <th key={column}>{column}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.keys(fileData).map((key) => {
+                                        const item = fileData[key];
+                                        return (
+                                            <tr key={key}>
+                                                {Object.keys(item).map((column) => (
+                                                    <td key={column}>{item[column]}</td>
+                                                ))}
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
                 </div>
             </main>
         </div>
