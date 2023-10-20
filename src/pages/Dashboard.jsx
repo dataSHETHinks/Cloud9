@@ -423,53 +423,6 @@ function Dashboard() {
 
                         </div>
                     </div>
-                    {/* {fileData && <>
-                        <div className="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Iteration</th>
-                                        <th>CPUTime</th>
-                                        <th>PhysTime</th>
-                                        <th>Travels</th>
-                                        <th>Value</th>
-                                        <th>AvValue</th>
-                                        <th>MinValue</th>
-                                        <th>MaxValue</th>
-                                        <th>Delta</th>
-                                        <th>Criteria</th>
-                                        <th>PrevAvRefValue</th>
-                                        <th>Progress</th>
-                                        <th>CriteriaType</th>
-                                        <th>CriteriaVarType</th>
-                                        <th>CriteriaPercentage</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {fileData && Object.keys(fileData).map((key) => {
-                                        const item = fileData[key];
-                                        return <tr key={item.Iteration}>
-                                            <td>{item.Iteration}</td>
-                                            <td>{item.CPUTime}</td>
-                                            <td>{item.PhysTime}</td>
-                                            <td>{item.Travels}</td>
-                                            <td>{item.Value}</td>
-                                            <td>{item.AvValue}</td>
-                                            <td>{item.MinValue}</td>
-                                            <td>{item.MaxValue}</td>
-                                            <td>{item.Delta}</td>
-                                            <td>{item.Criteria}</td>
-                                            <td>{item.PrevAvRefValue}</td>
-                                            <td>{item.Progress}</td>
-                                            <td>{item.CriteriaType}</td>
-                                            <td>{item.CriteriaVarType}</td>
-                                            <td>{item.CriteriaPercentage}</td>
-                                        </tr>
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                    </>} */}
 
                     {fileData && Object.keys(fileData).length > 0 && (
                         <div className="table-container">
