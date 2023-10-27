@@ -15,11 +15,14 @@ function Dashboard() {
     const [isCategoryDropdownOpen, setIsCategoryDropdown] = useState(false);
     const [allFiles, setAllFiles] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
+    const[isModuleDropdownOpen, setIsModuleDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedModule, setSelectedModule] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [uploadedFileName, setUploadedFileName] = useState('');
     const [fileData, setFileData] = useState(null);
+    const staticModules = ['Module 1', 'Module 2', 'Module 3'];
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -32,6 +35,10 @@ function Dashboard() {
     const toggleFileDropdown = () => {
         setIsFileDropdownOpen(!isFileDropdownOpen);
     };
+
+    const toggleModuleDropdown = () => {
+        setIsModuleDropdownOpen(!isModuleDropdownOpen);
+    }
 
     const toggleCategoryDropdown = () => {
         setIsCategoryDropdown(!isCategoryDropdownOpen);
@@ -82,6 +89,14 @@ function Dashboard() {
         setIsCategoryDropdown(false);
     }
 
+    const handleModuleClick = (module) => {
+        setSelectedModule(module);
+        setIsModuleDropdownOpen(false)
+        getDataByModule(module)
+    }
+    const getDataByModule = (event) => {
+        console.log("In module");
+    }
     const handleFileUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -366,7 +381,7 @@ function Dashboard() {
                                 {selectedFile === null ? 'Select a file' : selectedFile.title}
                             </button>
                             <ul className={`dropdown-menu ${isFileDropdownOpen ? 'show' : ''}`}
-                                style={{ backgroundColor: 'white' }}>
+                              style={{ backgroundColor: 'white' }}>
                                 {allFiles.map((file) => (
                                     <li key={file.id}>
                                         <button className="dropdown-item" onClick={() => handleFileClick(file)}>
@@ -374,6 +389,31 @@ function Dashboard() {
                                         </button>
                                     </li>
                                 ))}
+                            </ul>
+                        </div>
+                    </div>
+                     <div style={{ marginLeft: "20px", marginTop: "10px", display: "flex", alignItems: "flex-start" }}>
+                        <h3>Module number:</h3>
+                        <div className="btn-group" style={{ marginLeft: "15px", marginTop: "5px" }}>
+                            <button
+                                type="button"
+                                className="btn btn-outline-dark btn-sm border border-dark dropdown-toggle mb-0"
+                                onClick={toggleModuleDropdown}
+                            >
+                                {selectedModule === null ? 'Select a Module' : selectedModule.title}
+                            </button>
+                            <ul className={`dropdown-menu ${isModuleDropdownOpen ? 'show' : ''}`}
+                                style={{ backgroundColor: 'white' }}>
+                               {staticModules.map((module, index) => (
+                    <li key={index}>
+                        <button
+                            className="dropdown-item"
+                            onClick={() => handleModuleClick(module)}
+                        >
+                            {module}
+                        </button>
+                    </li>
+                ))}
                             </ul>
                         </div>
                     </div>
@@ -400,6 +440,7 @@ function Dashboard() {
                             </ul>
                         </div>
                     </div>
+                    
                     <br />
                     <br />
                     <div className='main-content'>
