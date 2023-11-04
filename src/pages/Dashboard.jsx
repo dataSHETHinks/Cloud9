@@ -83,17 +83,31 @@ function Dashboard() {
             })
     }
 
+    // Dynamic category left
     const addCategory = () => {
         api('POST', 'data/add_new_category/',
         {
             "name": "test-category"
         })
         .then((response) => {
+            alert(response.data.message)
+        })
+        .catch((error) => {
+            alert('POST Request Error:', error);
+        });
+    }
+
+    // Dynamic module left
+    const addModule = () => {
+        api('POST', 'data/add_new_module/',{
+            "name": "test-module"
+        })
+        .then((response) => {
             alert(response.message)
         })
         .catch((error) => {
-            console.error('POST Request Error:', error);
-        });
+            alert('POST Request Error:', error)
+        })
     }
 
     useEffect(() => {
@@ -130,11 +144,10 @@ function Dashboard() {
 
             const formData = new FormData();
             formData.append('uploaded_file', selectedFile);
-            formData.append('data', JSON.stringify({
-                file_category: selectedCategory.id,
-                file_name: fileNameWithoutExtension,
-                file_type: fileType
-            }));
+            formData.append('file_category',selectedCategory.id);
+            formData.append('file_module',selectedModule.id);
+            formData.append('file_name',fileNameWithoutExtension);
+            formData.append('file_type', fileType);
 
             api('POST', '/data/upload_file/', formData, 'multipart/form-data')
                 .then((response) => {
@@ -201,6 +214,7 @@ function Dashboard() {
                     </div>
                 </div>
                 <button onClick={addCategory}>Add Category</button>
+                <button onClick={addModule}>Add Module</button>
                 <div style={{ overflowY: 'auto', height: 'calc(100vh - 58px)' }}>
                     <div style={{ marginLeft: "20px", marginTop: "10px", display: "flex", alignItems: "flex-start" }}>
                         <h3>Uploaded files:</h3>
@@ -281,7 +295,7 @@ function Dashboard() {
                                 onChange={handleFileUpload}
                                 id="file-input"
                                 style={{ display: 'none' }}
-                                disabled={!selectedCategory}
+                                disabled={!selectedCategory || !selectedModule}
                             />
                             <label htmlFor="file-input" className="file-upload-label" style={{ cursor: "pointer" }}>
                                 <img src={browseplaceholder} alt="Upload File" style={{ width: "100px", height: "100px", borderRadius: "80px" }} />
