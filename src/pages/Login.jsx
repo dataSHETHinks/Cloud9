@@ -5,9 +5,9 @@ import logoImage from '../assets/companylogo.png';
 import api from '../apiConfig';
 
 function Login() {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
@@ -42,40 +42,26 @@ function Login() {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleLogin} className="login-form">
-        <div className="login-company-info">
-          <img src={logoImage} alt="Company Logo" />
-          <p>Fetherstill Inc</p>
-        </div>
-        <div className="input-group">
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            value={username}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="input-group">
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
+      <div className="left-side">
+
+      </div>
+      <div className="right-side">
+      <img src={logoImage} alt="Company Logo" />
+        <form onSubmit={handleLogin}>
+          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={handleInputChange} required />
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={handleInputChange} required />
+          </div>
+          <button type="submit" disabled={isLoading}>{isLoading ? 'Logging in...' : 'Login'}</button>
+        </form>
         <div className="forgot-password">
-          <Link to="/forgot-password">Forgot Password?</Link>
+          <a href="/forgot-password">Forgot Password?</a>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

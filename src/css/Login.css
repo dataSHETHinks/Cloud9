@@ -1,46 +1,50 @@
+/* Login container */
 .login-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  background-image: url('../assets/bg.jpg');
-  background-size: cover;
-  background-position: center;
 }
 
-.login-form {
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: white;
-  width: 400px;
-  text-align: center;
-}
-
-.login-company-info {
+/* Left side (logo) */
+.left-side {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: url('../assets/splitscreen2.png') no-repeat center center;
+  background-size: cover;
+  background-color: #f2a7a7; /* Background color for the left side */
+}
+p{
+  font-weight: bold ;
+}
+
+img {
+  margin-bottom: 30px;
+  margin-top: -30px;
+}
+/* Logo */
+.left-side img {
+  width: 150px; /* Adjust the size as needed */
+}
+
+/* Right side (login form) */
+.right-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffffff; /* Background color for the right side */
+}
+
+/* Form elements */
+.right-side h1 {
+  font-size: 24px;
   margin-bottom: 20px;
 }
 
-.login-company-info img {
-  height: 70px ;
-  margin-right: 10px;
-}
-
-.login-company-info p {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
-
-.login-form h2 {
-  margin: 0 0 20px;
-}
-
 .input-group {
-  margin-right: 22px;
   margin-bottom: 15px;
   text-align: left;
 }
@@ -54,12 +58,12 @@ label {
 input {
   width: 100%;
   padding: 10px;
-  margin-right: 50px;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 20px;
   font-size: 16px;
 }
 
+/* Adjust the margin-bottom for the login button and "Forgot password" link */
 button {
   width: 100%;
   background-color: #007bff;
@@ -67,12 +71,19 @@ button {
   border: none;
   padding: 10px;
   font-size: 16px;
-  border-radius: 3px;
-  margin-bottom: 20px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-top: 10px; /* Add margin-top to create space between password field and login button */
 }
 
-button:hover {
-  background-color: #0056b3;
+/* Adjust the margin-top for the "Forgot password" link */
+.forgot-password a {
+  text-decoration: none;
+  color: #007bff;
+  margin-top: 20px; /* Add margin-top to create space between login button and "Forgot password" link */
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
 }
