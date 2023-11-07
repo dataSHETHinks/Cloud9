@@ -1,0 +1,73 @@
+/* Registration container */
+.registration-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Left side (background or content) - Add your styles here */
+  .left-side {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../assets/signup-splitscreen.jpg') no-repeat center center;
+    background-size: cover;
+    background-color: #f2a7a7; /* Background color for the left side */
+  }
+
+  
+  
+  /* Right side (registration form) */
+  .right-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff; /* Background color for the right side */
+  }
+  
+  /* Form elements */
+  .right-side h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+  
+  button {
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px; /* Add margin-top for spacing */
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

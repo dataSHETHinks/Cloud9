@@ -5,6 +5,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import ChangePassword from './pages/ChangePassword';
 import AuthenticateRoute from './AuthenticateRoute';
+import CreateUser from './pages/CreateUser';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route exact path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/" element={<AuthenticateRoute><Dashboard /></AuthenticateRoute>} />
+          <Route path="/create-user" element={<CreateUser/>} />
           <Route path="/change-password" element={<AuthenticateRoute><ChangePassword /></AuthenticateRoute>} />
           <Route path='*' element={<div>404 Page Not Found</div>} />
         </Routes>
