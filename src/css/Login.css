@@ -12,7 +12,7 @@
   align-items: center;
   background: url('../assets/splitscreen2.png') no-repeat center center;
   background-size: cover;
-  background-color: #f2a7a7; /* Background color for the left side */
+  background-color: #fff; /* Background color for the left side */
 }
 p{
   font-weight: bold ;
@@ -44,6 +44,20 @@ img {
   margin-bottom: 20px;
 }
 
+.login-form {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  width: 300px;
+  text-align: center;
+}
+
+.login-form img{
+  margin-top: 5px;
+  height: 100px;
+}
+
 .input-group {
   margin-bottom: 15px;
   text-align: left;
@@ -59,14 +73,14 @@ input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  /* border-radius: 20px; */
   font-size: 16px;
 }
 
 /* Adjust the margin-bottom for the login button and "Forgot password" link */
 button {
   width: 100%;
-  background-color: #007bff;
+  background-color: #000;
   color: #fff;
   border: none;
   padding: 10px;

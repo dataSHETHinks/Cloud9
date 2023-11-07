@@ -8,7 +8,7 @@ function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -29,7 +29,7 @@ function Login() {
         "password": password
       })
       .then((response) => {
-        localStorage.setItem("accessToken",response.data.access_token)
+        localStorage.setItem("accessToken", response.data.access_token)
         setIsLoading(false);
         navigate('/');
       })
@@ -46,8 +46,9 @@ function Login() {
 
       </div>
       <div className="right-side">
-      <img src={logoImage} alt="Company Logo" />
-        <form onSubmit={handleLogin}>
+        <div className='login-form'>
+      <form onSubmit={handleLogin}>
+        <img src={logoImage} alt="Company Logo" />
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={handleInputChange} required />
@@ -60,6 +61,7 @@ function Login() {
         </form>
         <div className="forgot-password">
           <a href="/forgot-password">Forgot Password?</a>
+        </div>
         </div>
       </div>
     </div>
