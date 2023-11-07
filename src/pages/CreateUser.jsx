@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../apiConfig';
 import '../css/CreateUser.css';
+import BaseNav from '../components/base_nav';
 
 function CreateUser() {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ function CreateUser() {
   const [passwordsMatch, setPasswordsMatch] = useState(true); // State to track password matching
   const passwordRef = useRef(); // Ref for password input
   const confirmPasswordRef = useRef(); // Ref for confirm password input
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   const navigate = useNavigate();
   const handleInputChange = (event) => {
@@ -49,11 +50,9 @@ function CreateUser() {
 
   return (
     <div className="registration-container">
-      <div className="left-side">
-        {/* Left-side content (if any) */}
-      </div>
+        <BaseNav isSidebarOpen={isSidebarOpen}/>
       <div className="right-side">
-        <h1>Add new user</h1>
+        <h1>Add New User</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
