@@ -38,8 +38,23 @@ function Dashboard() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("accessToken")
-        navigate('/login')
+        
+        api('POST', '/logout/',{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({})
+            })
+            .then((response) => {
+                localStorage.removeItem("accessToken")
+                navigate("/login/");
+            })       
+            .catch((error) =>{
+                alert("Error");
+                console.error("Logout not successful");
+            })
+        
     };
 
     const handleRedirectToChangePassword = () => {
