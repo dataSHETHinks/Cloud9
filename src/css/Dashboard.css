@@ -74,8 +74,10 @@
   background-color: #fff;
   align-items: center;
   padding: 10px;
+  margin-top: 20px;
+  height: 40px;
   border-bottom: 1px solid #ccc;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 .hamburger-icon {
@@ -85,7 +87,7 @@
 .profile {
   position: relative;
   cursor: pointer;
-  display: flex; 
+  display: flex;
   align-items: center;
 }
 
@@ -97,7 +99,7 @@
   object-fit: cover;
 }
 
-.main-content{
+.main-content {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -136,7 +138,7 @@ th {
   background-color: #f2f2f2;
 }
 
-tbody{
+tbody {
   border-width: 1;
 }
 
@@ -166,6 +168,10 @@ tbody{
 
 .dropdown-menu li:hover {
   background-color: #f5f5f5;
+}
+
+.spacer {
+  flex-grow: 1; /* This pushes the profile to the right */
 }
 
 .pro-dropdown-menu {
@@ -230,4 +236,10 @@ tbody{
   width: 20%;
   float: left;
   /* margin-right: 10px; */
+}
+
+.BodyDiv {
+  background-color: black;
+  width: 100%;
+  height: 100%;
 }

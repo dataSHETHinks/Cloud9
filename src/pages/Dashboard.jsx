@@ -152,11 +152,17 @@ function Dashboard() {
       <BaseNav isSidebarOpen={isSidebarOpen} />
       <main className="content">
         <div className="dashboard-header">
-          <div className="hamburger-icon" onClick={toggleSidebar}>
+          <div className="hamburger-icon mb-4" onClick={toggleSidebar}>
             <i className={`fas fa-bars ${isSidebarOpen ? "hidden" : ""}`}></i>
           </div>
-          <div className="profile">
-            <img src={profileImage} alt="Profile" onClick={toggleDropdown} />
+          <div className="spacer"></div>{" "}
+          <div className="profile mt-5">
+            <img
+              className="profile"
+              src={profileImage}
+              alt="Profile"
+              onClick={toggleDropdown}
+            />
             {isDropdownOpen && (
               <div className="pro-dropdown-menu">
                 <ul>
@@ -169,7 +175,7 @@ function Dashboard() {
             )}
           </div>
         </div>
-        <div style={{ overflowY: "auto", height: "calc(100vh - 58px)" }}>
+        {/* <div style={{ overflowY: "auto", height: "calc(100vh - 58px)" }}>
           <div
             style={{
               marginLeft: "20px",
@@ -349,7 +355,8 @@ function Dashboard() {
               </table>
             </div>
           )}
-        </div>
+        </div> */}
+        <div className="BodyDiv"></div>
       </main>
     </div>
   );
