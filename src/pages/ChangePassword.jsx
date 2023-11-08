@@ -45,35 +45,39 @@ function ChangePassword() {
 
     return (
         <div className="change-password-container">
-            <form onSubmit={handleSubmit} className="change-password-form">
-                <div className="change-password-company-info">
+            <div className="change-password-left-side">
+
+            </div>
+            <div className="change-password-right-side">
+                <form onSubmit={handleSubmit} className="change-password-form">
                     <img src={logoImage} alt="Company Logo" />
-                    <p>Fetherstill Inc</p>
-                </div>
-                <div className="input-group">
-                    <input
-                        type="password"
-                        id="newPassword"
-                        placeholder="New Password"
-                        value={newPassword}
-                        onChange={handleNewPasswordChange}
-                        required
-                    />
-                </div>
-                <div className="input-group">
-                    <input
-                        type="password"
-                        id="confirmNewPassword"
-                        placeholder="Confirm Password"
-                        value={confirmNewPassword}
-                        onChange={handleConfirmNewPasswordChange}
-                        required
-                    />
-                </div>
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Changing' : 'Change Password  '}
-                </button>
-            </form>
+                    <div className="input-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="newPassword"
+                            placeholder="New Password"
+                            value={newPassword}
+                            onChange={handleNewPasswordChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="confirmNewPassword">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="confirmNewPassword"
+                            placeholder="Confirm Password"
+                            value={confirmNewPassword}
+                            onChange={handleConfirmNewPasswordChange}
+                            required
+                        />
+                    </div>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Changing' : 'Change Password  '}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

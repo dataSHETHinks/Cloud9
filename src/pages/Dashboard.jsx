@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Dashboard.css';
 import { useNavigate } from 'react-router-dom';
-import logoImage from '../assets/companylogo.png';
 import profileImage from '../assets/profile.webp';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import api from '../apiConfig';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import browseplaceholder from '../assets/browseplaceholder.jpg';
+import BaseNav from '../components/base_nav';
 
 function Dashboard() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -176,22 +176,7 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <nav className="sidebar" style={isSidebarOpen ? {} : { display: 'none' }}>
-                <div className="company-info">
-                    <div className="company-logo">
-                        <img src={logoImage} alt="Company Logo" />
-                    </div>
-                    <div className="company-name">
-                        <p>Fetherstill Inc</p>
-                    </div>
-                </div>
-                <ul className="sidebar-links">
-                    <li><a href="/reports">Reports</a></li>
-                    <li><a href="/analytics">Analytics</a></li>
-                    <li><a href="/settings">Settings</a></li>
-                    <li><a href="/support">Support</a></li>
-                </ul>
-            </nav>
+            <BaseNav isSidebarOpen={isSidebarOpen}/>
             <main className="content">
                 <div className="dashboard-header">
                     <div className="hamburger-icon" onClick={toggleSidebar}>
