@@ -1,25 +1,46 @@
-import logoImage from '../assets/companylogo.png';
+import logoImage from "../assets/companylogo.png";
+import classNames from "classnames";
+import "../css/sidebar/sideBar.css";
 
 const BaseNav = (params) => {
-    const {isSidebarOpen} = params
-    return (
-        <nav className="sidebar" style={isSidebarOpen ? {} : { display: 'none' }}>
-                <div className="company-info">
-                    <div className="company-logo">
-                        <img src={logoImage} alt="Company Logo" />
-                    </div>
-                    <div className="company-name">
-                        <p>Fetherstill Inc</p>
-                    </div>
-                </div>
-                <ul className="sidebar-links">
-                    <li><a href="/reports">Reports</a></li>
-                    <li><a href="/analytics">Analytics</a></li>
-                    <li><a href="/settings">Settings</a></li>
-                    <li><a href="/support">Support</a></li>
-                </ul>
-            </nav>
-    )
-}
+  const { isSidebarOpen } = params;
 
-export default BaseNav
+  const sidebarClasses = classNames("sidebar", {
+    closed: !isSidebarOpen,
+    open: isSidebarOpen,
+  });
+
+  return (
+    <nav className={sidebarClasses}>
+      <div className="company-info mt-5">
+        <div className="company-logo">
+          <img src={logoImage} alt="Company Logo" />
+          <hr className="my-2"></hr>
+          <div className="company-name">
+            <p>Fetherstill</p>
+          </div>
+        </div>
+      </div>
+      <hr className="my-2"></hr>
+      <ul className="sidebar-links">
+        <li className="mt-4">
+          <a href="/reports">Uploaded Files</a>
+        </li>
+        <li className="mt-2">
+          <a href="/analytics">Users</a>
+        </li>
+        <li className="mt-2">
+          <a href="/settings">Add New Roles</a>
+        </li>
+        <li className="mt-2">
+          <a href="/support">Add New Module</a>
+        </li>
+        <li className="mt-2">
+          <a href="/support">Add New Category</a>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export default BaseNav;
