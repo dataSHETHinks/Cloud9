@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 function ForgotPassword() {
   const [username, setUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
@@ -13,6 +14,7 @@ function ForgotPassword() {
   };
 
   const callLoginApi = (resetCode) => {
+ 
     api('POST', '/login/', {
       "username": username,
       "password": resetCode
@@ -21,7 +23,6 @@ function ForgotPassword() {
         const accessToken = response.data.access_token;
 
         localStorage.setItem('accessToken', accessToken);
-
         navigate(`/change-password?username=${username}&fromForgotPassword=true`);
       })
       .catch((error) => {
@@ -31,17 +32,20 @@ function ForgotPassword() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     api('POST', 'user/forget_password/',
       {
         "usernameOrEmail": username
       })
       .then((response) => {
+        setIsLoading(false);
         // TODO : Check with status code
-        alert(`Your rest password code is ${response.data.code}`)
+        console.log(`Your rest password code is ${response.data.code}`)
         callLoginApi(response.data.code)
       })
       .catch((error) => {
         console.error('POST Request Error:', error);
+        setIsLoading(false);
       });
   };
 
@@ -63,7 +67,9 @@ function ForgotPassword() {
             required
           />
         </div>
-        <button type="submit">Reset Password</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Sending verification code ' : 'Reset Password'}
+        </button>
       </form>
     </div>
   );

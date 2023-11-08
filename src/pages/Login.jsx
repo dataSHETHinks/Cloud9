@@ -8,7 +8,7 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -22,7 +22,7 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     api('POST', '/login/',
       {
         "username": username,
@@ -30,9 +30,12 @@ function Login() {
       })
       .then((response) => {
         localStorage.setItem("accessToken",response.data.access_token)
+        setIsLoading(false);
         navigate('/');
       })
       .catch((error) => {
+        setIsLoading(false);
+        alert("Please check your credentials")
         console.error('POST Request Error:', error);
       });
   }
@@ -66,7 +69,9 @@ function Login() {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
         <div className="forgot-password">
           <Link to="/forgot-password">Forgot Password?</Link>
         </div>
