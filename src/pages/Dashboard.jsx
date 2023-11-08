@@ -15,8 +15,11 @@ function Dashboard() {
     const [isCategoryDropdownOpen, setIsCategoryDropdown] = useState(false);
     const [allFiles, setAllFiles] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
+    const [allModules, setAllModules] = useState([]);
+    const [isModuleDropdownOpen, setIsModuleDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedModule, setSelectedModule] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [uploadedFileName, setUploadedFileName] = useState('');
     const [fileData, setFileData] = useState(null);
@@ -32,6 +35,10 @@ function Dashboard() {
     const toggleFileDropdown = () => {
         setIsFileDropdownOpen(!isFileDropdownOpen);
     };
+
+    const toggleModuleDropdown = () => {
+        setIsModuleDropdownOpen(!isModuleDropdownOpen);
+    }
 
     const toggleCategoryDropdown = () => {
         setIsCategoryDropdown(!isCategoryDropdownOpen);
@@ -62,13 +69,51 @@ function Dashboard() {
                 setAllCategories(response.data.data);
             })
             .catch((error) => {
-                console.error('GET Request Error:',)
+                console.error('GET Request Error:', error)
             });
+    }
+
+    const getAllModules = () => {
+        api('GET', 'data/get_file_modules/', {})
+            .then((response) => {
+                setAllModules(response.data.data)
+            })
+            .catch((error) => {
+                console.error('GET Request Error:', error)
+            })
+    }
+
+    // Dynamic category left
+    const addCategory = () => {
+        api('POST', 'data/add_new_category/',
+        {
+            "name": "test-category"
+        })
+        .then((response) => {
+            alert(response.data.message)
+        })
+        .catch((error) => {
+            alert('POST Request Error:', error);
+        });
+    }
+
+    // Dynamic module left
+    const addModule = () => {
+        api('POST', 'data/add_new_module/',{
+            "name": "test-module"
+        })
+        .then((response) => {
+            alert(response.message)
+        })
+        .catch((error) => {
+            alert('POST Request Error:', error)
+        })
     }
 
     useEffect(() => {
         getAllFiles();
         getAllCategories();
+        getAllModules();
     }, []);
 
     const handleFileClick = (file) => {
@@ -82,6 +127,14 @@ function Dashboard() {
         setIsCategoryDropdown(false);
     }
 
+    const handleModuleClick = (module) => {
+        setSelectedModule(module);
+        setIsModuleDropdownOpen(false)
+        getDataByModule(module)
+    }
+    const getDataByModule = (event) => {
+        console.log("In module");
+    }
     const handleFileUpload = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
@@ -91,11 +144,10 @@ function Dashboard() {
 
             const formData = new FormData();
             formData.append('uploaded_file', selectedFile);
-            formData.append('data', JSON.stringify({
-                file_category: selectedCategory.id,
-                file_name: fileNameWithoutExtension,
-                file_type: fileType
-            }));
+            formData.append('file_category',selectedCategory.id);
+            formData.append('file_module',selectedModule.id);
+            formData.append('file_name',fileNameWithoutExtension);
+            formData.append('file_type', fileType);
 
             api('POST', '/data/upload_file/', formData, 'multipart/form-data')
                 .then((response) => {
@@ -121,199 +173,6 @@ function Dashboard() {
                 console.error('POST Request Error:', error);
             });
     }
-
-    // const tableData = [
-    //     {
-    //         Iteration: 1,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 2,
-    //         CPUTime: 110,
-    //         PhysTime: 90,
-    //         Travels: 520,
-    //         Value: 1020,
-    //         AvValue: 960,
-    //         MinValue: 910,
-    //         MaxValue: 1060,
-    //         Delta: 60,
-    //     },
-    //     {
-    //         Iteration: 3,
-    //         CPUTime: 120,
-    //         PhysTime: 100,
-    //         Travels: 540,
-    //         Value: 1040,
-    //         AvValue: 970,
-    //         MinValue: 920,
-    //         MaxValue: 1070,
-    //         Delta: 70,
-    //     },
-    //     {
-    //         Iteration: 4,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 5,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 6,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 7,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-    //     {
-    //         Iteration: 8,
-    //         CPUTime: 100,
-    //         PhysTime: 80,
-    //         Travels: 500,
-    //         Value: 1000,
-    //         AvValue: 950,
-    //         MinValue: 900,
-    //         MaxValue: 1050,
-    //         Delta: 50,
-    //     },
-
-
-    // ];
 
     return (
         <div className="dashboard-container">
@@ -354,6 +213,8 @@ function Dashboard() {
                         }
                     </div>
                 </div>
+                <button onClick={addCategory}>Add Category</button>
+                <button onClick={addModule}>Add Module</button>
                 <div style={{ overflowY: 'auto', height: 'calc(100vh - 58px)' }}>
                     <div style={{ marginLeft: "20px", marginTop: "10px", display: "flex", alignItems: "flex-start" }}>
                         <h3>Uploaded files:</h3>
@@ -371,6 +232,31 @@ function Dashboard() {
                                     <li key={file.id}>
                                         <button className="dropdown-item" onClick={() => handleFileClick(file)}>
                                             {file.title}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div style={{ marginLeft: "20px", marginTop: "10px", display: "flex", alignItems: "flex-start" }}>
+                        <h3>Module:</h3>
+                        <div className="btn-group" style={{ marginLeft: "15px", marginTop: "5px" }}>
+                            <button
+                                type="button"
+                                className="btn btn-outline-dark btn-sm border border-dark dropdown-toggle mb-0"
+                                onClick={toggleModuleDropdown}
+                            >
+                                {selectedModule === null ? 'Select a Module' : selectedModule.name}
+                            </button>
+                            <ul className={`dropdown-menu ${isModuleDropdownOpen ? 'show' : ''}`}
+                                style={{ backgroundColor: 'white' }}>
+                                {allModules.map((module) => (
+                                    <li key={module.id}>
+                                        <button
+                                            className="dropdown-item"
+                                            onClick={() => handleModuleClick(module)}
+                                        >   
+                                            {module.name}   
                                         </button>
                                     </li>
                                 ))}
@@ -401,7 +287,6 @@ function Dashboard() {
                         </div>
                     </div>
                     <br />
-                    <br />
                     <div className='main-content'>
                         <div className="file-upload" style={{ marginRight: "20px", }}>
                             <input
@@ -410,11 +295,10 @@ function Dashboard() {
                                 onChange={handleFileUpload}
                                 id="file-input"
                                 style={{ display: 'none' }}
-                                disabled={!selectedCategory}
+                                disabled={!selectedCategory || !selectedModule}
                             />
                             <label htmlFor="file-input" className="file-upload-label" style={{ cursor: "pointer" }}>
                                 <img src={browseplaceholder} alt="Upload File" style={{ width: "100px", height: "100px", borderRadius: "80px" }} />
-                                <br />
                                 <br />
                                 <h3>
                                     {uploadedFileName || "Click to upload"}
