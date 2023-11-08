@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import '../css/ChangePassword.css';
 import logoImage from '../assets/companylogo.png';
+import api from '../apiConfig';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function ChangePassword() {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false); 
+    const location = useLocation();
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(location.search);
+    const fromForgotPassword = queryParams.get('fromForgotPassword');
 
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
@@ -16,12 +23,22 @@ function ChangePassword() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Add password change logic here
+        setIsLoading(true);
         if (newPassword === confirmNewPassword) {
-            // Passwords match, perform password change
-            alert('Password changed successfully!');
+            api('POST', '/user/change_password/', {
+                "password": newPassword,
+                "fromForgotPassword": fromForgotPassword
+            })
+                .then((response) => {
+                    alert(`${response.data.message}`);
+                    setIsLoading(false);
+                    navigate('/');
+                })
+                .catch((error) => {
+                    console.error('POST Request Error:', error);
+                    setIsLoading(false);
+                });
         } else {
-            // Passwords do not match, show an error
             alert('Passwords do not match. Please try again.');
         }
     };
@@ -53,7 +70,9 @@ function ChangePassword() {
                         required
                     />
                 </div>
-                <button type="submit">Change Password</button>
+                <button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Changing' : 'Change Password  '}
+                </button>
             </form>
         </div>
     );

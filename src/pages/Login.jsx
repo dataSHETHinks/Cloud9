@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import '../css/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import logoImage from '../assets/companylogo.png';
+import api from '../apiConfig';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
@@ -17,18 +20,29 @@ function Login() {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const isAuthenticated = true;
-
-    if (isAuthenticated) {
-      navigate('/dashboard'); // Navigate to the dashboard
-    }
-  };
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    api('POST', '/login/',
+      {
+        "username": username,
+        "password": password
+      })
+      .then((response) => {
+        localStorage.setItem("accessToken",response.data.access_token)
+        setIsLoading(false);
+        navigate('/');
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        alert("Please check your credentials")
+        console.error('POST Request Error:', error);
+      });
+  }
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
+      <form onSubmit={handleLogin} className="login-form">
         <div className="login-company-info">
           <img src={logoImage} alt="Company Logo" />
           <p>Fetherstill Inc</p>
@@ -55,7 +69,9 @@ function Login() {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
         <div className="forgot-password">
           <Link to="/forgot-password">Forgot Password?</Link>
         </div>
