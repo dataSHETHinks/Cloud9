@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../css/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import profileImage from "../assets/profile.webp";
@@ -15,6 +15,7 @@ function Dashboard() {
   const [isCategoryDropdownOpen, setIsCategoryDropdown] = useState(false);
   const [allFiles, setAllFiles] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
+  const [allModules, setAllModules] = useState([]);
   const [isModuleDropdownOpen, setIsModuleDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -22,7 +23,8 @@ function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [fileData, setFileData] = useState(null);
-  const staticModules = ["Module 1", "Module 2", "Module 3"];
+
+  const profileDropdownRef = useRef(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -73,6 +75,20 @@ function Dashboard() {
       });
   };
 
+  // Function to close the profile dropdown
+  const closeProfileDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      profileDropdownRef.current &&
+      !profileDropdownRef.current.contains(event.target)
+    ) {
+      closeProfileDropdown();
+    }
+  };
+
   useEffect(() => {
     getAllFiles();
     getAllCategories();
@@ -80,7 +96,9 @@ function Dashboard() {
       setIsSidebarOpen(true);
     }, 1500);
 
+    document.addEventListener("click", handleClickOutside);
     return () => {
+      document.removeEventListener("click", handleClickOutside);
       clearTimeout(openSidebarTimeout);
     };
   }, []);
@@ -147,6 +165,56 @@ function Dashboard() {
       });
   };
 
+  const getAllModules = () => {
+    api("GET", "data/get_file_modules/", {})
+      .then((response) => {
+        setAllModules(response.data.data);
+      })
+      .catch((error) => {
+        console.error("GET Request Error:", error);
+      });
+  };
+
+  // Dynamic category left
+  const addCategory = () => {
+    api("POST", "data/add_new_category/", {
+      name: "test-category",
+    })
+      .then((response) => {
+        alert(response.data.message);
+      })
+      .catch((error) => {
+        alert("POST Request Error:", error);
+      });
+  };
+
+  // Dynamic module left
+  const addModule = () => {
+    api("POST", "data/add_new_module/", {
+      name: "test-module",
+    })
+      .then((response) => {
+        alert(response.message);
+      })
+      .catch((error) => {
+        alert("POST Request Error:", error);
+      });
+  };
+
+  useEffect(() => {
+    getAllFiles();
+    getAllCategories();
+    getAllModules();
+  }, []);
+
+  const toggleProfileDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleProfileDropdownClose = () => {
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="dashboard-container">
       <BaseNav isSidebarOpen={isSidebarOpen} />
@@ -156,7 +224,26 @@ function Dashboard() {
             <i className={`fas fa-bars ${isSidebarOpen ? "hidden" : ""}`}></i>
           </div>
           <div className="spacer"></div>{" "}
-          <div className="profile mt-5">
+          <div className="profile mt-5" ref={profileDropdownRef}>
+            <img
+              className="profile"
+              src={profileImage}
+              alt="Profile"
+              onClick={toggleDropdown}
+            />
+            <div
+              className={`pro-dropdown-menu ${isDropdownOpen ? "open" : ""}`}
+              onClick={handleProfileDropdownClose}
+            >
+              <ul>
+                <li onClick={handleRedirectToChangePassword}>
+                  Change Password
+                </li>
+                <li onClick={handleLogout}>Logout</li>
+              </ul>
+            </div>
+          </div>
+          {/* <div className="profile mt-5">
             <img
               className="profile"
               src={profileImage}
@@ -173,9 +260,11 @@ function Dashboard() {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
-        {/* <div style={{ overflowY: "auto", height: "calc(100vh - 58px)" }}>
+        {/* <button onClick={addCategory}>Add Category</button> */}
+        {/* <button onClick={addModule}>Add Module</button> */}
+        <div style={{ overflowY: "auto", height: "calc(100vh - 58px)" }}>
           <div
             style={{
               marginLeft: "20px",
@@ -221,7 +310,7 @@ function Dashboard() {
               alignItems: "flex-start",
             }}
           >
-            <h3>Module number:</h3>
+            <h3>Module:</h3>
             <div
               className="btn-group"
               style={{ marginLeft: "15px", marginTop: "5px" }}
@@ -233,7 +322,7 @@ function Dashboard() {
               >
                 {selectedModule === null
                   ? "Select a Module"
-                  : selectedModule.title}
+                  : selectedModule.name}
               </button>
               <ul
                 className={`dropdown-menu ${
@@ -241,13 +330,13 @@ function Dashboard() {
                 }`}
                 style={{ backgroundColor: "white" }}
               >
-                {staticModules.map((module, index) => (
-                  <li key={index}>
+                {allModules.map((module) => (
+                  <li key={module.id}>
                     <button
                       className="dropdown-item"
                       onClick={() => handleModuleClick(module)}
                     >
-                      {module}
+                      {module.name}
                     </button>
                   </li>
                 ))}
@@ -296,8 +385,6 @@ function Dashboard() {
               </ul>
             </div>
           </div>
-
-          <br />
           <br />
           <div className="main-content">
             <div className="file-upload" style={{ marginRight: "20px" }}>
@@ -307,7 +394,7 @@ function Dashboard() {
                 onChange={handleFileUpload}
                 id="file-input"
                 style={{ display: "none" }}
-                disabled={!selectedCategory}
+                disabled={!selectedCategory || !selectedModule}
               />
               <label
                 htmlFor="file-input"
@@ -323,7 +410,6 @@ function Dashboard() {
                     borderRadius: "80px",
                   }}
                 />
-                <br />
                 <br />
                 <h3>{uploadedFileName || "Click to upload"}</h3>
               </label>
@@ -355,8 +441,8 @@ function Dashboard() {
               </table>
             </div>
           )}
-        </div> */}
-        <div className="BodyDiv"></div>
+        </div>
+        {/* <div className="BodyDiv"></div>; */}
       </main>
     </div>
   );

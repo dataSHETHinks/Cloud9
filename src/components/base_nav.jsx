@@ -24,19 +24,19 @@ const BaseNav = (params) => {
       <hr className="my-2"></hr>
       <ul className="sidebar-links">
         <li className="mt-4">
-          <a href="/reports">Uploaded Files</a>
+          <a href="/reports">Files</a>
         </li>
         <li className="mt-2">
           <a href="/analytics">Users</a>
         </li>
         <li className="mt-2">
-          <a href="/settings">Add New Roles</a>
+          <a href="/settings">Roles</a>
         </li>
         <li className="mt-2">
-          <a href="/support">Add New Module</a>
+          <a href="/support">Modules</a>
         </li>
         <li className="mt-2">
-          <a href="/support">Add New Category</a>
+          <a href="/support">Categories</a>
         </li>
       </ul>
     </nav>
