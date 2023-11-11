@@ -1,8 +1,7 @@
 import "./App.css";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
-import Dashboard from "./pages/Dashboard";
 import ChangePassword from "./pages/ChangePassword";
 import AuthenticateRoute from "./AuthenticateRoute";
 import { ToastContainer } from "react-toastify";

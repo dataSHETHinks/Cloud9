@@ -1,5 +1,5 @@
 import logoImage from "../assets/companylogo.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import "../css/sidebar/sideBar.css";
 

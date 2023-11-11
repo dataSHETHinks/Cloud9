@@ -7,17 +7,16 @@ import "../../css/FileComponentsCss/FileOverviewCss.css";
 const FileTable = () => {
   const [allFiles, setAllFiles] = useState([]);
 
+  const getAllFiles = () => {
+    api("GET", "/data/get_file_names/", {})
+      .then((response) => {
+        setAllFiles(response.data.data);
+      })
+      .catch((error) => {
+        console.error("GET Request Error:", error);
+      });
+  };
   useEffect(() => {
-    const getAllFiles = () => {
-      api("GET", "/data/get_file_names/", {})
-        .then((response) => {
-          setAllFiles(response.data.data);
-        })
-        .catch((error) => {
-          console.error("GET Request Error:", error);
-        });
-    };
-
     getAllFiles();
   }, []); // Fetch data on component mount
 
