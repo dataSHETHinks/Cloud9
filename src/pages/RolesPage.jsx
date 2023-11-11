@@ -1,17 +1,12 @@
-// AdminDashboard.jsx
-
-import React, { useState } from "react";
+import profileImage from "../assets/profile.webp";
 import BaseNav from "../components/base_nav";
 import DashBoardHeader from "../components/DashBoardHeader";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/Dashboard.css";
-import { useNavigate } from "react-router-dom";
-import profileImage from "../assets/profile.webp";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import DashboardHome from "../components/DashboardHome";
 
-function AdminDashboard() {
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import "../css/RolesComponentsCss/RolesPageCss.css";
+
+const RolesPage = (params) => {
   const navigate = useNavigate();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -30,13 +25,16 @@ function AdminDashboard() {
             profileImage={profileImage}
             navigate={navigate}
           />
-          <div className="BodyDiv">
-            <DashboardHome />
+          <div className="role-page-div">
+            <div className="child-1">
+              <h1>This is Roles Page.</h1>
+            </div>
+            <div className="child-2"></div>
           </div>
         </main>
       </div>
     </>
   );
-}
+};
 
-export default AdminDashboard;
+export default RolesPage;

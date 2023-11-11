@@ -35,9 +35,17 @@
   transition: opacity 0.75s ease, transform 0.75s ease; /* Add transitions for opacity and transform */
 }
 
+.sidebar-links li {
+  cursor: pointer;
+}
+
 .sidebar.open .sidebar-links {
   opacity: 1;
   transform: translateY(
     0
   ); /* Reset the transform for links when sidebar is open */
+}
+
+.cursor-class {
+  cursor: pointer;
 }
