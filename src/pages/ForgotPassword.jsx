@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../css/ForgotPassword.css';
 import logoImage from '../assets/companylogo.png';
 import api from '../apiConfig';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 function ForgotPassword() {
   const [username, setUsername] = useState('');
@@ -56,7 +56,6 @@ function ForgotPassword() {
       </div>
       <div className="right-side">
         <form onSubmit={handleSubmit} className='forgot-password-form'>
-        <img src={logoImage} alt="Company Logo" />
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
