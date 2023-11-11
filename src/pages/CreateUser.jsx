@@ -66,7 +66,7 @@ function CreateUser() {
         "username": username,
         "email" : email,
         "temp_password": password,
-        "role": selectedRole
+        "role": selectedRole.id
       })
       .then((response) => {
         window.alert('Added a new user');
