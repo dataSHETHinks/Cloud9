@@ -1,19 +1,15 @@
 // AdminDashboard.jsx
 
 import React, { useState } from "react";
-import { Route, Routes, Link } from "react-router-dom";
 import BaseNav from "../components/base_nav";
 import DashBoardHeader from "../components/DashBoardHeader";
 import "bootstrap/dist/css/bootstrap.min.css";
-import browseplaceholder from "../assets/browseplaceholder.jpg";
 import "../css/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import profileImage from "../assets/profile.webp";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import api from "../apiConfig";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DashboardHome from "../components/DashboardHome";
-import FilePage from "./FilePage";
 
 function AdminDashboard() {
   const navigate = useNavigate();

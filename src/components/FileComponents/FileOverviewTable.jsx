@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import api from "../../apiConfig";
-import "../../css/FileComponentsCss/FilOverviewCss.css";
+import "../../css/FileComponentsCss/FileOverviewCss.css";
 
 const FileTable = () => {
   const [allFiles, setAllFiles] = useState([]);

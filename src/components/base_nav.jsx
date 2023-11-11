@@ -33,17 +33,17 @@ const BaseNav = (params) => {
         <li className="mt-4" onClick={() => handleNavigate("/Files")}>
           <a>Files</a>
         </li>
-        <li className="mt-2">
-          <a href="/analytics">Users</a>
+        <li className="mt-2" onClick={() => handleNavigate("/Users")}>
+          <a>Users</a>
         </li>
-        <li className="mt-2">
-          <a href="/settings">Roles</a>
+        <li className="mt-2" onClick={() => handleNavigate("/Roles")}>
+          <a>Roles</a>
         </li>
-        <li className="mt-2">
-          <a href="/support">Modules</a>
+        <li className="mt-2" onClick={() => handleNavigate("/Modules")}>
+          <a>Modules</a>
         </li>
-        <li className="mt-2">
-          <a href="/support">Categories</a>
+        <li className="mt-2" onClick={() => handleNavigate("/Categories")}>
+          <a>Categories</a>
         </li>
       </ul>
     </nav>

@@ -9,6 +9,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "./pages/AdminDashboard";
 import FilePage from "./pages/FilePage";
+import UsersPage from "./pages/UsersPage";
+import RolesPage from "./pages/RolesPage";
+import ModulesPage from "./pages/ModulesPage";
+import CategoriesPage from "./pages/CategoriesPage";
 
 function App() {
   return (
@@ -27,6 +31,10 @@ function App() {
             }
           />
           <Route path="/Files" element={<FilePage />}></Route>
+          <Route path="/Users" element={<UsersPage />}></Route>
+          <Route path="/Roles" element={<RolesPage />}></Route>
+          <Route path="/Modules" element={<ModulesPage />}></Route>
+          <Route path="/Categories" element={<CategoriesPage />}></Route>
           <Route
             path="/change-password"
             element={
