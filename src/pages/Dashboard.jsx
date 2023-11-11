@@ -47,10 +47,10 @@ function Dashboard() {
     setIsCategoryDropdown(!isCategoryDropdownOpen);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    navigate("/login");
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("accessToken");
+  //   navigate("/login");
+  // };
 
   const handleRedirectToChangePassword = () => {
     navigate("/change-password");
@@ -104,6 +104,23 @@ function Dashboard() {
     };
   }, []);
 
+  const handleLogout = () => {
+    api("POST", "/logout/", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => {
+        localStorage.removeItem("accessToken");
+        navigate("/login/");
+      })
+      .catch((error) => {
+        alert("Error");
+        console.error("Logout not successful");
+      });
+  };
   const handleFileClick = (file) => {
     setSelectedFile(file);
     setIsFileDropdownOpen(false);
