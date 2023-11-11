@@ -48,7 +48,6 @@ function Login() {
       <div className="right-side">
         <div className='login-form'>
       <form onSubmit={handleLogin}>
-        <img src={logoImage} alt="Company Logo" />
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={handleInputChange} required />

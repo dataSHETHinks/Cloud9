@@ -2,6 +2,7 @@
 .login-container {
   display: flex;
   height: 100vh;
+  /* background-color: #f0f8ff; Light Blue Background */
 }
 
 /* Left side (logo) */
@@ -10,24 +11,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('../assets/splitscreen2.png') no-repeat center center;
+  background: url('../assets/companylogo.png') no-repeat center center;
   background-size: cover;
-  background-color: #fff; /* Background color for the left side */
-}
-p{
-  font-weight: bold ;
+  background-size: 350px 350px;
+  /* background-color: #f7f7f7; Light Grayish Background for the left side */
 }
 
-img {
-  margin-bottom: 30px;
-  margin-top: -30px;
-}
 /* Logo */
 .left-side img {
   width: 150px; /* Adjust the size as needed */
 }
 
 /* Right side (login form) */
+/* Form container */
 .right-side {
   flex: 1;
   display: flex;
@@ -35,31 +31,23 @@ img {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: #ffffff; /* Background color for the right side */
+  background-color: #f0f8ff; /* Light Blue Background */
 }
 
 /* Form elements */
 .right-side h1 {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Add margin to create space between heading and form elements */
+  color: #007acc; /* Dark Blue Text Color */
 }
 
 .login-form {
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 5px;
-  background-color: #ffffff;
   width: 300px;
   text-align: center;
 }
 
-.login-form img{
-  margin-top: 5px;
-  height: 100px;
-}
-
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 23px; /* Increase the margin between input groups */
   text-align: left;
 }
 
@@ -67,20 +55,20 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #007acc; /* Dark Blue Text Color */
+  font-family: 'Poppins', sans-serif; /* Modern Font Family */
 }
 
 input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  /* border-radius: 20px; */
+  border: 1px solid #007acc; /* Dark Blue Border Color */
   font-size: 16px;
 }
 
-/* Adjust the margin-bottom for the login button and "Forgot password" link */
 button {
   width: 100%;
-  background-color: #000;
+  background-color: #007acc; /* Dark Blue Background for the Button */
   color: #fff;
   border: none;
   padding: 10px;
@@ -88,14 +76,15 @@ button {
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-top: 10px; /* Add margin-top to create space between password field and login button */
+  margin-top: 10px;
+  margin-bottom: 20px; /* Increase the margin-bottom */
 }
 
-/* Adjust the margin-top for the "Forgot password" link */
+/* "Forgot password" link */
 .forgot-password a {
   text-decoration: none;
-  color: #007bff;
-  margin-top: 20px; /* Add margin-top to create space between login button and "Forgot password" link */
+  color: #007acc; /* Dark Blue Link Color */
+  margin-top: 40px; /* Increase the margin-top */
 }
 
 .forgot-password a:hover {
