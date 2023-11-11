@@ -50,7 +50,6 @@ function ChangePassword() {
             </div>
             <div className="change-password-right-side">
                 <form onSubmit={handleSubmit} className="change-password-form">
-                    <img src={logoImage} alt="Company Logo" />
                     <div className="input-group">
                         <label htmlFor="password">Password</label>
                         <input
