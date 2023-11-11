@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useDebugValue, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../apiConfig';
 import '../css/CreateUser.css';
@@ -7,7 +7,6 @@ import BaseNav from '../components/base_nav';
 function CreateUser() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true); // State to track password matching
@@ -15,21 +14,43 @@ function CreateUser() {
   const confirmPasswordRef = useRef(); // Ref for confirm password input
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
+  const [isRolesDropdownOpen, setIsRolesDropdown] = useState(false);
+  const [allRoles, setAllRoles] = useState([]);
+  const [selectedRole, setSelectedRole] = useState(null);
+
   const navigate = useNavigate();
+
+  const toggleRoleDropdown = () => {
+    setIsRolesDropdown(!isRolesDropdownOpen);
+  };
+
+  const getAllRoles = () => {
+    api('GET', '/user/get_user_roles/', {})
+        .then((response) =>{
+            setAllRoles(response.data);
+        })
+        .catch((error) => {
+            console.error('GET Request Error:',)
+        });
+  }
+
+  const handleRoleClick = (role) => {
+    setSelectedRole(role);
+    setIsRolesDropdown(false);
+}
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    console.log(name + ' ' + value);
     if (name === 'username') {
         setUsername(value);
     } else if (name === 'email'){
-        console.log("IN email")
         setEmail(value);
     } else if (name === 'password') {
         setPassword(value);
     } else if (name === 'confirmPassword'){
         setConfirmPassword(value);
     } else if (name === 'role'){
-        setRole(value);
+        setSelectedRole(value);
     } 
   };
 
@@ -40,13 +61,30 @@ function CreateUser() {
     if (password === confirmPassword) {
       // Passwords match, continue with your registration logic
       console.log('submitted');
-      // Add your registration logic here
+      api('POST', '/user/add_new_user/',
+      {
+        "username": username,
+        "email" : email,
+        "temp_password": password,
+        "role": selectedRole
+      })
+      .then((response) => {
+        window.alert('Added a new user');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('POST Request Error:', error);
+      });
     } else {
       // Passwords don't match, set error and prevent registration
       setPasswordsMatch(false);
       window.alert('Passwords do not match. Please try again.');
     }
   };
+
+  useEffect(() => {
+    getAllRoles();
+  }, []);
 
   return (
     <div className="registration-container">
@@ -102,21 +140,24 @@ function CreateUser() {
           </div>
           <div className="input-group">
             <label htmlFor="role">Role</label>
-            <select
-              id="role"
-              name="role"
-              value={role}
-              onChange={handleInputChange}
-              required
+            <button type="button" 
+                className="btn btn-outline-dark btn-sm border border-dark dropdown-toggle mb-0" 
+                onClick={toggleRoleDropdown}
             >
-              <option value="">Select a role</option>
-              <option value="Data Analyst">Data Analyst</option>
-              <option value="Data Engineer">Data Engineer</option>
-              <option value="Data Scientist">Data Scientist</option>
-              <option value="Admin">Admin</option>
-              <option value="Employee">Employee</option>
-              <option value="Operator">Operator</option>
-            </select>
+                {selectedRole === null ? 'Select a Role' : selectedRole.title}
+            </button>
+            {allRoles && allRoles.length > 0 && (
+
+            <ul className={`dropdown-menu ${isRolesDropdownOpen ? 'show' : ''}`}
+                style={{ backgroundColor: 'white' }}>
+                {allRoles.map((role) => (
+                <li key={role.id}>
+                    <button className="dropdown-item" onClick={() => handleRoleClick(role)}> 
+                        {role.title}
+                    </button>
+                </li>
+                ))}
+            </ul>)}
           </div>
           <button type="submit">Submit</button>
         </form>
