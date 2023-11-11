@@ -51,7 +51,6 @@ function Login() {
       <div className="right-side">
         <div className="login-form w-50 p-3">
           <form onSubmit={handleLogin}>
-            <img src={logoImage} alt="Company Logo" />
             <div className="input-group">
               <label htmlFor="username">Username</label>
               <input
