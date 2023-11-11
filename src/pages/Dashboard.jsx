@@ -172,7 +172,6 @@ function Dashboard() {
   const getFileDataByFileInfo = async (file) => {
     console.log(file);
     console.log(file.id);
-
     api("GET", `/data/get_file_data/?id=${file.id}`)
       .then((response) => {
         localStorage.setItem("fileData", response.data.data.data);
