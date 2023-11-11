@@ -51,26 +51,29 @@ function ForgotPassword() {
 
   return (
     <div className="forgot-password-container">
-      <form onSubmit={handleSubmit} className="forgot-password-form">
-        <div className="forgot-password-company-info">
-          <img src={logoImage} alt="Company Logo" />
-          <p>Fetherstill Inc</p>
-        </div>
-        <div className="input-group">
-          <input
-            type="name"
-            id="name"
-            name="name"
-            placeholder='Username'
-            value={username}
-            onChange={handleUsernameChange}
-            required
-          />
-        </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Sending verification code ' : 'Reset Password'}
-        </button>
-      </form>
+      <div className="forgot-password-left-side">
+
+      </div>
+      <div className="right-side">
+        <form onSubmit={handleSubmit} className='forgot-password-form'>
+        <img src={logoImage} alt="Company Logo" />
+          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="name"
+              id="name"
+              name="name"
+              placeholder='Username'
+              value={username}
+              onChange={handleUsernameChange}
+              required
+            />
+          </div>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Sending verification code ' : 'Reset Password'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

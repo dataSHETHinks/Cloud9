@@ -1,0 +1,51 @@
+.sidebar {
+  /* Initial styles */
+  width: 250px; /* Set the initial width */
+  transition: width 0.75s ease; /* Define the transition effect on the width property */
+  padding: 0;
+  padding-top: 20px;
+  overflow: hidden; /* Hide the overflow content */
+}
+
+/* Class for when the sidebar is closed */
+.sidebar.closed {
+  width: 0; /* Set the width to 0 when the sidebar is closed */
+}
+
+/* Class for when the sidebar is open */
+.sidebar.open {
+  width: 250px; /* Set the initial width */
+  transition: width 0.75s ease; /* Define the transition effect on the width property */
+}
+
+.image {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.75s ease; /* Add a transition for the opacity property */
+}
+
+.sidebar.open .image {
+  display: block;
+  opacity: 1;
+}
+
+.sidebar-links {
+  opacity: 0;
+  transform: translateY(-10px); /* Move the links up slightly to hide them */
+  transition: opacity 0.75s ease, transform 0.75s ease; /* Add transitions for opacity and transform */
+}
+
+.sidebar-links li {
+  cursor: pointer;
+}
+
+.sidebar.open .sidebar-links {
+  opacity: 1;
+  transform: translateY(
+    0
+  ); /* Reset the transform for links when sidebar is open */
+}
+
+.cursor-class {
+  cursor: pointer;
+}
