@@ -11,6 +11,7 @@ import profileImage from "../assets/profile.webp";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import api from "../apiConfig";
 import "bootstrap/dist/css/bootstrap.min.css";
+import FileOverviewTable from "../components/FileComponents/FileOverviewTable";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ function AdminDashboard() {
                 {/* Content for the first child of the left sub-division */}
               </div>
               <div className="left-sub-div-child-2">
-                {/* Content for the second child of the left sub-division */}
+                <FileOverviewTable />
               </div>
             </div>
             <div className="right-sub-div">

@@ -285,12 +285,12 @@ tbody {
   height: 65%;
   margin: 10px; /* Add margin for spacing */
   padding: 10px; /* Add padding for content spacing */
-  background-color: #aee5d8; /* Set a color for the second child */
+  /* background-color: black; */
 }
 
 .right-sub-div {
   flex: 0 0 40%; /* 40% of the available space for the right sub-division */
-  background-color: #; /* Set background color for the right sub-division */
+  /* Set background color for the right sub-division */
   display: flex; /* Use Flexbox to vertically align children */
   flex-direction: column; /* Stack children vertically */
   align-items: center; /* Center children horizontally */
