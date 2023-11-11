@@ -1,21 +1,11 @@
-// AdminDashboard.jsx
+import profileImage from "../assets/profile.webp";
 
-import React, { useState } from "react";
-import { Route, Routes, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import BaseNav from "../components/base_nav";
 import DashBoardHeader from "../components/DashBoardHeader";
-import "bootstrap/dist/css/bootstrap.min.css";
-import browseplaceholder from "../assets/browseplaceholder.jpg";
-import "../css/Dashboard.css";
-import { useNavigate } from "react-router-dom";
-import profileImage from "../assets/profile.webp";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import api from "../apiConfig";
-import "bootstrap/dist/css/bootstrap.min.css";
-import DashboardHome from "../components/DashboardHome";
-import FilePage from "./FilePage";
 
-function AdminDashboard() {
+const FilePage = (params) => {
   const navigate = useNavigate();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -35,12 +25,12 @@ function AdminDashboard() {
             navigate={navigate}
           />
           <div className="BodyDiv">
-            <DashboardHome />
+            <h1> THis is file Page</h1>
           </div>
         </main>
       </div>
     </>
   );
-}
+};
 
-export default AdminDashboard;
+export default FilePage;

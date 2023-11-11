@@ -8,6 +8,7 @@ import AuthenticateRoute from "./AuthenticateRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "./pages/AdminDashboard";
+import FilePage from "./pages/FilePage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               </AuthenticateRoute>
             }
           />
+          <Route path="/Files" element={<FilePage />}></Route>
           <Route
             path="/change-password"
             element={
