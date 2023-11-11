@@ -7,6 +7,7 @@ import api from "../apiConfig";
 import "bootstrap/dist/css/bootstrap.min.css";
 import browseplaceholder from "../assets/browseplaceholder.jpg";
 import BaseNav from "../components/base_nav";
+import DashBoardHeader from "../components/DashBoardHeader";
 
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -178,7 +179,7 @@ function Dashboard() {
   // Dynamic category left
   const addCategory = () => {
     api("POST", "data/add_new_category/", {
-      name: "test-category",
+      name: "test-category-1",
     })
       .then((response) => {
         alert(response.data.message);
@@ -207,10 +208,6 @@ function Dashboard() {
     getAllModules();
   }, []);
 
-  const toggleProfileDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   const handleProfileDropdownClose = () => {
     setIsDropdownOpen(false);
   };
@@ -219,51 +216,19 @@ function Dashboard() {
     <div className="dashboard-container">
       <BaseNav isSidebarOpen={isSidebarOpen} />
       <main className="content">
-        <div className="dashboard-header">
-          <div className="hamburger-icon mb-4" onClick={toggleSidebar}>
-            <i className={`fas fa-bars ${isSidebarOpen ? "hidden" : ""}`}></i>
-          </div>
-          <div className="spacer"></div>{" "}
-          <div className="profile mt-5" ref={profileDropdownRef}>
-            <img
-              className="profile"
-              src={profileImage}
-              alt="Profile"
-              onClick={toggleDropdown}
-            />
-            <div
-              className={`pro-dropdown-menu ${isDropdownOpen ? "open" : ""}`}
-              onClick={handleProfileDropdownClose}
-            >
-              <ul>
-                <li onClick={handleRedirectToChangePassword}>
-                  Change Password
-                </li>
-                <li onClick={handleLogout}>Logout</li>
-              </ul>
-            </div>
-          </div>
-          {/* <div className="profile mt-5">
-            <img
-              className="profile"
-              src={profileImage}
-              alt="Profile"
-              onClick={toggleDropdown}
-            />
-            {isDropdownOpen && (
-              <div className="pro-dropdown-menu">
-                <ul>
-                  <li onClick={handleRedirectToChangePassword}>
-                    Change Password
-                  </li>
-                  <li onClick={handleLogout}>Logout</li>
-                </ul>
-              </div>
-            )}
-          </div> */}
-        </div>
-        {/* <button onClick={addCategory}>Add Category</button> */}
-        {/* <button onClick={addModule}>Add Module</button> */}
+        <DashBoardHeader
+          isSidebarOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
+          profileImage={profileImage}
+          toggleDropdown={toggleDropdown}
+          isDropdownOpen={isDropdownOpen}
+          handleProfileDropdownClose={handleProfileDropdownClose}
+          handleRedirectToChangePassword={handleRedirectToChangePassword}
+          handleLogout={handleLogout}
+          profileDropdownRef={profileDropdownRef}
+        />
+        {/* <button onClick={addCategory}>Add Category</button>
+        <button onClick={addModule}>Add Module</button> */}
         <div style={{ overflowY: "auto", height: "calc(100vh - 58px)" }}>
           <div
             style={{

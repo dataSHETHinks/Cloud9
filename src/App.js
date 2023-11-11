@@ -7,6 +7,7 @@ import ChangePassword from "./pages/ChangePassword";
 import AuthenticateRoute from "./AuthenticateRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
             path="/"
             element={
               <AuthenticateRoute>
-                <Dashboard />
+                {/* <Dashboard /> */}
+                <AdminDashboard />
               </AuthenticateRoute>
             }
           />
