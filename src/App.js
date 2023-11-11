@@ -25,16 +25,50 @@ function App() {
             path="/"
             element={
               <AuthenticateRoute>
-                {/* <Dashboard /> */}
                 <AdminDashboard />
               </AuthenticateRoute>
             }
           />
-          <Route path="/Files" element={<FilePage />}></Route>
-          <Route path="/Users" element={<UsersPage />}></Route>
-          <Route path="/Roles" element={<RolesPage />}></Route>
-          <Route path="/Modules" element={<ModulesPage />}></Route>
-          <Route path="/Categories" element={<CategoriesPage />}></Route>
+          <Route
+            path="/Files"
+            element={
+              <AuthenticateRoute>
+                <FilePage />
+              </AuthenticateRoute>
+            }
+          ></Route>
+          <Route
+            path="/Users"
+            element={
+              <AuthenticateRoute>
+                <UsersPage />
+              </AuthenticateRoute>
+            }
+          ></Route>
+          <Route
+            path="/Roles"
+            element={
+              <AuthenticateRoute>
+                <RolesPage />
+              </AuthenticateRoute>
+            }
+          ></Route>
+          <Route
+            path="/Modules"
+            element={
+              <AuthenticateRoute>
+                <ModulesPage />
+              </AuthenticateRoute>
+            }
+          ></Route>
+          <Route
+            path="/Categories"
+            element={
+              <AuthenticateRoute>
+                <CategoriesPage />
+              </AuthenticateRoute>
+            }
+          ></Route>
           <Route
             path="/change-password"
             element={

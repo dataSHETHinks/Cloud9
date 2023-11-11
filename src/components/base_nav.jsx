@@ -20,7 +20,10 @@ const BaseNav = (params) => {
   return (
     <nav className={sidebarClasses}>
       <div className="company-info mt-5">
-        <div className="company-logo">
+        <div
+          className="company-logo cursor-class"
+          onClick={() => handleNavigate("/")}
+        >
           <img src={logoImage} alt="Company Logo" />
           <hr className="my-2"></hr>
           <div className="company-name">
