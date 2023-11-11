@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../apiConfig";
 
 const DashBoardHeader = ({ isSidebarOpen, toggleSidebar, profileImage }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -33,8 +34,15 @@ const DashBoardHeader = ({ isSidebarOpen, toggleSidebar, profileImage }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    navigate("/login");
+    api('POST', '/logout/', {})
+      .then((response) => {
+        localStorage.removeItem("accessToken")
+        navigate("/login/");
+      })
+      .catch((error) => {
+        alert(error);
+        console.error("Logout not successful");
+      });
   };
 
   const toggleDropdown = () => {

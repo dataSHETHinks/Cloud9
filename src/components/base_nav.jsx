@@ -1,5 +1,5 @@
 import logoImage from "../assets/companylogo.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import "../css/sidebar/sideBar.css";
 
@@ -36,8 +36,8 @@ const BaseNav = (params) => {
         <li className="mt-2">
           <a href="/analytics">Users</a>
         </li>
-        <li className="mt-2">
-          <a href="/settings">Roles</a>
+        <li className="mt-2" onClick={() => handleNavigate("/roles")}>
+          <a>Roles</a>
         </li>
         <li className="mt-2">
           <a href="/support">Modules</a>
