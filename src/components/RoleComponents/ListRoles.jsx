@@ -39,6 +39,12 @@ const ListRoles = () => {
     };
 
     const renderTableBody = () => {
+        if (allRoles.length === 0) {
+            return (
+                <h2>No roles added</h2>
+            );
+        }
+
         return (
             <tbody>
                 {allRoles.map((role, index) => (
