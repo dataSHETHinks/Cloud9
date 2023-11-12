@@ -9,8 +9,7 @@ const ListRoles = () => {
         const fetchRoles = async () => {
             try {
                 const response = await api("GET", "/user/get_user_roles/", {});
-                console.log(response.data);
-                setAllRoles(response.data || []); // Set an empty array if 'data' is undefined
+                setAllRoles(response.data || []);
             } catch (error) {
                 console.error("GET Request Error:", error);
             }

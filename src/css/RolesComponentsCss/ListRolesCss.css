@@ -3,7 +3,9 @@
     overflow-x: auto; /* Enable horizontal scrolling */
     overflow-y: auto;
     max-width: 100%; /* Make sure it doesn't exceed the container */
-    max-height: 500px;
+    max-height: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
   }
   
   .list-roles-table {
