@@ -7,17 +7,17 @@ import "../../css/FileComponentsCss/FileOverviewCss.css";
 const FileTable = () => {
   const [allFiles, setAllFiles] = useState([]);
 
-  const getAllFiles = () => {
-    api("GET", "/data/get_file_names/", {})
-      .then((response) => {
-        setAllFiles(response.data.data);
-      })
-      .catch((error) => {
-        console.error("GET Request Error:", error);
-      });
-  };
   useEffect(() => {
-    getAllFiles();
+    const fetchData = async () => {
+      try {
+        const response = await api("GET", "/data/get_file_names/", {});
+        setAllFiles(response.data.data);
+      } catch (error) {
+        console.error("GET Request Error:", error);
+      }
+    };
+
+    fetchData();
   }, []); // Fetch data on component mount
 
   return (
@@ -30,10 +30,6 @@ const FileTable = () => {
           <tr>
             <th>#</th>
             <th>Title</th>
-            <th>Category</th>
-            <th>Uploaded By</th>
-            <th>Modified At</th>
-            <th>Module Name</th>
           </tr>
         </thead>
         <tbody>
@@ -41,10 +37,6 @@ const FileTable = () => {
             <tr key={file.id}>
               <td>{index + 1}</td>
               <td>{file.title}</td>
-              <td>{file.category_name}</td>
-              <td>{file.uploaded_by_username}</td>
-              <td>{file.modified_at}</td>
-              <td>{file.module_name}</td>
             </tr>
           ))}
         </tbody>

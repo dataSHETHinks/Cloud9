@@ -1,0 +1,18 @@
+/* Add this to your CSS */
+.list-roles-table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: auto;
+    max-width: 100%; /* Make sure it doesn't exceed the container */
+    max-height: 500px;
+  }
+  
+  .list-roles-table {
+    white-space: nowrap; /* Prevent text wrapping in cells */
+    height: 100%;
+  }
+  
+  .list-roles-table th,
+  .list-roles-table td {
+    min-width: 100px; /* Set a minimum width for cells */
+  }
+  

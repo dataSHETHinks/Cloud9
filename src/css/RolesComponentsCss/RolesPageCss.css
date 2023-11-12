@@ -7,7 +7,7 @@
   height: 100%;
 }
 
-.child-1 {
+.role-page-child-1 {
   margin: 10px;
   padding: 10px;
   width: 100%;
@@ -15,10 +15,10 @@
   background-color: #ffcccb;
 }
 
-.child-2 {
+.role-page-child-2 {
   margin: 10px;
   padding: 10px;
   width: 100%;
   height: 97%;
-  background-color: black;
+  background-color: white;
 }

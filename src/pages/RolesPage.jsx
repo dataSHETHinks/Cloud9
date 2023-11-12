@@ -5,6 +5,7 @@ import DashBoardHeader from "../components/DashBoardHeader";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../css/RolesComponentsCss/RolesPageCss.css";
+import ListRoles from "../components/RoleComponents/ListRoles";
 
 const RolesPage = (params) => {
   const navigate = useNavigate();
@@ -26,10 +27,13 @@ const RolesPage = (params) => {
             navigate={navigate}
           />
           <div className="role-page-div">
-            <div className="child-1">
+            <div className="role-page-child-1">
               <h1>This is Roles Page.</h1>
             </div>
-            <div className="child-2"></div>
+            <div className="role-page-child-2">
+              <h3>List of Roles</h3>
+              <ListRoles />
+            </div>
           </div>
         </main>
       </div>
