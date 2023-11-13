@@ -1,7 +1,8 @@
 .dashboard-container {
   display: flex;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   overflow: hidden;
+  width: 100%;
 }
 
 .sidebar {
@@ -57,7 +58,8 @@
 }
 
 .content {
-  flex: 1;
+  width: 85%;
+  transition: width 0.75s ease;
 }
 
 .content h1 {
@@ -311,4 +313,61 @@ tbody {
 .right-sub-div-child-2 {
   height: 60%;
   background-color: #aee5d8; /* Set a color for the second child */
+}
+
+.sidebar {
+  /* Initial styles */
+  width: 15%; /* Set the initial width */
+  transition: width 0.75s ease; /* Define the transition effect on the width property */
+  padding: 0;
+  padding-top: 20px;
+  overflow: hidden; /* Hide the overflow content */
+}
+
+/* Class for when the sidebar is closed */
+.sidebar.closed {
+  width: 0; /* Set the width to 0 when the sidebar is closed */
+}
+
+.sidebar.closed + .content {
+  width: 100%; /* Set width to 100% when the sidebar is closed */
+  transition: width 0.75s ease; /* Add transition for the width property */
+}
+
+/* Class for when the sidebar is open */
+.sidebar.open {
+  width: 15%; /* Set the initial width */
+  transition: width 0.75s ease; /* Define the transition effect on the width property */
+}
+
+.image {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.75s ease; /* Add a transition for the opacity property */
+}
+
+.sidebar.open .image {
+  display: block;
+  opacity: 1;
+}
+
+.sidebar-links {
+  opacity: 0;
+  transform: translateY(-10px); /* Move the links up slightly to hide them */
+  transition: opacity 0.75s ease, transform 0.75s ease; /* Add transitions for opacity and transform */
+}
+
+.sidebar-links li {
+  cursor: pointer;
+}
+
+.sidebar.open .sidebar-links {
+  opacity: 1;
+  transform: translateY(
+    0
+  ); /* Reset the transform for links when sidebar is open */
+}
+
+.cursor-class {
+  cursor: pointer;
 }

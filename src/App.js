@@ -12,6 +12,7 @@ import UsersPage from "./pages/UsersPage";
 import RolesPage from "./pages/RolesPage";
 import ModulesPage from "./pages/ModulesPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import FileDetailsPage from "./pages/FileDetailsPage";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
               </AuthenticateRoute>
             }
           ></Route>
+          <Route
+            path="/FileDetails/:id" // Define a route parameter for the file ID
+            element={
+              <AuthenticateRoute>
+                <FileDetailsPage />
+              </AuthenticateRoute>
+            }
+          />
           <Route
             path="/Users"
             element={

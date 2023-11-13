@@ -1,6 +1,7 @@
 // DashboardHome.jsx
 
 import React from "react";
+import "../css/Dashboard.css";
 import FileOverviewTable from "./FileComponents/FileOverviewTable.jsx";
 
 const DashboardHome = () => {
@@ -11,7 +12,9 @@ const DashboardHome = () => {
           {/* Content for the first child of the left sub-division */}
         </div>
         <div className="left-sub-div-child-2">
-          <FileOverviewTable />
+          <FileOverviewTable
+            style={{ maxWidth: "100%", maxHeight: "87%", overflowY: "auto" }}
+          />
         </div>
       </div>
       <div className="right-sub-div">
