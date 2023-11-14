@@ -2,6 +2,7 @@ import logoImage from "../assets/companylogo.png";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import "../css/sidebar/sideBar.css";
+import { useEffect } from "react";
 
 const BaseNav = (params) => {
   const { isSidebarOpen } = params;
