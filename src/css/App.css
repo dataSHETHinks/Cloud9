@@ -1,0 +1,15 @@
+/* .demo-logo-vertical {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.logo-collapsed {
+  margin-left: 43px;
+  transform: translateX(calc(-100% + 16px));
+}
+
+.logo-expanded {
+  transform: translateX(0);
+} */

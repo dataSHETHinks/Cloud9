@@ -1,20 +1,18 @@
-import React from "react";
-// import "./App.css";
+import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import BaseLayout from "./components/newComponents/BaseLayout";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import ChangePassword from "./pages/ChangePassword";
 import AuthenticateRoute from "./AuthenticateRoute";
-import DashboardHome from "./components/DashboardHome";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import AdminDashboard from "./pages/newPages/AdminDashboard";
 import FilePage from "./pages/FilePage";
-import FileDetailsPage from "./pages/FileDetailsPage";
 import UsersPage from "./pages/UsersPage";
 import RolesPage from "./pages/RolesPage";
 import ModulesPage from "./pages/ModulesPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import FileDetailsPage from "./pages/FileDetailsPage";
 
 function App() {
   return (
@@ -27,7 +25,7 @@ function App() {
             path="/"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={DashboardHome} />
+                <AdminDashboard />
               </AuthenticateRoute>
             }
           />
@@ -35,7 +33,7 @@ function App() {
             path="/Files"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={FilePage} />
+                <FilePage />
               </AuthenticateRoute>
             }
           ></Route>
@@ -43,7 +41,7 @@ function App() {
             path="/FileDetails/:id" // Define a route parameter for the file ID
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={FileDetailsPage} />
+                <FileDetailsPage />
               </AuthenticateRoute>
             }
           />
@@ -51,7 +49,7 @@ function App() {
             path="/Users"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={UsersPage} />
+                <UsersPage />
               </AuthenticateRoute>
             }
           ></Route>
@@ -59,7 +57,7 @@ function App() {
             path="/Roles"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={RolesPage} />
+                <RolesPage />
               </AuthenticateRoute>
             }
           ></Route>
@@ -67,7 +65,7 @@ function App() {
             path="/Modules"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={ModulesPage} />
+                <ModulesPage />
               </AuthenticateRoute>
             }
           ></Route>
@@ -75,7 +73,7 @@ function App() {
             path="/Categories"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={CategoriesPage} />
+                <CategoriesPage />
               </AuthenticateRoute>
             }
           ></Route>

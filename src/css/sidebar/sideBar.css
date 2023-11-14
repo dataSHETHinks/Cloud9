@@ -1,6 +1,6 @@
 .sidebar {
   /* Initial styles */
-  width: 250px; /* Set the initial width */
+  width: 20%; /* Set the initial width */
   transition: width 0.75s ease; /* Define the transition effect on the width property */
   padding: 0;
   padding-top: 20px;
@@ -14,7 +14,7 @@
 
 /* Class for when the sidebar is open */
 .sidebar.open {
-  width: 250px; /* Set the initial width */
+  width: 20%; /* Set the initial width */
   transition: width 0.75s ease; /* Define the transition effect on the width property */
 }
 

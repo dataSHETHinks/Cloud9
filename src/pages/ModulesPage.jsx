@@ -14,27 +14,7 @@ const ModulesPage = (params) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  return (
-    <>
-      <div className="dashboard-container">
-        <BaseNav isSidebarOpen={isSidebarOpen} />
-        <main className="content">
-          <DashBoardHeader
-            isSidebarOpen={isSidebarOpen}
-            toggleSidebar={toggleSidebar}
-            profileImage={profileImage}
-            navigate={navigate}
-          />
-          <div className="module-page-div">
-            <div className="child-1">
-              <h1>This is Files Modules Page.</h1>
-            </div>
-            <div className="child-2"></div>
-          </div>
-        </main>
-      </div>
-    </>
-  );
+  return <p>Modules Page</p>;
 };
 
 export default ModulesPage;

@@ -16,7 +16,8 @@ const RolesPage = (params) => {
 
   return (
     <>
-      <div className="dashboard-container">
+      <p>Roles Page</p>
+      {/* <div className="dashboard-container">
         <BaseNav isSidebarOpen={isSidebarOpen} />
         <main className="content">
           <DashBoardHeader
@@ -32,7 +33,7 @@ const RolesPage = (params) => {
             <div className="child-2"></div>
           </div>
         </main>
-      </div>
+      </div> */}
     </>
   );
 };
