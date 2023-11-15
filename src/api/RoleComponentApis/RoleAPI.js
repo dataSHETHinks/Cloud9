@@ -1,14 +1,9 @@
 import api from "../../apiConfig";
 
-class AuthAPI {
-    static async login(username, password) {
-        const data = {
-            username,
-            password,
-        };
-
+class RoleAPI {
+    static async getUserRoles() {
         try {
-            const response = await api("POST", "/login/", data);
+            const response = await api('GET', 'user/get_user_roles/', {});
             return {
                 success: true,
                 response,
@@ -23,27 +18,20 @@ class AuthAPI {
         }
     }
 
-    static async logout() {
-        try {
-            const response = await api("POST", "/logout/");
-            return {
-                success: true,
-                response,
-                isLogout: false,
-            };
-        } catch (error) {
-            return {
-                success: false,
-                error,
-                isLogout: error.response && error.response.status === 401,
-            };
-        }
-    }
 
-    static async forgotPassword(username) {
+    //permissions sample
+    // const permissions = {
+    //   "can_modify_module": false,
+    //   "can_modify_category": false,
+    //   "can_modify_user": false,
+    //   "can_modify_files": false,
+    //   "can_modify_roles": false
+    // };
+    static async addNewUserRole(title, permissions) {
         try {
-            const response = await api('POST', 'user/forget_password/', {
-                "usernameOrEmail": username
+            const response = await api('POST', 'user/add_new_user_role/', {
+                "title": title,
+                ...permissions,
             });
             return {
                 success: true,
@@ -59,11 +47,11 @@ class AuthAPI {
         }
     }
 
-    static async changePassword(newPassword, fromForgotPassword) {
+    static async changeAssignedUserRole(userId, roleId) {
         try {
-            const response = await api('POST', '/user/change_password/', {
-                "password": newPassword,
-                "fromForgotPassword": fromForgotPassword
+            const response = await api('POST', 'user/change_assigned_user_role/', {
+                "user_id": userId,
+                "role_id": roleId,
             });
             return {
                 success: true,
@@ -78,7 +66,6 @@ class AuthAPI {
             };
         }
     }
-
 }
 
-export default AuthAPI;
+export default RoleAPI;
