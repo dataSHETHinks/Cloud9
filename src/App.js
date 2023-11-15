@@ -40,7 +40,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="/FileDetails/:id" // Define a route parameter for the file ID
+            path="/FileDetails/:id"
             element={
               <AuthenticateRoute>
                 <BaseLayout componentToRender={FileDetailsPage} />

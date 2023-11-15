@@ -1,123 +1,95 @@
-// FileDetails.jsx
-import profileImage from "../assets/profile.webp";
-import BaseNav from "../components/base_nav";
-
-import { useNavigate } from "react-router-dom";
-
-import React, { useState, useEffect } from "react";
-import DashBoardHeader from "../components/DashBoardHeader";
-import "../css/Dashboard.css";
-import "../css/FileComponentsCss/FileDetailsPageCss.css";
+import { useEffect, useState } from "react";
+import { Table, Descriptions } from "antd";
+import { useParams } from "react-router-dom";
+import api from "../apiConfig";
 
 const FileDetailsPage = () => {
-  const navigate = useNavigate();
-
-  const [fileData, setFileData] = useState(null);
+  const { id } = useParams();
+  const [dataSource, setDataSource] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [fileDetails, setFileDetails] = useState({});
 
   useEffect(() => {
-    // Retrieve the fileData from localStorage during component initialization
-    const storedFileData = localStorage.getItem("fileData");
+    const getFileData = async () => {
+      try {
+        const response = await api("GET", `/data/get_file_data/?id=${id}`);
+        if (response && response.data.data.data) {
+          const fileData = response.data;
+          const sampleObject = fileData.data.data; // Assuming the object is stored in 'sampleObject'
+          const details = {
+            category_name: fileData.data.category_name,
+            uploaded_by_username: fileData.data.uploaded_by_username,
+            uploaded_at: fileData.data.uploaded_at,
+            modified_at: fileData.data.modified_at,
+          };
+          setFileDetails(details);
+          if (sampleObject && Object.keys(sampleObject).length > 0) {
+            const keys = Object.keys(sampleObject[1]); // Using keys from the first object (assuming keys are consistent)
+            const dataSource = Object.entries(sampleObject).map(
+              ([key, item]) => ({
+                ...item,
+                key, // Set the 'key' field to the corresponding index
+                index: key, // Additional field for index, if needed
+              })
+            );
+            const indexColumn = {
+              title: "Index",
+              dataIndex: "index",
+              key: "index",
+              render: (text, record, index) => <span>{index + 1}</span>,
+            };
+            const newColumns = [
+              indexColumn, // Include the Index column as the first column
+              ...keys.map((key) => ({
+                title: key,
+                dataIndex: key,
+                key: key,
+                width: 150, // Set a fixed width for columns (adjust as needed)
+              })),
+            ];
+            setColumns(newColumns);
+            setDataSource(dataSource);
+          } else {
+            console.error("Invalid data structure received");
+          }
+        } else {
+          console.error("Empty or invalid response data");
+        }
+      } catch (error) {
+        console.error("GET Request Error:", error);
+      }
+    };
 
-    if (storedFileData) {
-      // Parse the JSON data if it's stored as a string
-      const parsedFileData = JSON.parse(storedFileData);
-      // Set the file data in the state
-      setFileData(parsedFileData);
-    }
-  }, []);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+    getFileData(); // Fetch data only on the initial render
+  }, [id]);
 
   return (
-    <div className="dashboard-container">
-      <BaseNav isSidebarOpen={isSidebarOpen} />
-      <div className="content">
-        <DashBoardHeader
-          isSidebarOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          profileImage={profileImage}
-          navigate={navigate}
+    <>
+      <Descriptions title="File Details" bordered style={{ marginBottom: 20 }}>
+        <Descriptions.Item label="Category Name">
+          {fileDetails.category_name}
+        </Descriptions.Item>
+        <Descriptions.Item label="Uploaded By">
+          {fileDetails.uploaded_by_username}
+        </Descriptions.Item>
+        <Descriptions.Item label="Uploaded At">
+          {fileDetails.uploaded_at}
+        </Descriptions.Item>
+        <Descriptions.Item label="Modified At">
+          {fileDetails.modified_at}
+        </Descriptions.Item>
+      </Descriptions>
+      <div style={{ overflowX: "auto" }}>
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          bordered
+          pagination={false}
+          scroll={{ x: "max-content", y: 345 }}
+          rowKey="key" // Set the 'key' field for the table row
         />
-        <div className="file-details-page-div">
-          {fileData ? (
-            <>
-              <div
-                className="child-1"
-                style={{
-                  padding: "20px",
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                }}
-              >
-                <h2 style={{ fontSize: "24px", marginBottom: "10px" }}>
-                  {fileData.title}
-                </h2>
-                <ul
-                  style={{
-                    listStyle: "none",
-                    padding: 0,
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <li style={{ marginRight: "20px" }}>
-                    <strong>Category:</strong> {fileData.category_name}
-                  </li>
-                  <li style={{ marginRight: "20px" }}>
-                    <strong>Uploaded by:</strong>{" "}
-                    {fileData.uploaded_by_username}
-                  </li>
-                  <li style={{ marginRight: "20px" }}>
-                    <strong>Uploaded at:</strong> {fileData.uploaded_at}
-                  </li>
-                  <li>
-                    <strong>Modified at:</strong> {fileData.modified_at}
-                  </li>
-                </ul>
-              </div>
-              <div className="child-2">
-                <div
-                  className="table-responsive"
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "580px",
-                    minHeight: "50%",
-                    overflowY: "auto",
-                  }}
-                >
-                  <table className="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        {fileData.data &&
-                          Object.keys(fileData.data[1]).map((key) => (
-                            <th key={key}>{key}</th>
-                          ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.keys(fileData.data).map((iteration) => (
-                        <tr key={iteration}>
-                          {Object.keys(fileData.data[iteration]).map((key) => (
-                            <td key={key}>{fileData.data[iteration][key]}</td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="child-1">
-              <p>No file data available.</p>
-            </div>
-          )}
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

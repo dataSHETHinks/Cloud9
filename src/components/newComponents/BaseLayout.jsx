@@ -25,7 +25,7 @@ import UsersPage from "../../pages/UsersPage";
 import RolesPage from "../../pages/RolesPage";
 import ModulesPage from "../../pages/ModulesPage";
 import CategoriesPage from "../../pages/CategoriesPage";
-import FileDetailsPage from "../../pages/FileDetailsPage";
+import FileDetailsPage from "../../pages/FileDetailsPage_";
 import DashboardHome from "../DashboardHome";
 
 const BaseLayout = ({ componentToRender: Component }) => {
