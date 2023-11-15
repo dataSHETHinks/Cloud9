@@ -1,5 +1,13 @@
-import { useEffect, useState } from "react";
-import { Table, Descriptions } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  Descriptions,
+  Form,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Typography,
+} from "antd";
 import { useParams } from "react-router-dom";
 import api from "../apiConfig";
 
@@ -8,6 +16,8 @@ const FileDetailsPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [columns, setColumns] = useState([]);
   const [fileDetails, setFileDetails] = useState({});
+  const [form] = Form.useForm();
+  const [editingKey, setEditingKey] = useState("");
 
   useEffect(() => {
     const getFileData = async () => {
@@ -63,6 +73,59 @@ const FileDetailsPage = () => {
     getFileData(); // Fetch data only on the initial render
   }, [id]);
 
+  const isEditing = (record) => record.key === editingKey;
+
+  const edit = (record) => {
+    form.setFieldsValue({ ...record });
+    setEditingKey(record.key);
+  };
+
+  const cancel = () => {
+    setEditingKey("");
+  };
+
+  const save = async (key) => {
+    try {
+      const row = await form.validateFields();
+
+      const newData = [...dataSource];
+      const index = newData.findIndex((item) => key === item.key);
+
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, { ...item, ...row });
+        setDataSource(newData);
+        setEditingKey("");
+      } else {
+        newData.push(row);
+        setDataSource(newData);
+        setEditingKey("");
+      }
+    } catch (errInfo) {
+      console.log("Validate Failed:", errInfo);
+    }
+  };
+
+  const handleSave = (row) => {
+    save(row.key);
+  };
+
+  const columnsWithEdit = columns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+        inputType: col.dataIndex === "age" ? "number" : "text",
+      }),
+    };
+  });
+
   return (
     <>
       <Descriptions title="File Details" bordered style={{ marginBottom: 20 }}>
@@ -80,14 +143,16 @@ const FileDetailsPage = () => {
         </Descriptions.Item>
       </Descriptions>
       <div style={{ overflowX: "auto" }}>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          bordered
-          pagination={false}
-          scroll={{ x: "max-content", y: 345 }}
-          rowKey="key" // Set the 'key' field for the table row
-        />
+        <Form form={form} component={false}>
+          <Table
+            dataSource={dataSource}
+            columns={columnsWithEdit}
+            bordered
+            pagination={false}
+            scroll={{ x: "max-content", y: 345 }}
+            rowKey="key"
+          />
+        </Form>
       </div>
     </>
   );
