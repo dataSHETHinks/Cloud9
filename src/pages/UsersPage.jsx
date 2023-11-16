@@ -28,6 +28,7 @@ const UsersPage = () => {
   const getAllUsers = () => {
     api("GET", "/user/get_users/", {})
       .then((response) => {
+        console.log(response.data.user_list)
         setAllUsers(response.data.user_list);
       })
       .catch((error) => {
@@ -125,7 +126,7 @@ const handleDelete = (user) => {
             </div>
             <div>
               <div className="table-container"  style={{border:'0px'}}>
-                <Table dataSource={allUsers} rowKey="id" scroll={{ y: 470 }}  pagination={{ pageSize: 10 }}>
+                <Table dataSource={allUsers} rowKey="id" scroll={{ y: window.innerHeight - 300 }} pagination={false}>
                   <Column title="#" dataIndex="id" key="id" render={(text, record, index) => index + 1}  />
                   <Column title="Username" dataIndex="username" key="username" align='center' />
                   <Column title="Email" dataIndex="email" key="email" align='center'/>
@@ -135,7 +136,7 @@ const handleDelete = (user) => {
                     key="roles"
                     align='center'
                     render={(roles) =>
-                      roles.length !== 0 ? roles : <span style={{ color: "gray" }}>Not Assigned</span>
+                      roles !== null ? roles : <span style={{ color: "gray" }}>Not Assigned</span>
                     }
                   />
                   <Column title="Deleted User" align='center' dataIndex="is_deleted" key="is_deleted" render={(is_deleted) => (is_deleted ? "Yes" : "No")} />
