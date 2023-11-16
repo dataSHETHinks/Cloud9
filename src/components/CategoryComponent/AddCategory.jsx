@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import CategoryAPI from '../../api/CategoryComponentApis/CategoryAPI'
+import { useNavigate } from 'react-router-dom';
 
-const AddCategory = ({ onAddCategory }) => {
+const AddCategory = () => {
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
+    const navigate = useNavigate();
 
     const showModal = () => {
         setVisible(true);
@@ -14,10 +16,26 @@ const AddCategory = ({ onAddCategory }) => {
         setVisible(false);
     };
 
+    const addCategory = async (values) => {
+        const result = await CategoryAPI.addNewCategory(values.CategoryName);
+        if (result.success) {
+            console.log('Category added successfully:', result.response);
+            window.location.reload()
+        } else {
+            if (result.isLogout) {
+                localStorage.removeItem("accessToken");
+                navigate("/login/");
+            } else {
+                alert(result.error);
+            }
+        }
+    }
+
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            onAddCategory(values);
+            console.log(values)
+            addCategory(values);
             form.resetFields();
             setVisible(false);
         } catch (error) {

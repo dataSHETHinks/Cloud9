@@ -14,44 +14,6 @@ import ListCategory from "../components/CategoryComponent/ListCategory";
 
 
 const CategoriesPage = (params) => {
-  const [allCategory, setAllCategory] = useState([]);
-  const navigate = useNavigate();
-  const [newCategoryName, setNewCategoryName] = useState(""); // Step 1
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  ;
-
-  const handleNewCategoryChange = (e) => {
-    setNewCategoryName(e.target.value); // Step 3
-  };
-
-  const addNewCategory = () => {
-    api("POST", "/data/add_new_category/", { name: newCategoryName })
-      .then((response) => {
-        console.log("New category added:", response.data);
-      
-        getFileCategories();
-        setNewCategoryName(""); // Clear the input field
-      })
-      .catch((error) => {
-        console.error("Error adding new category:", error);
-      });
-  };
-
-
-  const getFileCategories = () =>{
-    api("GET", "/data/get_file_categories/", {})
-    .then((response) => {
-      setAllCategory(response.data.data);
-    })
-    .catch((error) => {
-      console.error("GET Request Error:",error);
-    });
-  };
-  useEffect(() => {
-    getFileCategories();
-  }, []);
-
   return (
     <>
     <AddCategory />

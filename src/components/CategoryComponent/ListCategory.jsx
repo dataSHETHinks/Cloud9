@@ -11,10 +11,10 @@ const ListCategorys = () => {
     useEffect(() => {
         const fetchCategorys = async () => {
             try {
-                const result = await CategoryAPI.getAllCategory();
+                const result = await CategoryAPI.getAllCategories();
                 if (result.success) {
-                    
-                    setAllCategorys(Array.isArray(result.response.data) ? result.response.data : []);
+
+                    setAllCategorys(result.response.data.data || [])
                 } else {
                     if (result.isLogout) {
                         localStorage.removeItem("accessToken");
@@ -30,16 +30,42 @@ const ListCategorys = () => {
         };
 
         fetchCategorys();
-    }, [navigate]); 
+    }, []);
 
     const tableHeight = window.innerHeight - 300;
+
+    const columns = allCategorys.length > 0 ? [
+        {
+            title: '#',
+            dataIndex: 'index',
+            key: 'index',
+            align: 'center',
+            render: (text, record, index) => <span>{index + 1}</span>,
+        },
+        ...Object.keys(allCategorys[0]).filter((key) => key !== "id").map((key) => ({
+            title: key,
+            dataIndex: key,
+            key: key,
+            align: 'center',
+            render: (text, record) => {
+                return text;
+            },
+        })),
+    ] : [];
 
     return (
         <div className="list-Categorys-table-responsive">
             <Table
                 dataSource={allCategorys}
-                columns={[{ title: 'Category Name', dataIndex: 'name', key: 'name' }]}
-                rowKey="id"
+                columns={columns}
+                pagination={false}
+                locale={{ emptyText: <h2>No categories added</h2> }}
+                bordered
+                header={{
+                    style: {
+                        textAlign: 'center',
+                    },
+                }}
                 scroll={{ y: tableHeight }}
             />
         </div>

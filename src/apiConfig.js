@@ -3,18 +3,15 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE_URL = "http://127.0.0.1:8000/";
-const token = localStorage.getItem("accessToken");
+// const token = localStorage.getItem("accessToken");
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
 });
 
 const api = async (method, url, data, contentType = "application/json") => {
   const headers = {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     "Content-Type": contentType,
   };
 
