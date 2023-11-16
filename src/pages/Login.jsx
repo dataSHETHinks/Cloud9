@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "../css/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import logoImage from "../assets/companylogo.png";
-import api from "../apiConfig";
 import "react-toastify/dist/ReactToastify.css";
 import "../App.css";
 import AuthAPI from "../api/AuthComponentApis/AuthAPI";
