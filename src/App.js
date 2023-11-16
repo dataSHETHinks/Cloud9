@@ -10,11 +10,12 @@ import ChangePassword from "./pages/ChangePassword";
 import AuthenticateRoute from "./AuthenticateRoute";
 import DashboardHome from "./components/DashboardHome";
 import FilePage from "./pages/FilePage";
-import FileDetailsPage from "./pages/FileDetailsPage";
+// import FileDetailsPage from "./pages/FileDetailsPage";
 import UsersPage from "./pages/UsersPage";
 import RolesPage from "./pages/RolesPage";
 import ModulesPage from "./pages/ModulesPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import DynamicEditableTable from "./pages/DynamicEditableTable";
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
             path="/FileDetails/:id"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={FileDetailsPage} />
+                <BaseLayout componentToRender={DynamicEditableTable} />
               </AuthenticateRoute>
             }
           />
