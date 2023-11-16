@@ -36,7 +36,7 @@ const ListModules = () => {
 
     const columns = allModules.length > 0 ? [
         {
-            title: 'ID',
+            title: '#',
             dataIndex: 'index',
             key: 'index',
             align: 'center',

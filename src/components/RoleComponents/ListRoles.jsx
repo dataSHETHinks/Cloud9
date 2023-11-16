@@ -26,18 +26,27 @@ const ListRoles = () => {
         fetchRoles();
     }, []);
 
-    const columns = allRoles.length > 0 ? Object.keys(allRoles[0]).filter((key) => key !== "id").map((key) => ({
-        title: key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()),
-        dataIndex: key,
-        key: key,
-        align: 'center',
-        render: (text, record) => {
+    const columns = allRoles.length > 0 ? [
+        {
+          title: "#",
+          dataIndex: "index",
+          key: "index",
+          align: "center",
+          render: (text, record, index) => index + 1,
+        },
+        ...Object.keys(allRoles[0]).filter((key) => key !== "id").map((key) => ({
+          title: key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()),
+          dataIndex: key,
+          key: key,
+          align: 'center',
+          render: (text, record) => {
             if (typeof record[key] === 'boolean') {
-                return record[key] ? <span style={{ color: 'green' }}>True</span> : <span style={{ color: 'red' }}>False</span>;
+              return record[key] ? <span style={{ color: 'green' }}>True</span> : <span style={{ color: 'red' }}>False</span>;
             }
             return text;
-        },
-    })) : [];
+          },
+        })),
+      ] : [];
 
     const tableHeight = window.innerHeight - 300;
 

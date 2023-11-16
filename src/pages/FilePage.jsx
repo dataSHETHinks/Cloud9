@@ -6,6 +6,13 @@ import AddNewFileForm from "../components/FileComponents/AddNewFileForm";
 
 const columns = [
   {
+    title: "#",
+    dataIndex: "index",
+    key: "index",
+    align: "center",
+    render: (text, record, index) => index + 1,
+  },
+  {
     title: "Title",
     dataIndex: "title",
     align:"center",
