@@ -15,7 +15,6 @@ const RolesPage = (params) => {
   return (
     <>
       <AddRole />
-      <p>Roles</p>
       <ListRoles />
     </>
   );

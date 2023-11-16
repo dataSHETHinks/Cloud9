@@ -15,21 +15,21 @@ const columns = [
   {
     title: "Title",
     dataIndex: "title",
-    align:"center",
+    align: "center",
     sorter: (a, b) => a.title.localeCompare(b.title),
     sortDirections: ["ascend", "descend"],
   },
   {
     title: "Category",
     dataIndex: "category_name",
-    align:"center",
+    align: "center",
     sorter: (a, b) => a.category_name.localeCompare(b.category_name),
     sortDirections: ["ascend", "descend"],
   },
   {
     title: "Uploaded By",
     dataIndex: "uploaded_by_username",
-    align:"center",
+    align: "center",
     sorter: (a, b) =>
       a.uploaded_by_username.localeCompare(b.uploaded_by_username),
     sortDirections: ["ascend", "descend"],
@@ -37,28 +37,28 @@ const columns = [
   {
     title: "Uploaded At",
     dataIndex: "uploaded_at",
-    align:"center",
+    align: "center",
     sorter: (a, b) => new Date(a.uploaded_at) - new Date(b.uploaded_at),
     sortDirections: ["ascend", "descend"],
   },
   {
     title: "Modified At",
     dataIndex: "modified_at",
-    align:"center",
+    align: "center",
     sorter: (a, b) => new Date(a.modified_at) - new Date(b.modified_at),
     sortDirections: ["ascend", "descend"],
   },
   {
     title: "Module",
     dataIndex: "module_name",
-    align:"center",
+    align: "center",
     sorter: (a, b) => a.module_name.localeCompare(b.module_name),
     sortDirections: ["ascend", "descend"],
   },
   {
     title: "Action",
     dataIndex: "id", // Assuming 'id' is the unique identifier for files
-    align:"center",
+    align: "center",
     render: (id) => <Link to={`/FileDetails/${id}`}>View Details</Link>,
   },
 ];
@@ -119,14 +119,11 @@ const FilePage = () => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        onClick={showModal}
-        size="Large"
-        style={{ width: "200px", float: "left" }}
-      >
-        Add a New File
-      </Button>
+      <div style={{ textAlign: 'left' }}>
+        <Button type="primary" size="large" style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
+          + Add a New File
+        </Button>
+      </div>
       <Modal
         title="Add a New File"
         open={isModalOpen}

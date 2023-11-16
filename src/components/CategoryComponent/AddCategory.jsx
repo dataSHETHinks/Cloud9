@@ -44,7 +44,7 @@ const AddCategory = () => {
     return (
         <div>
             <div style={{ textAlign: 'left' }}>
-                <Button type="primary" style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
+                <Button type="primary" size='large' style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
                     + New Category
                 </Button>
             </div>

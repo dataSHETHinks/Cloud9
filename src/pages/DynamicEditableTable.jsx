@@ -227,7 +227,7 @@ const DynamicEditableTable = () => {
       </Descriptions>
       <Form form={form} component={false}>
         <Table
-          scroll={{ x: "max-content", y: 345 }}
+          scroll={{ x: "max-content", y: window.innerHeight - 450 }}
           components={{
             body: {
               cell: EditableCell,

@@ -70,43 +70,43 @@ const UsersPage = () => {
 
   let isConfirming = false; // Add this flag
 
-const handleDelete = (user) => {
-  console.log(isConfirming);
-  if (isConfirming) {
-    return; // If already confirming, do nothing
-  }
+  const handleDelete = (user) => {
+    console.log(isConfirming);
+    if (isConfirming) {
+      return; // If already confirming, do nothing
+    }
 
     isConfirming = true;
 
-  confirm({
-    title: `Do you really want to delete ${user.username}?`,
-    onOk() {
-      const newStatus = !user.delete_user;
-      api("POST", "/user/modify_user_status/", {
-        user_id: user.id,
-        delete_user: newStatus,
-      })
-        .then(() => {
-          window.location.reload();
-          getAllUsers();
+    confirm({
+      title: `Do you really want to delete ${user.username}?`,
+      onOk() {
+        const newStatus = !user.delete_user;
+        api("POST", "/user/modify_user_status/", {
+          user_id: user.id,
+          delete_user: newStatus,
         })
-        .catch((error) => {
-          console.error("POST Request Error:", error);
-        })
-        .finally(() => {
-          setUserToDelete(null);
-          isConfirming = false; // Reset the flag
-        });
-    },
-    onCancel() {
-      setUserToDelete(null);
-      isConfirming = false; // Reset the flag
-    },
-    cancelButtonProps: { // Optional: Customize cancel button props
-      style: { color: '#333' }, // Change cancel button text color
-    },
-  });
-};
+          .then(() => {
+            window.location.reload();
+            getAllUsers();
+          })
+          .catch((error) => {
+            console.error("POST Request Error:", error);
+          })
+          .finally(() => {
+            setUserToDelete(null);
+            isConfirming = false; // Reset the flag
+          });
+      },
+      onCancel() {
+        setUserToDelete(null);
+        isConfirming = false; // Reset the flag
+      },
+      cancelButtonProps: { // Optional: Customize cancel button props
+        style: { color: '#333' }, // Change cancel button text color
+      },
+    });
+  };
 
   return (
     <>
@@ -115,21 +115,17 @@ const handleDelete = (user) => {
         <main className="content">
 
           <div className="user-page-div">
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Button  type="primary"
-                       size="large"
-                       style={{ width: '15%', backgroundColor: '#1890ff', marginRight: '16px' }}
-                       onClick={showAddUserModal}
-              >
-                Add New User
+            <div style={{ textAlign: 'left' }}>
+              <Button type="primary" size="large" style={{ width: "240px", justifyContent: "left" }} onClick={showAddUserModal}>
+                + Add New User
               </Button>
             </div>
             <div>
-              <div className="table-container"  style={{border:'0px'}}>
+              <div className="table-container" style={{ border: '0px' }}>
                 <Table dataSource={allUsers} rowKey="id" scroll={{ y: window.innerHeight - 300 }} pagination={false}>
-                  <Column title="#" dataIndex="id" key="id" render={(text, record, index) => index + 1}  />
+                  <Column title="#" dataIndex="id" key="id" render={(text, record, index) => index + 1} />
                   <Column title="Username" dataIndex="username" key="username" align='center' />
-                  <Column title="Email" dataIndex="email" key="email" align='center'/>
+                  <Column title="Email" dataIndex="email" key="email" align='center' />
                   <Column
                     title="Role"
                     dataIndex="roles"
@@ -146,7 +142,7 @@ const handleDelete = (user) => {
                     key="delete_user"
                     align='center'
                     render={(delete_user, record) => (
-                      <Button disabled={record.is_deleted} onClick={() => setUserToDelete(record)}  className={`custom-delete-button${record.is_deleted ? ' disabled' : ''}`}>
+                      <Button disabled={record.is_deleted} onClick={() => setUserToDelete(record)} className={`custom-delete-button${record.is_deleted ? ' disabled' : ''}`}>
                         Delete
                       </Button>
                     )}
@@ -158,13 +154,13 @@ const handleDelete = (user) => {
         </main>
 
         <Modal title="Add New User" visible={newUserVisible} onCancel={handleAddUserCancel} onOk={handleAddUserSubmit}
-         footer={[
-          <Button key="cancel" onClick={handleAddUserCancel}>
-            Cancel
-          </Button>,
-          <Button key="submit" type="primary" onClick={handleAddUserSubmit} style={{marginInlineStart:0}}>
-            Submit
-          </Button>,
+          footer={[
+            <Button key="cancel" onClick={handleAddUserCancel}>
+              Cancel
+            </Button>,
+            <Button key="submit" type="primary" onClick={handleAddUserSubmit} style={{ marginInlineStart: 0 }}>
+              Submit
+            </Button>,
           ]}
         >
           <Form form={form} layout="vertical">
