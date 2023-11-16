@@ -4,17 +4,17 @@ class UserAPI {
   static async getUserList() {
     try {
       const response = await api('GET', 'user/get_users/', {});
-      return {
+      return Promise.resolve({
         success: true,
         response,
         isLogout: false,
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.reject({
         success: false,
         error,
         isLogout: error.response && error.response.status === 401,
-      };
+      });
     }
   }
 
@@ -26,17 +26,17 @@ class UserAPI {
         "temp_password": tempPassword,
         "role": roleId,
       });
-      return {
+      return Promise.resolve({
         success: true,
         response,
         isLogout: false,
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.reject({
         success: false,
         error,
         isLogout: error.response && error.response.status === 401,
-      };
+      });
     }
   }
 
@@ -46,17 +46,17 @@ class UserAPI {
         "user_id": userId,
         "delete_user": deleteFlag,
       });
-      return {
+      return Promise.resolve({
         success: true,
         response,
         isLogout: false,
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.reject({
         success: false,
         error,
         isLogout: error.response && error.response.status === 401,
-      };
+      });
     }
   }
 }
