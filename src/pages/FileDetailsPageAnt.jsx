@@ -16,10 +16,6 @@ const FileDetailsPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [columns, setColumns] = useState([]);
   const [fileDetails, setFileDetails] = useState({});
-  const [form] = Form.useForm();
-  const [editingKey, setEditingKey] = useState("");
-
-  const isEditing = (record) => record.key === editingKey;
 
   useEffect(() => {
     const getFileData = async () => {
@@ -74,78 +70,6 @@ const FileDetailsPage = () => {
 
     getFileData(); // Fetch data only on the initial render
   }, [id]);
-
-  const edit = (record) => {
-    form.setFieldsValue({ ...record });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const handleSave = async (record) => {
-    try {
-      await form.validateFields();
-      save(record.key);
-    } catch (err) {
-      console.error("Validation failed:", err);
-    }
-  };
-
-  const columnsWithEdit = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-        inputType: col.dataIndex === "age" ? "number" : "text",
-      }),
-      render: (text, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link onClick={() => handleSave(record)}>
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <Typography.Link>Cancel</Typography.Link>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link onClick={() => edit(record)}>Edit</Typography.Link>
-        );
-      },
-    };
-  });
-
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-
-      const newData = [...dataSource];
-      const index = newData.findIndex((item) => key === item.key);
-
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setDataSource(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setDataSource(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
-
   return (
     <>
       <Descriptions title="File Details" bordered style={{ marginBottom: 20 }}>
