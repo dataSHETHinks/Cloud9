@@ -75,6 +75,7 @@ const DynamicEditableTable = () => {
             key: key,
             width: 150,
             editable: true,
+            align: 'center',
           }));
 
           // Insert 'idx' column configuration at the beginning

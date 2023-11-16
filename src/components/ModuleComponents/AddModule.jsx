@@ -45,9 +45,11 @@ const AddModule = () => {
 
     return (
         <div>
-            <Button type="primary" onClick={showModal}>
-                + New Module
-            </Button>
+            <div style={{ textAlign: 'left' }}>
+                <Button type="primary" style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
+                    + New Module
+                </Button>
+            </div>
             <Modal
                 title="Add New Module"
                 open={visible}
@@ -64,7 +66,7 @@ const AddModule = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-        </div>
+        </div >
     );
 };
 

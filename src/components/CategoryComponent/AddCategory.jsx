@@ -19,7 +19,6 @@ const AddCategory = () => {
     const addCategory = async (values) => {
         const result = await CategoryAPI.addNewCategory(values.CategoryName);
         if (result.success) {
-            console.log('Category added successfully:', result.response);
             window.location.reload()
         } else {
             if (result.isLogout) {
@@ -34,7 +33,6 @@ const AddCategory = () => {
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            console.log(values)
             addCategory(values);
             form.resetFields();
             setVisible(false);
@@ -45,9 +43,11 @@ const AddCategory = () => {
 
     return (
         <div>
-            <Button type="primary" onClick={showModal}>
-                + New Category
-            </Button>
+            <div style={{ textAlign: 'left' }}>
+                <Button type="primary" style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
+                    + New Category
+                </Button>
+            </div>
             <Modal
                 title="Add New Category"
                 open={visible}
