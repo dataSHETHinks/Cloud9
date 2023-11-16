@@ -64,38 +64,16 @@ const CategoriesPage = (params) => {
           <div className="category-page-div">
             <div className="child-1">
               <div>
-                <input
+                <Input
                   type="text"
                   placeholder="New Category Name"
                   value={newCategoryName}
                   onChange={handleNewCategoryChange}
                 />
-                <button onClick={addNewCategory}>Add Category</button>
+                <Button onClick={addNewCategory}>Add Category</Button>
               </div>
             </div>
     <div className="child-2">
-     {/* <div
-      className="table-responsive"
-      style={{ maxHeight: "85%", overflowY: "auto" }}
-    >
-      <table className="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Category Name</th>
-            {/* <th>Name</th> */}
-          {/* </tr>
-        </thead>
-        <tbody>
-          {allCategory.map((category, index) => (
-            <tr key={category.id}>
-              <td>{index + 1}</td>
-              <td>{category.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div> */} */}
     <Table
             dataSource={allCategory}
             columns={[{ title: 'Category Name', dataIndex: 'name', key: 'name' }]}
