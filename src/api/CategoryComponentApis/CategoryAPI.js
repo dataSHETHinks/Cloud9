@@ -4,17 +4,17 @@ class CategoryAPI {
   static async addNewCategory(categoryName) {
     try {
       const response = await api("POST", "data/add_new_category/", { name: categoryName });
-      return {
+      return Promise.resolve({
         success: true,
         response,
         isLogout: false,
-      };
+      });
     } catch (error) {
-      return {
+      return Promise.reject({
         success: false,
         error,
         isLogout: error.response && error.response.status === 401,
-      };
+      });
     }
   }
 
