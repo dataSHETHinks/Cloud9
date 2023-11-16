@@ -35,6 +35,27 @@ class FileAPI {
         }
     }
 
+    static async updateFileData(fileId, rowNum, rowData) {
+        try {
+            const response = await api('POST', 'data/update_file_data/', {
+                "file_id": fileId,
+                "row_num": rowNum,
+                "row_data": rowData,
+            });
+            return {
+                success: true,
+                response,
+                isLogout: false,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error,
+                isLogout: error.response && error.response.status === 401,
+            };
+        }
+    }
+
     static async uploadFile(selectedFile, selectedCategory, selectedModule) {
         if (selectedFile && selectedCategory && selectedModule) {
             try {
