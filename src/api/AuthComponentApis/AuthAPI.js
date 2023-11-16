@@ -9,34 +9,34 @@ class AuthAPI {
 
         try {
             const response = await api("POST", "/login/", data);
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
     static async logout() {
         try {
             const response = await api("POST", "/logout/");
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
@@ -45,17 +45,17 @@ class AuthAPI {
             const response = await api('POST', 'user/forget_password/', {
                 "usernameOrEmail": username
             });
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
@@ -65,17 +65,17 @@ class AuthAPI {
                 "password": newPassword,
                 "fromForgotPassword": fromForgotPassword
             });
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
