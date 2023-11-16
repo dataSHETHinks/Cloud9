@@ -44,3 +44,17 @@
   max-width: 400px; /* Set a maximum width */
   width: auto; /* Allow the box to expand as needed */
 }
+
+.editable-row .ant-form-item-explain {
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
+}
+
+.ant-popconfirm-buttons {
+  width: 70px;
+}
+
+.ant-popover {
+  width: 200px;
+}

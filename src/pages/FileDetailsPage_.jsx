@@ -9,7 +9,7 @@ import DashBoardHeader from "../components/DashBoardHeader";
 import "../css/Dashboard.css";
 import "../css/FileComponentsCss/FileDetailsPageCss.css";
 
-const FileDetailsPage = () => {
+const FileDetailsPage = (params) => {
   const navigate = useNavigate();
 
   const [fileData, setFileData] = useState(null);

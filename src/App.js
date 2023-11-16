@@ -1,5 +1,5 @@
 import React from "react";
-// import "./App.css";
+import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,11 +10,12 @@ import ChangePassword from "./pages/ChangePassword";
 import AuthenticateRoute from "./AuthenticateRoute";
 import DashboardHome from "./components/DashboardHome";
 import FilePage from "./pages/FilePage";
-import FileDetailsPage from "./pages/FileDetailsPage";
+// import FileDetailsPage from "./pages/FileDetailsPage";
 import UsersPage from "./pages/UsersPage";
 import RolesPage from "./pages/RolesPage";
 import ModulesPage from "./pages/ModulesPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import DynamicEditableTable from "./pages/DynamicEditableTable";
 
 function App() {
   return (
@@ -40,10 +41,10 @@ function App() {
             }
           ></Route>
           <Route
-            path="/FileDetails/:id" // Define a route parameter for the file ID
+            path="/FileDetails/:id"
             element={
               <AuthenticateRoute>
-                <BaseLayout componentToRender={FileDetailsPage} />
+                <BaseLayout componentToRender={DynamicEditableTable} />
               </AuthenticateRoute>
             }
           />

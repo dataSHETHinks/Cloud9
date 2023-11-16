@@ -1,43 +1,137 @@
-import profileImage from "../assets/profile.webp";
-import BaseNav from "../components/base_nav";
-import DashBoardHeader from "../components/DashBoardHeader";
+import React, { useState, useEffect } from "react";
+import { Table, Button, Modal } from "antd";
+import { Link } from "react-router-dom";
+import api from "../apiConfig";
+import AddNewFileForm from "../components/FileComponents/AddNewFileForm";
 
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import "../css/FileComponentsCss/FilePageCss.css";
-import FileOverviewTable from "../components/FileComponents/FileOverviewTable";
+const columns = [
+  {
+    title: "Title",
+    dataIndex: "title",
+    sorter: (a, b) => a.title.localeCompare(b.title),
+    sortDirections: ["ascend", "descend"],
+  },
+  {
+    title: "Category",
+    dataIndex: "category_name",
+    sorter: (a, b) => a.category_name.localeCompare(b.category_name),
+    sortDirections: ["ascend", "descend"],
+  },
+  {
+    title: "Uploaded By",
+    dataIndex: "uploaded_by_username",
+    sorter: (a, b) =>
+      a.uploaded_by_username.localeCompare(b.uploaded_by_username),
+    sortDirections: ["ascend", "descend"],
+  },
+  {
+    title: "Uploaded At",
+    dataIndex: "uploaded_at",
+    sorter: (a, b) => new Date(a.uploaded_at) - new Date(b.uploaded_at),
+    sortDirections: ["ascend", "descend"],
+  },
+  {
+    title: "Modified At",
+    dataIndex: "modified_at",
+    sorter: (a, b) => new Date(a.modified_at) - new Date(b.modified_at),
+    sortDirections: ["ascend", "descend"],
+  },
+  {
+    title: "Module",
+    dataIndex: "module_name",
+    sorter: (a, b) => a.module_name.localeCompare(b.module_name),
+    sortDirections: ["ascend", "descend"],
+  },
+  {
+    title: "Action",
+    dataIndex: "id", // Assuming 'id' is the unique identifier for files
+    render: (id) => <Link to={`/FileDetails/${id}`}>View Details</Link>,
+  },
+];
 
-const FilePage = (params) => {
-  const navigate = useNavigate();
+const FilePage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [allFiles, setAllFiles] = useState([]);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    const getAllFiles = async () => {
+      try {
+        const response = await api("GET", "/data/get_file_names/", {});
+        setAllFiles(response.data.data);
+      } catch (error) {
+        console.error("GET Request Error:", error);
+      }
+    };
+
+    getAllFiles();
+  }, []);
+
+  const handleFileUpload = (values, selectedFile) => {
+    const { title, category, module, fileType } = values;
+
+    if (selectedFile) {
+      const fileTypeToSend = fileType.toLowerCase();
+
+      const formData = new FormData();
+      formData.append("uploaded_file", selectedFile);
+      formData.append("file_category", category);
+      formData.append("file_module", module);
+      formData.append("file_name", title);
+      formData.append("file_type", fileTypeToSend);
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ", " + pair[1]); // Check formData contents
+      }
+
+      api("POST", "/data/upload_file/", formData, "multipart/form-data")
+        .then((response) => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("POST Request Error:", error);
+        });
+    }
   };
 
   return (
-    <p>Files Page</p>
-    // <div className="dashboard-container">
-    //   <BaseNav isSidebarOpen={isSidebarOpen} />
-    //   <div className="content">
-    //     <DashBoardHeader
-    //       isSidebarOpen={isSidebarOpen}
-    //       toggleSidebar={toggleSidebar}
-    //       profileImage={profileImage}
-    //       navigate={navigate}
-    //     />
-    //     <div className="file-page-div">
-    //       <div className="child-1">
-    //         <h1>This is Files Page.</h1>
-    //       </div>
-    //       <div className="child-2">
-    //         <FileOverviewTable
-    //           style={{ maxWidth: "100%", maxHeight: "73%", overflowY: "auto" }}
-    //         />
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+    <div>
+      <Button
+        type="primary"
+        onClick={showModal}
+        size="Large"
+        style={{ width: "200px", float: "left" }}
+      >
+        Add a New File
+      </Button>
+      <Modal
+        title="Add a New File"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <AddNewFileForm onSubmit={handleFileUpload} />
+      </Modal>
+      <Table
+        dataSource={allFiles}
+        columns={columns}
+        scroll={{ y: 460 }}
+        pagination={false}
+      />
+    </div>
   );
 };
 
