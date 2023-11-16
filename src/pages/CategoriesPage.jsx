@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import "../css/CategoriesComponentsCss/CategoryPageCss.css";
 
 import api from '../apiConfig';
+import { Input, Button, Table } from 'antd';
 
 const CategoriesPage = (params) => {
   const [allCategory, setAllCategory] = useState([]);
@@ -26,7 +27,8 @@ const CategoriesPage = (params) => {
     api("POST", "/data/add_new_category/", { name: newCategoryName })
       .then((response) => {
         console.log("New category added:", response.data);
-        setAllCategory((prevCategories) => [...prevCategories, response.data]); // Step 6
+        // setAllCategory((prevCategories) => [...prevCategories, response.data]); // Step 6
+        getFileCategories();
         setNewCategoryName(""); // Clear the input field
       })
       .catch((error) => {
@@ -71,8 +73,8 @@ const CategoriesPage = (params) => {
                 <button onClick={addNewCategory}>Add Category</button>
               </div>
             </div>
-            <div className="child-2">
-            <div
+    <div className="child-2">
+     {/* <div
       className="table-responsive"
       style={{ maxHeight: "85%", overflowY: "auto" }}
     >
@@ -82,7 +84,7 @@ const CategoriesPage = (params) => {
             <th>#</th>
             <th>Category Name</th>
             {/* <th>Name</th> */}
-          </tr>
+          {/* </tr>
         </thead>
         <tbody>
           {allCategory.map((category, index) => (
@@ -93,7 +95,12 @@ const CategoriesPage = (params) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </div> */} */}
+    <Table
+            dataSource={allCategory}
+            columns={[{ title: 'Category Name', dataIndex: 'name', key: 'name' }]}
+            rowKey="id"
+          />
             </div>
           </div>
         </main>
