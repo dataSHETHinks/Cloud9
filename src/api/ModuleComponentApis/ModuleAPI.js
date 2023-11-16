@@ -34,6 +34,6 @@ class ModuleAPI {
       });
     }
   }
-}
+  }
 
 export default ModuleAPI;
