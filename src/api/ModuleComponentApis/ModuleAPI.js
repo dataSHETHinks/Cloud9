@@ -27,6 +27,7 @@ class ModuleAPI {
         isLogout: false,
       };
     } catch (error) {
+      console.error('Request Error:', error.response ? error.response.data : error);
       return {
         success: false,
         error,
@@ -34,6 +35,6 @@ class ModuleAPI {
       };
     }
   }
-}
+  }
 
 export default ModuleAPI;
