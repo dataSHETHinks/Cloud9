@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import "../css/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import logoImage from "../assets/companylogo.png";
-import api from "../apiConfig";
 import "react-toastify/dist/ReactToastify.css";
 import "../App.css";
+import AuthAPI from "../api/AuthComponentApis/AuthAPI";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -22,27 +21,27 @@ function Login() {
     }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    api("POST", "/login/", {
-      username: username,
-      password: password,
-    })
-      .then((response) => {
-        localStorage.setItem("accessToken", response.data.access_token);
-        setIsLoading(false);
-        navigate("/");
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        if (error.response !== undefined && error.response.status === 401) {
-          toast.error("Plesae check your credentials.");
-        } else {
-          toast.error(error);
-        }
-        console.error("POST Request Error:", error);
-      });
+    const result = await AuthAPI.login(username, password);
+    if (result.success) {
+      // Login successful, handle the response
+      localStorage.setItem("accessToken", result.response.data.access_token);
+      setIsLoading(false);
+      navigate("/");
+    } else {
+      // Login failed, handle the error
+      if (result.isLogout) {
+        // Redirect to logout or login page
+        console.log(result.error.response.data.error)
+        localStorage.removeItem("accessToken");
+        navigate("/login/")
+      } else {
+        toast.error(result.error);
+      }
+      console.error("POST Request Error:", result.error);
+    }
   };
 
   return (

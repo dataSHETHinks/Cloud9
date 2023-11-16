@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import browseplaceholder from "../assets/browseplaceholder.jpg";
 import BaseNav from "../components/base_nav";
 import DashBoardHeader from "../components/DashBoardHeader";
+import FileAPI from "../api/FileComponentApis/FileApi";
 
 function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -56,14 +57,21 @@ function Dashboard() {
     navigate("/change-password");
   };
 
-  const getAllFiles = () => {
-    api("GET", "/data/get_file_names/", {})
-      .then((response) => {
-        setAllFiles(response.data.data);
-      })
-      .catch((error) => {
-        console.error("GET Request Error:", error);
-      });
+  const getAllFiles = async () => {
+    const result = await FileAPI.listAllFiles();
+    if (result.success) {
+      setAllFiles(result.response.data.data);
+    } else {
+      if (result.isLogout) {
+        // Redirect to logout or login page
+        console.log(result.error.response.data.error)
+        localStorage.removeItem("accessToken");
+        navigate("/login/")
+      } else {
+        console.log(result.error.response.data.error)
+      }
+      console.error("POST Request Error:", result.error);
+    }
   };
 
   const getAllCategories = () => {
@@ -149,14 +157,9 @@ function Dashboard() {
 
       const formData = new FormData();
       formData.append("uploaded_file", selectedFile);
-      formData.append(
-        "data",
-        JSON.stringify({
-          file_category: selectedCategory.id,
-          file_name: fileNameWithoutExtension,
-          file_type: fileType,
-        })
-      );
+      formData.append("file_category", selectedCategory.id);
+      formData.append("file_name", fileNameWithoutExtension);
+      formData.append("file_type", fileType);
 
       api("POST", "/data/upload_file/", formData, "multipart/form-data")
         .then((response) => {
@@ -306,9 +309,8 @@ function Dashboard() {
                   : selectedModule.name}
               </button>
               <ul
-                className={`dropdown-menu ${
-                  isModuleDropdownOpen ? "show" : ""
-                }`}
+                className={`dropdown-menu ${isModuleDropdownOpen ? "show" : ""
+                  }`}
                 style={{ backgroundColor: "white" }}
               >
                 {allModules.map((module) => (
@@ -348,9 +350,8 @@ function Dashboard() {
                   : selectedCategory.name}
               </button>
               <ul
-                className={`dropdown-menu ${
-                  isCategoryDropdownOpen ? "show" : ""
-                }`}
+                className={`dropdown-menu ${isCategoryDropdownOpen ? "show" : ""
+                  }`}
                 style={{ backgroundColor: "white" }}
               >
                 {allCategories.map((category) => (

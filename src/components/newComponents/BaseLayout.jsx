@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AuthAPI from "../../api/AuthComponentApis/AuthAPI";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -44,6 +45,18 @@ const BaseLayout = ({ componentToRender: Component }) => {
   const [collapsed, setCollapsed] = useState(false);
   const logoTransitionClass = collapsed ? "logo-collapsed" : "logo-expanded";
 
+  const handleLogout = async (e) => {
+    const result = await AuthAPI.logout();
+
+    if (result.success) {
+      localStorage.removeItem("accessToken");
+      navigate("/login/");
+    } else {
+      // Logout failed, handle the error
+      console.error(result.error);
+    }
+  }
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -84,7 +97,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
                 handleNavigate("/Settings");
                 break;
               case "7":
-                handleNavigate("/Logout");
+                handleLogout()
                 break;
               case "8":
                 handleNavigate("/");
