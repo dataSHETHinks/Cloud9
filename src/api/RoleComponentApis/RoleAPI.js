@@ -4,17 +4,19 @@ class RoleAPI {
     static async getUserRoles() {
         try {
             const response = await api('GET', 'user/get_user_roles/', {});
-            return {
-                success: true,
-                response,
-                isLogout: false,
-            };
+            return Promise.resolve(
+                {
+                    success: true,
+                    response,
+                    isLogout: false,
+                }
+            );
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
@@ -33,17 +35,17 @@ class RoleAPI {
                 "title": title,
                 ...permissions,
             });
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
@@ -53,17 +55,17 @@ class RoleAPI {
                 "user_id": userId,
                 "role_id": roleId,
             });
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 }

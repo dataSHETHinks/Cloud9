@@ -27,9 +27,11 @@ const AddRole = ({ onAddRole }) => {
 
     return (
         <div>
-            <Button type="primary" onClick={showModal}>
-                Add User Role
-            </Button>
+            <div style={{ textAlign: 'left' }}>
+                <Button type="primary" style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
+                    Add User Role
+                </Button>                                  
+            </div>
             <Modal
                 title="Add User Role"
                 open={visible}

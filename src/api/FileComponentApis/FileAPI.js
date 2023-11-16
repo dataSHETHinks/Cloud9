@@ -4,34 +4,34 @@ class FileAPI {
     static async listAllFiles() {
         try {
             const response = await api("GET", "/data/get_file_names/", {});
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
     static async getFileData(fileId) {
         try {
             const response = await api("GET", `/data/get_file_data/?id=${fileId}`);
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
@@ -42,17 +42,17 @@ class FileAPI {
                 "row_num": rowNum,
                 "row_data": rowData,
             });
-            return {
+            return Promise.resolve({
                 success: true,
                 response,
                 isLogout: false,
-            };
+            });
         } catch (error) {
-            return {
+            return Promise.reject({
                 success: false,
                 error,
                 isLogout: error.response && error.response.status === 401,
-            };
+            });
         }
     }
 
@@ -71,24 +71,24 @@ class FileAPI {
 
                 const response = await api("POST", "/data/upload_file/", formData, "multipart/form-data");
 
-                return {
+                return Promise.resolve({
                     success: true,
                     response,
                     isLogout: false,
-                };
+                });
             } catch (error) {
-                return {
+                return Promise.reject({
                     success: false,
                     error,
                     isLogout: error.response && error.response.status === 401,
-                };
+                });
             }
         } else {
-            return {
+            return Promise.reject({
                 success: false,
                 error: "Invalid file, category or module",
                 isLogout: false,
-            };
+            });
         }
     }
 }
