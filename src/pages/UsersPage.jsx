@@ -28,7 +28,6 @@ const UsersPage = () => {
   const getAllUsers = () => {
     api("GET", "/user/get_users/", {})
       .then((response) => {
-        console.log(response.data.user_list)
         setAllUsers(response.data.user_list);
       })
       .catch((error) => {

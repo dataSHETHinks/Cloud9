@@ -20,15 +20,6 @@ class RoleAPI {
         }
     }
 
-
-    //permissions sample
-    // const permissions = {
-    //   "can_modify_module": false,
-    //   "can_modify_category": false,
-    //   "can_modify_user": false,
-    //   "can_modify_files": false,
-    //   "can_modify_roles": false
-    // };
     static async addNewUserRole(title, permissions) {
         try {
             const response = await api('POST', 'user/add_new_user_role/', {
