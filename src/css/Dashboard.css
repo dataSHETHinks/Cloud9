@@ -1,0 +1,371 @@
+.dashboard-container {
+  display: flex;
+  /* min-height: 100vh; */
+  overflow: hidden;
+  width: 100%;
+}
+
+.sidebar {
+  /* width: 250px; */
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  transition: transform 0.3s;
+  animation-duration: 500ms;
+}
+
+.company-info {
+  display: flex;
+  align-items: center;
+}
+
+.company-logo {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.company-logo img {
+  max-width: 100%;
+  height: auto;
+}
+
+.company-name {
+  flex: 3;
+}
+
+.company-name p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-links li {
+  padding: 10px;
+}
+
+.sidebar-links li:hover {
+  background-color: #555454;
+}
+
+.sidebar-links a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.content {
+  width: 85%;
+  transition: width 0.75s ease;
+}
+
+.content h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.header-icons {
+  display: flex;
+}
+
+.dashboard-header {
+  display: flex;
+  background-color: #fff;
+  align-items: center;
+  padding: 10px;
+  margin-top: 20px;
+  height: 40px;
+  border-bottom: 1px solid #ccc;
+  justify-content: space-between;
+}
+
+.hamburger-icon {
+  cursor: pointer;
+}
+
+.profile {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 10px;
+}
+
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 2px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tbody {
+  border-width: 1;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+.spacer {
+  flex-grow: 1; /* This pushes the profile to the right */
+}
+
+.pro-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.pro-dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pro-dropdown-menu li {
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.pro-dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+.cat-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.cat-dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cat-dropdown-menu li {
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.cat-dropdown-menu li:hover {
+  background-color: #f5f5f5;
+}
+
+.file-upload {
+  width: 20%;
+  float: left;
+  /* margin-right: 10px; */
+}
+
+.pro-dropdown-menu {
+  /* ... other styles ... */
+  opacity: 0; /* Start with the dropdown hidden */
+  transition: opacity 0.3s ease; /* Add a transition for opacity */
+}
+
+.pro-dropdown-menu.open {
+  opacity: 1; /* Show the dropdown when it has the "open" class */
+}
+
+.BodyDiv {
+  width: 100%;
+  height: 100%;
+  display: flex; /* Use Flexbox to create a flexible container */
+}
+
+.left-sub-div {
+  flex: 0 0 60%; /* 60% of the available space */
+  background-color: #ccc; /* Set background color for the left sub-division */
+}
+
+.right-sub-div {
+  flex: 0 0 40%; /* 40% of the available space */
+  background-color: #fff; /* Set background color for the right sub-division */
+}
+
+.left-sub-div {
+  flex: 0 0 60%; /* 60% of the available space for the left sub-division */
+  background-color: #ccc; /* Set background color for the left sub-division */
+  display: flex; /* Use Flexbox to vertically align children */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center children horizontally */
+}
+
+.left-sub-div-child-1 {
+  width: 96%;
+  height: 20%;
+  margin: 10px; /* Add margin for spacing */
+  padding: 10px; /* Add padding for content spacing */
+  background-color: #fff; /* Set a color for the first child */
+}
+
+.left-sub-div-child-2 {
+  width: 96%;
+  height: 65%;
+  margin: 10px; /* Add margin for spacing */
+  padding: 10px; /* Add padding for content spacing */
+  /* background-color: black; */
+}
+
+.right-sub-div {
+  flex: 0 0 40%; /* 40% of the available space for the right sub-division */
+  /* Set background color for the right sub-division */
+  display: flex; /* Use Flexbox to vertically align children */
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center children horizontally */
+}
+
+.right-sub-div-child-1,
+.right-sub-div-child-2 {
+  width: 96%;
+  margin: 10px; /* Add margin for spacing */
+  padding: 10px; /* Add padding for content spacing */
+}
+
+.right-sub-div-child-1 {
+  height: 25%;
+  background-color: #ffcccb; /* Set a color for the first child */
+}
+
+.right-sub-div-child-2 {
+  height: 60%;
+  background-color: #aee5d8; /* Set a color for the second child */
+}
+
+.sidebar {
+  /* Initial styles */
+  width: 15%; /* Set the initial width */
+  transition: width 0.75s ease; /* Define the transition effect on the width property */
+  padding: 0;
+  padding-top: 20px;
+  overflow: hidden; /* Hide the overflow content */
+}
+
+/* Class for when the sidebar is closed */
+.sidebar.closed {
+  width: 0; /* Set the width to 0 when the sidebar is closed */
+}
+
+.sidebar.closed + .content {
+  width: 100%; /* Set width to 100% when the sidebar is closed */
+  transition: width 0.75s ease; /* Add transition for the width property */
+}
+
+/* Class for when the sidebar is open */
+.sidebar.open {
+  width: 15%; /* Set the initial width */
+  transition: width 0.75s ease; /* Define the transition effect on the width property */
+}
+
+.image {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.75s ease; /* Add a transition for the opacity property */
+}
+
+.sidebar.open .image {
+  display: block;
+  opacity: 1;
+}
+
+.sidebar-links {
+  opacity: 0;
+  transform: translateY(-10px); /* Move the links up slightly to hide them */
+  transition: opacity 0.75s ease, transform 0.75s ease; /* Add transitions for opacity and transform */
+}
+
+.sidebar-links li {
+  cursor: pointer;
+}
+
+.sidebar.open .sidebar-links {
+  opacity: 1;
+  transform: translateY(
+    0
+  ); /* Reset the transform for links when sidebar is open */
+}
+
+.cursor-class {
+  cursor: pointer;
+}

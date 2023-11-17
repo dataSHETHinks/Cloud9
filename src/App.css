@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+.toast-message-content {
+  text-align: center; /* Center-align text */
+  word-break: break-word; /* Allow text to break to the next line if it's too long */
+  min-width: 200px; /* Set a minimum width */
+  max-width: 400px; /* Set a maximum width */
+  width: auto; /* Allow the box to expand as needed */
+}
+
+.editable-row .ant-form-item-explain {
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
+}
+
+.ant-popconfirm-buttons {
+  width: 70px;
+}
+
+.ant-popover {
+  width: 200px;
+}
