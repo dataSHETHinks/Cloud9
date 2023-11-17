@@ -1,84 +1,92 @@
-import React, { useState } from 'react';
-import '../css/ChangePassword.css';
-import logoImage from '../assets/companylogo.png';
-import api from '../apiConfig';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from "react";
+import "../css/ChangePassword.css";
+import api from "../apiConfig";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Form, Input, Button } from "antd";
+import { toast } from "react-toastify";
 
 function ChangePassword() {
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmNewPassword, setConfirmNewPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false); 
-    const location = useLocation();
-    const navigate = useNavigate();
-    const queryParams = new URLSearchParams(location.search);
-    const fromForgotPassword = queryParams.get('fromForgotPassword');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const username = queryParams.get("username");
+  const fromForgotPassword = queryParams.get("fromForgotPassword");
 
-    const handleNewPasswordChange = (event) => {
-        setNewPassword(event.target.value);
-    };
+  const handleSubmit = (values) => {
+    if (values.newPassword === values.confirmNewPassword) {
+      api("POST", "/user/change_password/", {
+        password: values.confirmNewPassword,
+        fromForgotPassword: fromForgotPassword === "true" ? true : false,
+      })
+        .then((response) => {
+          toast(`${response.data.message}`);
+          navigate("/");
+        })
+        .catch((error) => {
+          console.error("POST Request Error:", error);
+        });
+    } else {
+      toast.error("Passwords do not match. Please try again.");
+    }
+  };
 
-    const handleConfirmNewPasswordChange = (event) => {
-        setConfirmNewPassword(event.target.value);
-    };
+  return (
+    <Form
+      name="basic"
+      initialValues={{
+        remember: true,
+        username: username || "",
+      }}
+      labelCol={{
+        span: 8,
+      }}
+      wrapperCol={{
+        span: 16,
+      }}
+      style={{
+        maxWidth: 600,
+      }}
+      onFinish={handleSubmit}
+      autoComplete="off"
+    >
+      <Form.Item
+        label="Password"
+        name="newPassword"
+        rules={[
+          {
+            required: true,
+            message: "Please input your password!",
+          },
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        setIsLoading(true);
-        if (newPassword === confirmNewPassword) {
-            api('POST', '/user/change_password/', {
-                "password": newPassword,
-                "fromForgotPassword": fromForgotPassword
-            })
-                .then((response) => {
-                    alert(`${response.data.message}`);
-                    setIsLoading(false);
-                    navigate('/');
-                })
-                .catch((error) => {
-                    console.error('POST Request Error:', error);
-                    setIsLoading(false);
-                });
-        } else {
-            alert('Passwords do not match. Please try again.');
-        }
-    };
+      <Form.Item
+        label="Cofirm Password"
+        name="confirmNewPassword"
+        rules={[
+          {
+            required: true,
+            message: "Please confirm your password!",
+          },
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
 
-    return (
-        <div className="change-password-container">
-            <div className="change-password-left-side">
-
-            </div>
-            <div className="change-password-right-side">
-                <form onSubmit={handleSubmit} className="change-password-form">
-                    <div className="input-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            id="newPassword"
-                            placeholder="New Password"
-                            value={newPassword}
-                            onChange={handleNewPasswordChange}
-                            required
-                        />
-                    </div>
-                    <div className="input-group">
-                        <label htmlFor="confirmNewPassword">Confirm Password</label>
-                        <input
-                            type="password"
-                            id="confirmNewPassword"
-                            placeholder="Confirm Password"
-                            value={confirmNewPassword}
-                            onChange={handleConfirmNewPasswordChange}
-                            required
-                        />
-                    </div>
-                    <button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Changing' : 'Change Password  '}
-                    </button>
-                </form>
-            </div>
-        </div>
-    );
+      <Form.Item
+        wrapperCol={{
+          offset: 8,
+          span: 16,
+        }}
+      >
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  );
 }
 
 export default ChangePassword;

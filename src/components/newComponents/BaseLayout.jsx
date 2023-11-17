@@ -3,7 +3,6 @@ import AuthAPI from "../../api/AuthComponentApis/AuthAPI";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UserOutlined,
   HomeOutlined,
   ClusterOutlined,
   FileTextOutlined,
@@ -15,28 +14,53 @@ import {
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import logoImage from "../../assets/companylogo.png";
-import {
-  useRoutes,
-  Link,
-  useNavigate,
-  BrowserRouter as Router,
-} from "react-router-dom";
-import FilePage from "../../pages/FilePage";
-import UsersPage from "../../pages/UsersPage";
-import RolesPage from "../../pages/RolesPage";
-import ModulesPage from "../../pages/ModulesPage";
-import CategoriesPage from "../../pages/CategoriesPage";
-import FileDetailsPage from "../../pages/FileDetailsPage_";
-import DashboardHome from "../DashboardHome";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BaseLayout = ({ componentToRender: Component }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (path) => {
-    console.log("Path is");
-    console.log(path);
     navigate(path);
   };
+
+  const location = useLocation(); // Get the current location object
+  const [selectedKey, setSelectedKey] = useState("8"); // Set default selectedKey
+
+  useEffect(() => {
+    // Function to parse the URL and set the selectedKey based on it
+    const updateSelectedKey = () => {
+      const paths = location.pathname.split("/").filter(Boolean); // Split the URL path
+      const currentPath = paths[0]; // Consider the first part of the path (if necessary)
+      console.log(currentPath);
+
+      // Logic to map the path to the corresponding selectedKey
+      switch (currentPath) {
+        case "Files":
+          setSelectedKey("1");
+          break;
+        case "Users":
+          setSelectedKey("2");
+          break;
+        case "Roles":
+          setSelectedKey("3");
+          break;
+        case "Modules":
+          setSelectedKey("4");
+          break;
+        case "Categories":
+          setSelectedKey("5");
+          break;
+        case "ChangePassword":
+          setSelectedKey("6");
+          break;
+        default:
+          setSelectedKey("8"); // Default to Home if no match
+          break;
+      }
+    };
+
+    updateSelectedKey(); // Call the function initially
+  }, [location.pathname]);
 
   const { Header, Sider, Content } = Layout;
   const {
@@ -55,7 +79,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
       // Logout failed, handle the error
       console.error(result.error);
     }
-  }
+  };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -75,7 +99,8 @@ const BaseLayout = ({ componentToRender: Component }) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          selectedKeys={[selectedKey]}
+          defaultSelectedKeys={["8"]}
           onClick={({ key }) => {
             switch (key) {
               case "1":
@@ -94,15 +119,14 @@ const BaseLayout = ({ componentToRender: Component }) => {
                 handleNavigate("/Categories");
                 break;
               case "6":
-                handleNavigate("/Settings");
+                handleNavigate("/ChangePassword");
                 break;
               case "7":
-                handleLogout()
+                handleLogout();
                 break;
               case "8":
                 handleNavigate("/");
                 break;
-              // Add other cases for different menu items
               default:
                 break;
             }
@@ -112,49 +136,49 @@ const BaseLayout = ({ componentToRender: Component }) => {
               key: "8",
               icon: <HomeOutlined />,
               label: "Home",
-              onClick: () => handleNavigate("/"),
+              link: "/",
             },
             {
               key: "1",
               icon: <FileTextOutlined />,
               label: "Files",
-              onClick: () => handleNavigate("/Files"),
+              link: "/Files",
             },
             {
               key: "2",
               icon: <UsergroupAddOutlined />,
               label: "Users",
-              link: "/Files",
+              link: "/Users",
             },
             {
               key: "3",
               icon: <ClusterOutlined />,
               label: "Roles",
-              link: "/Files",
+              link: "/Roles/",
             },
             {
               key: "4",
               icon: <MergeCellsOutlined />,
               label: "Modules",
-              link: "/Files",
+              link: "/Modules/",
             },
             {
               key: "5",
               icon: <UnorderedListOutlined />,
               label: "Categories",
-              link: "/Files",
+              link: "/Categories",
             },
             {
               key: "6",
               icon: <SettingOutlined />,
-              label: "Settings",
-              link: "/Files",
+              label: "Change Password",
+              link: "/ChangePassword",
             },
             {
               key: "7",
               icon: <LogoutOutlined rotate={180} />,
               label: "Log Out",
-              link: "/Files",
+              // link: "/Files",
             },
             // Add other menu items with their corresponding links here
           ]}

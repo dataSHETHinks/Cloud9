@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../css/Login.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../App.css";
@@ -32,7 +32,7 @@ function Login() {
     } else {
       if (result.isLogout) {
         localStorage.removeItem("accessToken");
-        navigate("/login/")
+        navigate("/login/");
       } else {
         toast.error(result.error);
       }
