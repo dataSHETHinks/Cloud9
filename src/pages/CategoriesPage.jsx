@@ -17,7 +17,6 @@ const CategoriesPage = (params) => {
   return (
     <>
     <AddCategory />
-    <p>Category</p>
     <ListCategory />
   </>
   );

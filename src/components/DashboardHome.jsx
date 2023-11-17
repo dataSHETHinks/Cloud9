@@ -1,16 +1,41 @@
 // DashboardHome.jsx
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Dashboard.css";
-import FileOverviewTable from "./FileComponents/FileOverviewTable.jsx";
+import UserAPI from "../api/UserComponentApis/UserAPI";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const DashboardHome = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      const result = await UserAPI.getUserDetails();
+      if (result.success) {
+        setUser(result.response.data)
+      } else {
+        if (result.isLogout) {
+          localStorage.removeItem("accessToken");
+          navigate("/login/");
+        } else {
+          toast.error(result.error);
+        }
+      }
+    }
+
+
+    getUserDetails()
+  }, [])
+
   return (
     <>
       <div className="left-sub-div">
         <div className="left-sub-div-child-1">
-          <h1>Home</h1>
-          {/* Content for the first child of the left sub-division */}
+          <div style={{ float: "left" }}>
+            {user && <p style={{ fontSize: "24px" }}>Welcome, {user.username}</p>}
+          </div>
         </div>
         <div className="left-sub-div-child-2">
           {/* <FileOverviewTable

@@ -277,7 +277,7 @@ tbody {
   height: 20%;
   margin: 10px; /* Add margin for spacing */
   padding: 10px; /* Add padding for content spacing */
-  background-color: #ffcccb; /* Set a color for the first child */
+  background-color: #fff; /* Set a color for the first child */
 }
 
 .left-sub-div-child-2 {

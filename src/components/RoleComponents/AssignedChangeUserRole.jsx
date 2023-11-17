@@ -59,7 +59,7 @@ const AssignedChangeUserRole = () => {
         console.log(values)
         const result = await RoleAPI.changeAssignedUserRole(values.User, values.role);
         if (result.success) {
-            window.location.reload()
+            alert("User role changed successfully")
         } else {
             if (result.isLogout) {
                 localStorage.removeItem("accessToken");

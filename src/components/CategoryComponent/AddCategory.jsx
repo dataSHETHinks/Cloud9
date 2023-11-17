@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import CategoryAPI from '../../api/CategoryComponentApis/CategoryAPI'
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AddCategory = () => {
     const [visible, setVisible] = useState(false);
@@ -25,7 +26,7 @@ const AddCategory = () => {
                 localStorage.removeItem("accessToken");
                 navigate("/login/");
             } else {
-                alert(result.error);
+                toast.error(result.error);
             }
         }
     }

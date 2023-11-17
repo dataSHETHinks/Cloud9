@@ -26,15 +26,11 @@ function Login() {
     setIsLoading(true);
     const result = await AuthAPI.login(username, password);
     if (result.success) {
-      // Login successful, handle the response
       localStorage.setItem("accessToken", result.response.data.access_token);
       setIsLoading(false);
       navigate("/");
     } else {
-      // Login failed, handle the error
       if (result.isLogout) {
-        // Redirect to logout or login page
-        console.log(result.error.response.data.error)
         localStorage.removeItem("accessToken");
         navigate("/login/")
       } else {

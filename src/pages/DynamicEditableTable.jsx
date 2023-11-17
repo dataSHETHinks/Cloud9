@@ -86,6 +86,7 @@ const DynamicEditableTable = () => {
             width: 80,
             render: (_, record) => record.index, // render index number in each row
             fixed: "left",
+            align: "center",
           };
           setIdxCols(idxColumn);
           setColumns(newColumns);
@@ -168,6 +169,7 @@ const DynamicEditableTable = () => {
     dataIndex: "operation",
     width: 120,
     fixed: "left",
+    align: "center",
     render: (_, record) => {
       const editable = isEditing(record);
       return editable ? (

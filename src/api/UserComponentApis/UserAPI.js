@@ -1,6 +1,23 @@
 import api from "../../apiConfig";
 
 class UserAPI {
+  static async getUserDetails(){
+    try{
+      const response = await api('GET', 'user/get_user_details/', {});
+      return Promise.resolve({
+        success: true,
+        response,
+        isLogout: false,
+      });
+    } catch (error) {
+      return Promise.reject({
+        success: false,
+        error,
+        isLogout: error.response && error.response.status === 401,
+      });
+    }
+  }
+
   static async getUserList() {
     try {
       const response = await api('GET', 'user/get_users/', {});
