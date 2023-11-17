@@ -70,9 +70,6 @@ const FilePage = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -119,8 +116,13 @@ const FilePage = () => {
 
   return (
     <div>
-      <div style={{ textAlign: 'left' }}>
-        <Button type="primary" size="large" style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
+      <div style={{ textAlign: "left" }}>
+        <Button
+          type="primary"
+          size="large"
+          style={{ width: "240px", justifyContent: "left" }}
+          onClick={showModal}
+        >
           + Add a New File
         </Button>
       </div>

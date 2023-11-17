@@ -10,7 +10,6 @@ import ChangePassword from "./pages/ChangePassword";
 import AuthenticateRoute from "./AuthenticateRoute";
 import DashboardHome from "./components/DashboardHome";
 import FilePage from "./pages/FilePage";
-// import FileDetailsPage from "./pages/FileDetailsPage";
 import UsersPage from "./pages/UsersPage";
 import RolesPage from "./pages/RolesPage";
 import ModulesPage from "./pages/ModulesPage";
@@ -81,10 +80,10 @@ function App() {
             }
           ></Route>
           <Route
-            path="/change-password"
+            path="/ChangePassword"
             element={
               <AuthenticateRoute>
-                <ChangePassword />
+                <BaseLayout componentToRender={ChangePassword} />
               </AuthenticateRoute>
             }
           />

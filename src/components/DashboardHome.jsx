@@ -14,7 +14,7 @@ const DashboardHome = () => {
     const getUserDetails = async () => {
       const result = await UserAPI.getUserDetails();
       if (result.success) {
-        setUser(result.response.data)
+        setUser(result.response.data);
       } else {
         if (result.isLogout) {
           localStorage.removeItem("accessToken");
@@ -23,18 +23,19 @@ const DashboardHome = () => {
           toast.error(result.error);
         }
       }
-    }
+    };
 
-
-    getUserDetails()
-  }, [])
+    getUserDetails();
+  }, []);
 
   return (
     <>
       <div className="left-sub-div">
         <div className="left-sub-div-child-1">
           <div style={{ float: "left" }}>
-            {user && <p style={{ fontSize: "24px" }}>Welcome, {user.username}</p>}
+            {user && (
+              <p style={{ fontSize: "24px" }}>Welcome, {user.username}</p>
+            )}
           </div>
         </div>
         <div className="left-sub-div-child-2">
