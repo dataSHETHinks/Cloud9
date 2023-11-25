@@ -8,10 +8,13 @@ import {
   Typography,
   Descriptions,
   Button,
+  Radio,
+  Modal,
 } from "antd";
 import { useParams } from "react-router-dom";
 import api from "../apiConfig";
 import "../App.css";
+import {saveAs} from 'file-saver';
 
 const EditableCell = ({
   editing,
@@ -42,6 +45,27 @@ const EditableCell = ({
   );
 };
 
+const DownloadModal = ({ visible, onCancel, onDownload }) => {
+  const [downloadType, setDownloadType] = useState("csv");
+
+  const handleDownload = () => {
+    onDownload(downloadType);
+  };
+  return (
+    <Modal
+      title="Download Options"
+      visible={visible}
+      onCancel={onCancel}
+      onOk={handleDownload}
+    >
+      <Radio.Group onChange={(e) => setDownloadType(e.target.value)} value={downloadType}>
+        <Radio value="csv">Download as CSV</Radio>
+        <Radio value="xlsx">Download as Excel</Radio>
+      </Radio.Group>
+    </Modal>
+  );
+};
+
 const DynamicEditableTable = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
@@ -50,6 +74,7 @@ const DynamicEditableTable = () => {
   const [editingKey, setEditingKey] = useState("");
   const [fileDetails, setFileDetails] = useState({});
   const [idxCols, setIdxCols] = useState([]);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
 
   const isEditing = (record) => record.key === editingKey;
 
@@ -148,6 +173,48 @@ const DynamicEditableTable = () => {
     }
   };
 
+  const handleDownload = (downloadType) => {
+    const requestData = {
+      export_type: downloadType,
+      file_id: id, // Assuming 'id' is a variable in your component
+    };
+
+    api("POST", "/data/export_file/", requestData, { responseType: 'blob' })
+    .then((response) => {
+      const extension = downloadType === 'csv' ? 'csv' : 'xlsx';
+      // Check if response.headers is available
+      // Create a Blob from the response data
+      let blob;
+
+      if (extension === 'csv') {
+        blob = new Blob([response], { type: 'text/csv' });
+      } else {
+        blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      }
+      
+
+      // Create a link element to trigger the download
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `exported_data.${extension}`;
+      document.body.appendChild(link);
+
+      // Trigger download
+      link.click();
+
+      // Remove the link from the DOM after the download is initiated
+      document.body.removeChild(link);
+
+        console.log("File downloaded successfully:", response);
+      })
+      .catch((error) => {
+        console.error("File download error:", error);
+      })
+      .finally(() => {
+        setDownloadModalVisible(false);
+      });
+  };
+
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
       return col;
@@ -219,9 +286,9 @@ const DynamicEditableTable = () => {
         <Descriptions.Item label="Download this file">
           <Button
             type="primary"
-            // onClick={showModal}
             size="Large"
             style={{ width: "200px", align: "center" }}
+            onClick={() => setDownloadModalVisible(true)}
           >
             Download
           </Button>
@@ -249,6 +316,11 @@ const DynamicEditableTable = () => {
           })}
         />
       </Form>
+      <DownloadModal
+        visible={downloadModalVisible}
+        onCancel={() => setDownloadModalVisible(false)}
+        onDownload={handleDownload}
+      />
     </>
   );
 };
