@@ -12,6 +12,7 @@ import {
 import { useParams } from "react-router-dom";
 import api from "../apiConfig";
 import "../App.css";
+import FileAPI from "../api/FileComponentApis/FileAPI";
 
 const EditableCell = ({
   editing,
@@ -47,7 +48,7 @@ const DynamicEditableTable = () => {
 
   const [fileId, setFileId] = useState("");
   const [updatedRowNum, setUpdatedRowNum] = useState("");
-  const [updatedRowData, setUpdatedRowData] = useState("");
+  const [updatedRowDataAPI, setUpdatedRowDataAPI] = useState("");
 
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState([]);
@@ -114,7 +115,7 @@ const DynamicEditableTable = () => {
     };
 
     getFileData();
-  }, [id]);
+  }, [id, updatedRowDataAPI]);
 
   const editRow = (record) => {
     form.setFieldsValue({
@@ -155,7 +156,9 @@ const DynamicEditableTable = () => {
         const seprateData = { ...restWithoutIdx };
 
         setUpdatedRowNum(String(idx));
-        setUpdatedRowData(JSON.stringify(seprateData));
+        var toBeSent = JSON.stringify(seprateData);
+        setUpdatedRowDataAPI(JSON.stringify(seprateData));
+        FileAPI.updateFileData(fileId, String(idx), toBeSent);
       } else {
         newData.push(values);
         setDataSource(newData);
