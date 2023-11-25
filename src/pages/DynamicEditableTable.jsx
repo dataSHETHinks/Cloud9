@@ -44,6 +44,11 @@ const EditableCell = ({
 
 const DynamicEditableTable = () => {
   const { id } = useParams();
+
+  const [fileId, setFileId] = useState("");
+  const [updatedRowNum, setUpdatedRowNum] = useState("");
+  const [updatedRowData, setUpdatedRowData] = useState("");
+
   const [form] = Form.useForm();
   const [dataSource, setDataSource] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -60,6 +65,7 @@ const DynamicEditableTable = () => {
 
         if (response && response.data.data.data) {
           const fileData = response.data;
+          setFileId(fileData.data.id);
           const sampleObject = fileData.data.data;
           const details = {
             category_name: fileData.data.category_name,
@@ -75,7 +81,7 @@ const DynamicEditableTable = () => {
             key: key,
             width: 150,
             editable: true,
-            align: 'center',
+            align: "center",
           }));
 
           // Insert 'idx' column configuration at the beginning
@@ -132,14 +138,26 @@ const DynamicEditableTable = () => {
 
       if (index > -1) {
         const item = newData[index];
+        const updatedRowData = {
+          ...item,
+          ...values,
+          idx: item.index,
+        };
         newData.splice(index, 1, {
           ...item,
-          ...values, // Update with validated form values
+          ...values,
         });
         setDataSource(newData);
         setEditingKey("");
+
+        const { idx, ...restWithoutIdx } = updatedRowData;
+
+        const seprateData = { ...restWithoutIdx };
+
+        setUpdatedRowNum(String(idx));
+        setUpdatedRowData(JSON.stringify(seprateData));
       } else {
-        newData.push(values); // Push validated form values
+        newData.push(values);
         setDataSource(newData);
         setEditingKey("");
       }
