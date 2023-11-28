@@ -71,8 +71,16 @@ const AddRole = () => {
             <Modal
                 title="Add User Role"
                 open={visible}
-                onOk={handleOk}
                 onCancel={handleCancel}
+                onOk={handleOk}
+                footer={[
+                    <Button key="cancel" onClick={handleCancel}>
+                      Cancel
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={handleOk} style={{ marginInlineStart: 0 }}>
+                      Submit
+                    </Button>,
+                ]}
             >
                 <Form form={form}>
                     <Form.Item

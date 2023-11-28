@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
-const api = async (method, url, data, contentType = "application/json", responseType="") => {
+const api = async (method, url, data, contentType = "application/json", responseType = "") => {
   const headers = {
     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     "Content-Type": contentType,
