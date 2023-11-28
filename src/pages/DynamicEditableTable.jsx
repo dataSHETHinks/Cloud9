@@ -14,7 +14,6 @@ import {
 import { useParams } from "react-router-dom";
 import api from "../apiConfig";
 import "../App.css";
-import {saveAs} from 'file-saver';
 
 const EditableCell = ({
   editing,
@@ -34,7 +33,7 @@ const EditableCell = ({
           name={dataIndex}
           style={{ margin: 0 }}
           rules={[{ required: true, message: `Please Input ${title}!` }]}
-          // initialValue={record[dataIndex]}
+        // initialValue={record[dataIndex]}
         >
           {inputNode}
         </Form.Item>
@@ -179,31 +178,29 @@ const DynamicEditableTable = () => {
       file_id: id, // Assuming 'id' is a variable in your component
     };
 
-    api("POST", "/data/export_file/", requestData, { responseType: 'blob' })
-    .then((response) => {
-      const extension = downloadType === 'csv' ? 'csv' : 'xlsx';
-      // Check if response.headers is available
-      // Create a Blob from the response data
-      let blob;
+    const contentType = downloadType === 'csv' ? 'text/csv' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-      if (extension === 'csv') {
-        blob = new Blob([response], { type: 'text/csv' });
-      } else {
-        blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      }
-      
+    api("POST", "/data/export_file/", requestData, contentType, "blob")
+      .then((response) => {
+        const extension = downloadType === 'csv' ? 'csv' : 'xlsx';
+        // Check if response.headers is available
+        // Create a Blob from the response data
+        let blob;
 
-      // Create a link element to trigger the download
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `exported_data.${extension}`;
-      document.body.appendChild(link);
+        if (extension === 'csv') {
+          blob = new Blob([response], { type: 'text/csv' });
+        } else {
+          blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          // blob = new Blob([response], { type: 'text/csv' });
+        }
 
-      // Trigger download
-      link.click();
-
-      // Remove the link from the DOM after the download is initiated
-      document.body.removeChild(link);
+        // Create a link element and trigger the download
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `exported_data.${extension}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
         console.log("File downloaded successfully:", response);
       })
