@@ -119,40 +119,39 @@ const DashboardHome = () => {
     }
   };
 
-  const getAllUsers = async () => {
-    const result = await UserAPI.getUserList();
-    if (result.success) {
-      console.log(result.response.data.user_list)
-      const users = result.response.data.user_list || [];
+  const getAllUsers = () => {
+    api("GET", "user/get_users/", {})
+      .then((response) => {
+        const users = response.data.user_list || [];
 
-      // Count total users, deleted users, and staff users
-      const totalUsers = users.length;
-      const deletedUsers = users.filter((user) => user.is_deleted).length;
-      const staffUsers = users.filter((user) => user.is_staff).length;
+        // Count total users, deleted users, and staff users
+        const totalUsers = users.length;
+        const deletedUsers = users.filter((user) => user.is_deleted).length;
+        const staffUsers = users.filter((user) => user.is_staff).length;
 
-      // Update the state using the state updater function
-      setTotalUsersCount(() => totalUsers);
-      setDeletedUsersCount(() => deletedUsers);
-      setStaffUsersCount(() => staffUsers);
+        // Update the state using the state updater function
+        setTotalUsersCount(() => totalUsers);
+        setDeletedUsersCount(() => deletedUsers);
+        setStaffUsersCount(() => staffUsers);
 
-      // Update the state using the state updater function
-      setAllUsers(() => users);
-    } else {
-      if (result.isLogout) {
-        localStorage.removeItem("accessToken");
-        navigate("/login/");
-      } else {
-        toast.error(result.error);
-      }
-      console.error("POST Request Error:", result.error);
-    }
+        // Update the state using the state updater function
+        setAllUsers(() => users);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("accessToken");
+          navigate("/login/");
+        } else {
+          toast.error(error.response.data.error);
+        }
+      });
   };
 
   useEffect(() => {
     getAllUsers();
-    getAllFiles();
-    getUserDetails();
-    getAllRoles();
+    // getAllFiles();
+    // getUserDetails();
+    // getAllRoles();
   }, []);
 
 
@@ -210,7 +209,7 @@ const DashboardHome = () => {
               </Row>
             </Card>
           </div>
-          <div style={{ width: "100%", padding: "10px", backgroundColor: "#fff", paddingTop:"10px" }}>
+          <div style={{ width: "100%", padding: "10px", backgroundColor: "#fff", paddingTop: "10px" }}>
             <p style={{ fontSize: "18px", textAlign: "left", marginBottom: "10px" }}>Roles</p>
             <div style={{ maxHeight: "200px", overflowY: "auto" }}>
               <Table dataSource={allRoles} columns={roleColumns} pagination={false} />

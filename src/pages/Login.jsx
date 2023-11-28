@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../App.css";
-import AuthAPI from "../api/AuthComponentApis/AuthAPI";
+import api from "../apiConfig";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -21,23 +21,24 @@ function Login() {
     }
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const result = await AuthAPI.login(username, password);
-    if (result.success) {
-      localStorage.setItem("accessToken", result.response.data.access_token);
-      setIsLoading(false);
-      navigate("/");
-    } else {
-      if (result.isLogout) {
-        localStorage.removeItem("accessToken");
-        navigate("/login/");
-      } else {
-        toast.error(result.error);
-      }
-      console.error("POST Request Error:", result.error);
-    }
+    api("POST", "/login/", {
+      username: username,
+      password: password,
+    })
+      .then((response) => {
+        localStorage.setItem("accessToken", response.data.access_token);
+        setIsLoading(false);
+        navigate("/");
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        if (error.response) {
+          toast.error(error.response.data.error)
+        }
+      });
   };
 
   return (
