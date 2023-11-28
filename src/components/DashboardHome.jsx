@@ -144,7 +144,6 @@ const DashboardHome = () => {
       } else {
         toast.error(result.error);
       }
-      console.error("POST Request Error:", result.error);
     }
   };
 
