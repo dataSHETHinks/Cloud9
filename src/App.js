@@ -15,6 +15,8 @@ import RolesPage from "./pages/RolesPage";
 import ModulesPage from "./pages/ModulesPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import DynamicEditableTable from "./pages/DynamicEditableTable";
+import FileHistoryPage from "./pages/FileHistoryPage";
+import FileHistoryDetailPage from "./pages/FileHistoryDetailPage";
 
 function App() {
   return (
@@ -47,6 +49,22 @@ function App() {
               </AuthenticateRoute>
             }
           />
+          <Route
+            path="/FilesHistory"
+            element={
+              <AuthenticateRoute>
+                <BaseLayout componentToRender={FileHistoryPage} />
+              </AuthenticateRoute>
+            }
+          ></Route>
+          <Route
+            path="/FileHistoryDetail/:id"
+            element={
+              <AuthenticateRoute>
+                <BaseLayout componentToRender={FileHistoryDetailPage} />
+              </AuthenticateRoute>
+            }
+          ></Route>
           <Route
             path="/Users"
             element={
