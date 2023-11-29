@@ -11,6 +11,7 @@ import {
   UnorderedListOutlined,
   SettingOutlined,
   LogoutOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import logoImage from "../../assets/companylogo.png";
@@ -38,23 +39,26 @@ const BaseLayout = ({ componentToRender: Component }) => {
         case "Files":
           setSelectedKey("1");
           break;
-        case "Users":
+        case "FilesHistory":
           setSelectedKey("2");
           break;
-        case "Roles":
+        case "Users":
           setSelectedKey("3");
           break;
-        case "Modules":
+        case "Roles":
           setSelectedKey("4");
           break;
-        case "Categories":
+        case "Modules":
           setSelectedKey("5");
           break;
-        case "ChangePassword":
+        case "Categories":
           setSelectedKey("6");
           break;
+        case "ChangePassword":
+          setSelectedKey("7");
+          break;
         default:
-          setSelectedKey("8"); // Default to Home if no match
+          setSelectedKey("9"); // Default to Home if no match
           break;
       }
     };
@@ -107,24 +111,27 @@ const BaseLayout = ({ componentToRender: Component }) => {
                 handleNavigate("/Files");
                 break;
               case "2":
-                handleNavigate("/Users");
+                handleNavigate("/FilesHistory");
                 break;
               case "3":
-                handleNavigate("/Roles");
+                handleNavigate("/Users");
                 break;
               case "4":
-                handleNavigate("/Modules");
+                handleNavigate("/Roles");
                 break;
               case "5":
-                handleNavigate("/Categories");
+                handleNavigate("/Modules");
                 break;
               case "6":
-                handleNavigate("/ChangePassword");
+                handleNavigate("/Categories");
                 break;
               case "7":
-                handleLogout();
+                handleNavigate("/ChangePassword");
                 break;
               case "8":
+                handleLogout();
+                break;
+              case "9":
                 handleNavigate("/");
                 break;
               default:
@@ -133,7 +140,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
           }}
           items={[
             {
-              key: "8",
+              key: "9",
               icon: <HomeOutlined />,
               label: "Home",
               link: "/",
@@ -146,36 +153,42 @@ const BaseLayout = ({ componentToRender: Component }) => {
             },
             {
               key: "2",
+              icon: <HistoryOutlined />,
+              label: "Files History",
+              link: "/FilesHistory",
+            },
+            {
+              key: "3",
               icon: <UsergroupAddOutlined />,
               label: "Users",
               link: "/Users",
             },
             {
-              key: "3",
+              key: "4",
               icon: <ClusterOutlined />,
               label: "Roles",
               link: "/Roles/",
             },
             {
-              key: "4",
+              key: "5",
               icon: <MergeCellsOutlined />,
               label: "Modules",
               link: "/Modules/",
             },
             {
-              key: "5",
+              key: "6",
               icon: <UnorderedListOutlined />,
               label: "Categories",
               link: "/Categories",
             },
             {
-              key: "6",
+              key: "7",
               icon: <SettingOutlined />,
               label: "Change Password",
               link: "/ChangePassword",
             },
             {
-              key: "7",
+              key: "8",
               icon: <LogoutOutlined rotate={180} />,
               label: "Log Out",
               // link: "/Files",
