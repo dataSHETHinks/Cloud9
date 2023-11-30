@@ -12,9 +12,11 @@ import {
   Modal,
   Switch,
 } from "antd";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../apiConfig";
 import "../App.css";
+import FileAPI from "../api/FileComponentApis/FileAPI";
+import { toast } from "react-toastify";
 
 const EditableCell = ({
   editing,
@@ -54,7 +56,7 @@ const DownloadModal = ({ visible, onCancel, onDownload }) => {
   return (
     <Modal
       title="Download Options"
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       onOk={handleDownload}
     >
@@ -128,10 +130,10 @@ const DynamicEditableTable = () => {
           );
           setDataSource(dataSource);
         } else {
-          console.error("Empty or invalid response data");
+          toast.error("Empty or invalid response data");
         }
       } catch (error) {
-        console.error("GET Request Error:", error);
+        toast.error("GET Request Error:", error);
       }
     };
 
@@ -166,6 +168,22 @@ const DynamicEditableTable = () => {
         });
         setDataSource(newData);
         setEditingKey("");
+
+        // Call the updateFileData API here
+        const fileId = id; // Assuming fileId is a property in your item object
+        const rowNum = item.key; // Assuming rowNum is a property in your item object
+
+        const result = await FileAPI.updateFileData(fileId, rowNum, JSON.stringify(values));
+        if (result.success) {
+          toast.success(result.response.data.message)
+        } else {
+          if (result.isLogout) {
+            localStorage.removeItem("accessToken");
+            navigate("/login/");
+          } else {
+            toast.error(result.error.response.data.error);
+          }
+        }
       } else {
         newData.push(values); // Push validated form values
         setDataSource(newData);

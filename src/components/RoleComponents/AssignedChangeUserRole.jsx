@@ -91,7 +91,7 @@ const AssignedChangeUserRole = () => {
             <div style={{ textAlign: 'left' }}>
                 <Button type="primary" size="large"
                     style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
-                    Changed User Role
+                    Change User Role
                 </Button>
             </div>
             <Modal
