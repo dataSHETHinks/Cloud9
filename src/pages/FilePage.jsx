@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal,Select } from "antd";
 import { Link } from "react-router-dom";
 import api from "../apiConfig";
 import AddNewFileForm from "../components/FileComponents/AddNewFileForm";
+
+
+const { Option } = Select;
 
 const columns = [
   {
@@ -57,7 +60,7 @@ const columns = [
   },
   {
     title: "Action",
-    dataIndex: "id", // Assuming 'id' is the unique identifier for files
+    dataIndex: "id", 
     align: "center",
     render: (id) => <Link to={`/FileDetails/${id}`}>View Details</Link>,
   },
@@ -66,15 +69,48 @@ const columns = [
 const FilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allFiles, setAllFiles] = useState([]);
+  const [modules, setModules] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedModule, setSelectedModule] = useState('none');
+  const [selectedCategory, setSelectedCategory] = useState('none');
 
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
+  const handleModuleChange = (value) => {
+    setSelectedModule(value);
+  };
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+  };
+
+  const handleFilter = async () => {
+    try {
+      if (selectedModule === 'none' && selectedCategory === 'none') {
+        // If both are 'None', do not apply any filters
+        const response = await api("GET", "/data/get_file_names/", {});
+        setAllFiles(response.data.data);
+      } else {
+        const moduleParam = selectedModule !== 'none' ? `module_id=${selectedModule}` : '';
+        const categoryParam = selectedCategory !== 'none' ? `category_id=${selectedCategory}` : '';
+        const params = [moduleParam, categoryParam].filter(Boolean).join('&');
+
+        const response = await api("GET", `/data/filter_file_data/?${params}`);
+        setAllFiles(response.data);
+      }
+    } catch (error) {
+      console.error("GET Request Error:", error);
+    }
+  };
+
   useEffect(() => {
+    // Fetch all files when the component mounts
     const getAllFiles = async () => {
       try {
         const response = await api("GET", "/data/get_file_names/", {});
@@ -84,7 +120,25 @@ const FilePage = () => {
       }
     };
 
+    // Fetch modules and categories when the component mounts
+    const getModulesAndCategories = async () => {
+      try {
+        const modulesResponse = await api("GET", "/data/get_file_modules/");
+        const categoriesResponse = await api("GET", "/data/get_file_categories/");
+
+        // Extract unique module names and category names
+        const uniqueModules = modulesResponse.data.data;
+        const uniqueCategories = categoriesResponse.data.data;
+
+        setModules(uniqueModules);
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("GET Request Error:", error);
+      }
+    };
+    
     getAllFiles();
+    getModulesAndCategories();
   }, []);
 
   const handleFileUpload = (values, selectedFile) => {
@@ -114,9 +168,61 @@ const FilePage = () => {
     }
   };
 
+  // Extracting relevant data for display
+  const displayData = allFiles.map(file => ({
+    id: file.id,
+    title: file.title,
+    category_name: file.category_name,
+    uploaded_by_username: file.uploaded_by_username,
+    uploaded_at: new Date(file.uploaded_at).toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    modified_at: new Date(file.modified_at).toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    module_name: file.module_name,
+  }));
+
   return (
     <div>
       <div style={{ textAlign: "left" }}>
+        <Select
+          style={{ width: 120, marginRight: 16 }}
+          placeholder="Select Module"
+          onChange={handleModuleChange}
+          defaultValue="none" // Set the default value to "None"
+        >
+          <Option value="none">None</Option>
+          {modules.map((module) => (
+            <Option key={module.id} value={module.id}>
+              {module.name}
+            </Option>
+          ))}
+        </Select>
+        <Select
+          style={{ width: 120, marginRight: 16 }}
+          placeholder="Select Category"
+          onChange={handleCategoryChange}
+          defaultValue="none" // Set the default value to "None"
+        >
+          <Option value="none">None</Option>
+          {categories.map((category) => (
+            <Option key={category.id} value={category.id}>
+              {category.name}
+            </Option>
+          ))}
+        </Select>
+        <Button type="primary" onClick={handleFilter}>
+          Filter
+        </Button>
         <Button
           type="primary"
           size="large"
@@ -136,14 +242,19 @@ const FilePage = () => {
           </Button>,
         ]}
       >
+        {/* AddNewFileForm component from code1 */}
         <AddNewFileForm onSubmit={handleFileUpload} />
       </Modal>
-      <Table
-        dataSource={allFiles}
-        columns={columns}
-        scroll={{ y: 460 }}
-        pagination={false}
-      />
+      {allFiles && allFiles.length > 0 ? (
+        <Table
+          dataSource={displayData}
+          columns={columns}
+          scroll={{ y: 460 }}
+          pagination={false}
+        />
+      ) : (
+        <p>No data to display</p>
+      )}
     </div>
   );
 };
