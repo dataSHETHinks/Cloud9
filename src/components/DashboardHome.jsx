@@ -142,9 +142,8 @@ const DashboardHome = () => {
         localStorage.removeItem("accessToken");
         navigate("/login/");
       } else {
-        toast.error(result.error);
+        toast.error(result.error.response.data.error);
       }
-      console.error("POST Request Error:", result.error);
     }
   };
 
