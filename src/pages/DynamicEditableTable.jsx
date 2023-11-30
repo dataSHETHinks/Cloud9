@@ -36,7 +36,7 @@ const EditableCell = ({
           name={dataIndex}
           style={{ margin: 0 }}
           rules={[{ required: true, message: `Please Input ${title}!` }]}
-        // initialValue={record[dataIndex]}
+          // initialValue={record[dataIndex]}
         >
           {inputNode}
         </Form.Item>
@@ -60,7 +60,10 @@ const DownloadModal = ({ visible, onCancel, onDownload }) => {
       onCancel={onCancel}
       onOk={handleDownload}
     >
-      <Radio.Group onChange={(e) => setDownloadType(e.target.value)} value={downloadType}>
+      <Radio.Group
+        onChange={(e) => setDownloadType(e.target.value)}
+        value={downloadType}
+      >
         <Radio value="csv">Download as CSV</Radio>
         <Radio value="xlsx">Download as Excel</Radio>
       </Radio.Group>
@@ -78,7 +81,7 @@ const DynamicEditableTable = () => {
   const [idxCols, setIdxCols] = useState([]);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const [showFileDetails, setShowFileDetails] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const isEditing = (record) => record.key === editingKey;
 
@@ -105,7 +108,7 @@ const DynamicEditableTable = () => {
             key: key,
             width: 150,
             editable: true,
-            align: 'center',
+            align: "center",
           }));
 
           // Insert 'idx' column configuration at the beginning
@@ -173,9 +176,13 @@ const DynamicEditableTable = () => {
         const fileId = id; // Assuming fileId is a property in your item object
         const rowNum = item.key; // Assuming rowNum is a property in your item object
 
-        const result = await FileAPI.updateFileData(fileId, rowNum, JSON.stringify(values));
+        const result = await FileAPI.updateFileData(
+          fileId,
+          rowNum,
+          JSON.stringify(values)
+        );
         if (result.success) {
-          toast.success(result.response.data.message)
+          toast.success(result.response.data.message);
         } else {
           if (result.isLogout) {
             localStorage.removeItem("accessToken");
@@ -200,24 +207,29 @@ const DynamicEditableTable = () => {
       file_id: id, // Assuming 'id' is a variable in your component
     };
 
-    const contentType = downloadType === 'csv' ? 'text/csv' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    const contentType =
+      downloadType === "csv"
+        ? "text/csv"
+        : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     api("POST", "/data/export_file/", requestData, contentType, "blob")
       .then((response) => {
-        const extension = downloadType === 'csv' ? 'csv' : 'xlsx';
+        const extension = downloadType === "csv" ? "csv" : "xlsx";
         // Check if response.headers is available
         // Create a Blob from the response data
         let blob;
 
-        if (extension === 'csv') {
-          blob = new Blob([response], { type: 'text/csv' });
+        if (extension === "csv") {
+          blob = new Blob([response], { type: "text/csv" });
         } else {
-          blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          blob = new Blob([response], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
           // blob = new Blob([response], { type: 'text/csv' });
         }
 
         // Create a link element and trigger the download
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         link.download = `exported_data.${extension}`;
         document.body.appendChild(link);
@@ -287,7 +299,7 @@ const DynamicEditableTable = () => {
 
   const detailsContent = (
     <Descriptions>
-        <Descriptions.Item label="Uploaded By">
+      <Descriptions.Item label="Uploaded By">
         {fileDetails.uploaded_by_username}
       </Descriptions.Item>
       <Descriptions.Item label="Category Name">
@@ -296,23 +308,23 @@ const DynamicEditableTable = () => {
       <Descriptions.Item label="Module Name">
         {fileDetails.module_name}
       </Descriptions.Item>
-    
+
       <Descriptions.Item label="Uploaded At">
-        {new Date(fileDetails.uploaded_at).toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
+        {new Date(fileDetails.uploaded_at).toLocaleString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
         })}
       </Descriptions.Item>
       <Descriptions.Item label="Modified At">
-        {new Date(fileDetails.modified_at).toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
+        {new Date(fileDetails.modified_at).toLocaleString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
         })}
       </Descriptions.Item>
     </Descriptions>
@@ -320,20 +332,31 @@ const DynamicEditableTable = () => {
 
   return (
     <>
-    
+      <div
+        style={{
+          marginBottom: 16,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Switch
+          checked={showFileDetails}
+          onChange={setShowFileDetails}
+          style={{ width: "10px", marginRight: 8 }}
+        />
+        <span>Show File Details</span>
+      </div>
 
-      <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
-  <Switch
-    checked={showFileDetails}
-    onChange={setShowFileDetails}
-    style={{width: "10px", marginRight: 8 }}
-  />
-  <span>Show File Details</span>
-</div>
-  
       {showFileDetails && detailsContent}
-  
-      <div style={{ marginBottom: 16, display: "flex", justifyContent: "flex-start" }}>
+
+      <div
+        style={{
+          marginBottom: 16,
+          display: "flex",
+          justifyContent: "flex-start",
+        }}
+      >
         <Button
           type="primary"
           size="large"

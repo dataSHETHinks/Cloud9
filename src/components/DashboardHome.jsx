@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { Card, Col, Row, Statistic, Table } from "antd";
 import RoleAPI from "../api/RoleComponentApis/RoleAPI";
 import api from "../apiConfig";
+import CustomLoader from "./CustomLoader";
 
 const DashboardHome = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const DashboardHome = () => {
   const [totalUsersCount, setTotalUsersCount] = useState(0);
   const [deletedUsersCount, setDeletedUsersCount] = useState(0);
   const [staffUsersCount, setStaffUsersCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fileColumns = [
     // {
@@ -67,19 +69,21 @@ const DashboardHome = () => {
     },
   ];
 
-
   const getUserDetails = async () => {
-    const result = await UserAPI.getUserDetails();
-    if (result.success) {
-      setUser(result.response.data);
-    } else {
-      if (result.isLogout) {
+    setIsLoading(true);
+    try {
+      const result = await UserAPI.getUserDetails();
+      if (result.success) {
+        setUser(result.response.data);
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
         localStorage.removeItem("accessToken");
         navigate("/login/");
-      } else {
-        toast.error(result.error);
       }
     }
+    setIsLoading(false);
   };
 
   const getAllFiles = async () => {
@@ -96,13 +100,12 @@ const DashboardHome = () => {
     // }
     try {
       const response = await api("GET", "/data/get_file_names/", {});
-      console.log(response.data.data)
+      console.log(response.data.data);
       setAllFiles(response.data.data);
     } catch (error) {
       console.error("GET Request Error:", error);
     }
   };
-
 
   const getAllRoles = async () => {
     const result = await RoleAPI.getUserRoles();
@@ -122,7 +125,7 @@ const DashboardHome = () => {
   const getAllUsers = async () => {
     const result = await UserAPI.getUserList();
     if (result.success) {
-      console.log(result.response.data.user_list)
+      console.log(result.response.data.user_list);
       const users = result.response.data.user_list || [];
 
       // Count total users, deleted users, and staff users
@@ -154,7 +157,6 @@ const DashboardHome = () => {
     getAllRoles();
   }, []);
 
-
   // Calculate statistics by category
   const calculateStatisticsByCategory = () => {
     const statisticsByCategory = {};
@@ -180,63 +182,110 @@ const DashboardHome = () => {
   const statisticsByCategory = calculateStatisticsByCategory();
 
   return (
-    <div style={{ margin: "20px" }}>
-      {user && (
-        <p style={{ fontSize: "24px", textAlign: "left" }}>
-          Welcome, {user.username}
-        </p>
-      )}
+    <>
+      {isLoading ? (
+        <div className="centered-loader">
+          <CustomLoader />
+        </div>
+      ) : null}
+      <div style={{ margin: "20px" }}>
+        {user && (
+          <p style={{ fontSize: "24px", textAlign: "left" }}>
+            Welcome, {user.username}
+          </p>
+        )}
 
-      <div style={{ display: "flex", height: "100%" }}>
-        <div style={{ flex: "0 0 60%", backgroundColor: "#ccc" }}>
-          <div style={{ width: "100%", padding: "10px", backgroundColor: "#fff" }}>
-            {/* <p style={{ fontSize: "18px", textAlign: "left", marginBottom: "10px" }}>Files</p>
+        <div style={{ display: "flex", height: "100%" }}>
+          <div style={{ flex: "0 0 60%", backgroundColor: "#ccc" }}>
+            <div
+              style={{
+                width: "100%",
+                padding: "10px",
+                backgroundColor: "#fff",
+              }}
+            >
+              {/* <p style={{ fontSize: "18px", textAlign: "left", marginBottom: "10px" }}>Files</p>
             <div style={{ maxHeight: "400px", overflowY: "auto" }}>
               <Table dataSource={allFiles} columns={fileColumns} pagination={false} />
             </div> */}
-            <Card title="File Statistics by Category" bordered={false} style={{
-              fontWeight: "bold",
-            }}>
-              <Row style={{ justifyContent: "center" }} gutter={16}>
-                {Object.keys(statisticsByCategory).map((category, index) => (
-                  <Col span={6} key={index}>
-                    <Statistic
-                      title={category}
-                      value={statisticsByCategory[category].totalFiles}
-                    />
-                  </Col>
-                ))}
-              </Row>
-            </Card>
+              <Card
+                title="File Statistics by Category"
+                bordered={false}
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                <Row style={{ justifyContent: "center" }} gutter={16}>
+                  {Object.keys(statisticsByCategory).map((category, index) => (
+                    <Col span={6} key={index}>
+                      <Statistic
+                        title={category}
+                        value={statisticsByCategory[category].totalFiles}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              </Card>
+            </div>
+            <div
+              style={{
+                width: "100%",
+                padding: "10px",
+                backgroundColor: "#fff",
+                paddingTop: "10px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "18px",
+                  textAlign: "left",
+                  marginBottom: "10px",
+                }}
+              >
+                Roles
+              </p>
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                <Table
+                  dataSource={allRoles}
+                  columns={roleColumns}
+                  pagination={false}
+                />
+              </div>
+            </div>
           </div>
-          <div style={{ width: "100%", padding: "10px", backgroundColor: "#fff", paddingTop:"10px" }}>
-            <p style={{ fontSize: "18px", textAlign: "left", marginBottom: "10px" }}>Roles</p>
-            <div style={{ maxHeight: "200px", overflowY: "auto" }}>
-              <Table dataSource={allRoles} columns={roleColumns} pagination={false} />
+
+          <div style={{ flex: "0 0 40%" }}>
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                margin: "10px",
+                padding: "10px",
+                backgroundColor: "#fff",
+              }}
+            >
+              {/* <p style={{ fontSize: "18px", textAlign: "left", marginBottom: "10px" }}>Users</p> */}
+              {/* <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+              <Table dataSource={allUsers} columns={userColumns} pagination={false} />
+            </div> */}
+              <Card
+                title="User Statistics"
+                bordered={false}
+                style={{
+                  width: 350,
+                  backgroundColor: "#f4f4f4",
+                  fontWeight: "bold",
+                }}
+              >
+                <Statistic title="Total Users" value={totalUsersCount} />
+                <Statistic title="Deleted Users" value={deletedUsersCount} />
+                <Statistic title="Staff Users" value={staffUsersCount} />
+              </Card>
             </div>
           </div>
         </div>
-
-        <div style={{ flex: "0 0 40%" }}>
-          <div style={{ width: "100%", height: "100%", margin: "10px", padding: "10px", backgroundColor: "#fff" }}>
-            {/* <p style={{ fontSize: "18px", textAlign: "left", marginBottom: "10px" }}>Users</p> */}
-            {/* <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-              <Table dataSource={allUsers} columns={userColumns} pagination={false} />
-            </div> */}
-            <Card title="User Statistics" bordered={false}
-              style={{
-                width: 350,
-                backgroundColor: "#f4f4f4",
-                fontWeight: "bold",
-              }}>
-              <Statistic title="Total Users" value={totalUsersCount} />
-              <Statistic title="Deleted Users" value={deletedUsersCount} />
-              <Statistic title="Staff Users" value={staffUsersCount} />
-            </Card>
-          </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
