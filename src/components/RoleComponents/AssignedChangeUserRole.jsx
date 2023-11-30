@@ -1,6 +1,6 @@
 // AddRole.js
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Checkbox, Select } from 'antd';
+import { Button, Modal, Form, Input, Checkbox, Select, message } from 'antd';
 import RoleAPI from '../../api/RoleComponentApis/RoleAPI';
 import { useNavigate } from 'react-router';
 import UserAPI from '../../api/UserComponentApis/UserAPI';
@@ -55,21 +55,26 @@ const AssignedChangeUserRole = () => {
         setVisible(false);
     };
 
+
+
     const changeAssignedUserRole = async (values) => {
-        console.log(values)
         const result = await RoleAPI.changeAssignedUserRole(values.User, values.role);
         if (result.success) {
-            alert("User role changed successfully")
+            message.success({
+                content: "User role changed successfully",
+                duration: 1,
+                onClose: () => window.location.reload(),
+            });
         } else {
             if (result.isLogout) {
                 localStorage.removeItem("accessToken");
                 navigate("/login/");
             } else {
-                alert(result.error);
+                message.error({ content: result.error, onClose: () => window.location.reload() });
             }
         }
-    }
-
+    };
+    
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
@@ -129,3 +134,5 @@ const AssignedChangeUserRole = () => {
 };
 
 export default AssignedChangeUserRole;
+
+

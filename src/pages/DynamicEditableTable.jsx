@@ -10,6 +10,7 @@ import {
   Button,
   Radio,
   Modal,
+  Switch,
 } from "antd";
 import { useParams } from "react-router-dom";
 import api from "../apiConfig";
@@ -74,6 +75,8 @@ const DynamicEditableTable = () => {
   const [fileDetails, setFileDetails] = useState({});
   const [idxCols, setIdxCols] = useState([]);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [showFileDetails, setShowFileDetails] = useState(false);
+  // const navigate = useNavigate();
 
   const isEditing = (record) => record.key === editingKey;
 
@@ -86,8 +89,9 @@ const DynamicEditableTable = () => {
           const fileData = response.data;
           const sampleObject = fileData.data.data;
           const details = {
-            category_name: fileData.data.category_name,
             uploaded_by_username: fileData.data.uploaded_by_username,
+            category_name: fileData.data.category_name,
+            module_name: fileData.data.module_name,
             uploaded_at: fileData.data.uploaded_at,
             modified_at: fileData.data.modified_at,
           };
@@ -263,34 +267,64 @@ const DynamicEditableTable = () => {
     },
   };
 
-  const updatedMergedColumns = [operationColumn, idxCols, ...mergedColumns];
+  const detailsContent = (
+    <Descriptions>
+        <Descriptions.Item label="Uploaded By">
+        {fileDetails.uploaded_by_username}
+      </Descriptions.Item>
+      <Descriptions.Item label="Category Name">
+        {fileDetails.category_name}
+      </Descriptions.Item>
+      <Descriptions.Item label="Module Name">
+        {fileDetails.module_name}
+      </Descriptions.Item>
+    
+      <Descriptions.Item label="Uploaded At">
+        {new Date(fileDetails.uploaded_at).toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
+      </Descriptions.Item>
+      <Descriptions.Item label="Modified At">
+        {new Date(fileDetails.modified_at).toLocaleString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
+      </Descriptions.Item>
+    </Descriptions>
+  );
 
   return (
     <>
-      <Descriptions title="File Details" bordered style={{ marginBottom: 20 }}>
-        <Descriptions.Item label="Category Name">
-          {fileDetails.category_name}
-        </Descriptions.Item>
-        <Descriptions.Item label="Uploaded By">
-          {fileDetails.uploaded_by_username}
-        </Descriptions.Item>
-        <Descriptions.Item label="Uploaded At">
-          {fileDetails.uploaded_at}
-        </Descriptions.Item>
-        <Descriptions.Item label="Modified At">
-          {fileDetails.modified_at}
-        </Descriptions.Item>
-        <Descriptions.Item label="Download this file">
-          <Button
-            type="primary"
-            size="Large"
-            style={{ width: "200px", align: "center" }}
-            onClick={() => setDownloadModalVisible(true)}
-          >
-            Download
-          </Button>
-        </Descriptions.Item>
-      </Descriptions>
+    
+
+      <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
+  <Switch
+    checked={showFileDetails}
+    onChange={setShowFileDetails}
+    style={{width: "10px", marginRight: 8 }}
+  />
+  <span>Show File Details</span>
+</div>
+  
+      {showFileDetails && detailsContent}
+  
+      <div style={{ marginBottom: 16, display: "flex", justifyContent: "flex-start" }}>
+        <Button
+          type="primary"
+          size="large"
+          style={{ width: "200px", marginLeft: 16 }}
+          onClick={() => setDownloadModalVisible(true)}
+        >
+          Download
+        </Button>
+      </div>
       <Form form={form} component={false}>
         <Table
           scroll={{ x: "max-content", y: window.innerHeight - 450 }}
@@ -301,7 +335,7 @@ const DynamicEditableTable = () => {
           }}
           bordered
           dataSource={dataSource}
-          columns={updatedMergedColumns}
+          columns={[operationColumn, idxCols, ...mergedColumns]}
           rowClassName="editable-row"
           pagination={false}
           onRow={(record) => ({
