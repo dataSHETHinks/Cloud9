@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal,Select } from "antd";
+import { Table, Button, Modal, Select } from "antd";
 import { Link } from "react-router-dom";
 import api from "../apiConfig";
 import AddNewFileForm from "../components/FileComponents/AddNewFileForm";
@@ -60,7 +60,7 @@ const columns = [
   },
   {
     title: "Action",
-    dataIndex: "id", 
+    dataIndex: "id",
     align: "center",
     render: (id) => <Link to={`/FileDetails/${id}`}>View Details</Link>,
   },
@@ -136,7 +136,7 @@ const FilePage = () => {
         console.error("GET Request Error:", error);
       }
     };
-    
+
     getAllFiles();
     getModulesAndCategories();
   }, []);
@@ -220,9 +220,12 @@ const FilePage = () => {
             </Option>
           ))}
         </Select>
-        <Button type="primary" onClick={handleFilter}>
+        <Button type="primary"
+          size="large"
+          style={{ width: "240px", justifyContent: "left" }} onClick={handleFilter}>
           Filter
         </Button>
+        <br/>
         <Button
           type="primary"
           size="large"
