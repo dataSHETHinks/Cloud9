@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import {
-    Form,
-    Input,
-    InputNumber,
-    Popconfirm,
-    Table,
-    Typography,
-    Descriptions,
-    Button,
-    Radio,
-    Modal,
+  Form,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Table,
+  Typography,
+  Descriptions,
+  Button,
+  Radio,
+  Modal,
+  Switch,
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../apiConfig";
@@ -75,6 +76,7 @@ const FileHistoryDetailPage = () => {
     const [fileDetails, setFileDetails] = useState({});
     const [idxCols, setIdxCols] = useState([]);
     const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+    const [showFileDetails, setShowFileDetails] = useState(false);
 
     useEffect(() => {
         const getHistoryFileData = () => {
@@ -187,29 +189,59 @@ const FileHistoryDetailPage = () => {
 
     const updatedMergedColumns = [idxCols, ...mergedColumns];
 
-    return (
+    const detailsContent = (
+        <Descriptions>
+          <Descriptions.Item label="Uploaded By">
+            {fileDetails.uploaded_by_username}
+          </Descriptions.Item>
+          
+    
+          <Descriptions.Item label="Uploaded At">
+            {new Date(fileDetails.uploaded_at).toLocaleString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </Descriptions.Item>
+          <Descriptions.Item label="Modified At">
+            {new Date(fileDetails.modified_at).toLocaleString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </Descriptions.Item>
+        </Descriptions>
+      );
+
+      return (
         <>
-            <Descriptions title="History File Details" bordered style={{ marginBottom: 20 }}>
-                <Descriptions.Item label="Uploaded By">
-                    {fileDetails.uploaded_by_username}
-                </Descriptions.Item>
-                <Descriptions.Item label="Uploaded At">
-                    {fileDetails.uploaded_at}
-                </Descriptions.Item>
-                <Descriptions.Item label="Modified At">
-                    {fileDetails.modified_at}
-                </Descriptions.Item>
-                <Descriptions.Item label="Download this file">
-                    <Button
-                        type="primary"
-                        size="Large"
-                        style={{ width: "200px", align: "center" }}
-                        onClick={() => setDownloadModalVisible(true)}
-                    >
-                        Download
-                    </Button>
-                </Descriptions.Item>
-            </Descriptions>
+    
+    
+          <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
+            <Switch
+              checked={showFileDetails}
+              onChange={setShowFileDetails}
+              style={{ width: "10px", marginRight: 8 }}
+            />
+            <span>Show File Details</span>
+          </div>
+    
+          {showFileDetails && detailsContent}
+    
+          <div style={{ marginBottom: 16, display: "flex", justifyContent: "flex-start" }}>
+            <Button
+              type="primary"
+              size="large"
+              style={{ width: "200px", marginLeft: 16 }}
+              onClick={() => setDownloadModalVisible(true)}
+            >
+              Download
+            </Button>
+          </div>
             <Form form={form} component={false}>
                 <Table
                     scroll={{ x: "max-content", y: window.innerHeight - 450 }}

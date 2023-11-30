@@ -193,14 +193,14 @@ const FilePage = () => {
 
   return (
     <div>
-      <div style={{ textAlign: "left" }}>
+      <div style={{ textAlign: "right" }}>
         <Select
-          style={{ width: 120, marginRight: 16 }}
+          style={{ width: 150, marginRight: 16 }}
           placeholder="Select Module"
           onChange={handleModuleChange}
           defaultValue="none" // Set the default value to "None"
         >
-          <Option value="none">None</Option>
+          <Option value="none">Select Module</Option>
           {modules.map((module) => (
             <Option key={module.id} value={module.id}>
               {module.name}
@@ -208,12 +208,12 @@ const FilePage = () => {
           ))}
         </Select>
         <Select
-          style={{ width: 120, marginRight: 16 }}
+          style={{ width: 150, marginRight: 16 }}
           placeholder="Select Category"
           onChange={handleCategoryChange}
           defaultValue="none" // Set the default value to "None"
         >
-          <Option value="none">None</Option>
+          <Option value="none">Select Category</Option>
           {categories.map((category) => (
             <Option key={category.id} value={category.id}>
               {category.name}
@@ -222,10 +222,13 @@ const FilePage = () => {
         </Select>
         <Button type="primary"
           size="large"
-          style={{ width: "240px", justifyContent: "left" }} onClick={handleFilter}>
+          style={{ width: "200px", justifyContent: "left" }} onClick={handleFilter}>
           Filter
         </Button>
+      
+        </div>
         <br/>
+        <div style={{ textAlign: "left" }}>
         <Button
           type="primary"
           size="large"
