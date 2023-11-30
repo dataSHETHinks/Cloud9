@@ -11,12 +11,18 @@ import {
   Radio,
   Modal,
   Switch,
+  Select,
+  Row,
+  Col,
+  DatePicker,
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../apiConfig";
 import "../App.css";
 import FileAPI from "../api/FileComponentApis/FileAPI";
 import { toast } from "react-toastify";
+import { FilterOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const EditableCell = ({
   editing,
@@ -77,10 +83,33 @@ const DynamicEditableTable = () => {
   const [fileDetails, setFileDetails] = useState({});
   const [idxCols, setIdxCols] = useState([]);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [showFileDetails, setShowFileDetails] = useState(false);
   const navigate = useNavigate();
+  const [filterType, setFilterType] = useState('range');
+  const [selectedColumn, setSelectedColumn] = useState('');
+  const [filterValueFrom, setFilterValueFrom] = useState('');
+  const [filterValueTo, setFilterValueTo] = useState('');
+  const [filterValue, setFilterValue] = useState('');
+  const [selectedFileName, setSelectedFileName] = useState('');
+  const [filterColumns, setFilterColumns] = useState([]);
 
   const isEditing = (record) => record.key === editingKey;
+
+  const handleFilterButtonClick = () => {
+    setFilterModalVisible(true);
+  };
+
+  // Function to handle filter modal Ok button click
+  const handleFilterModalOk = () => {
+    // Implement your filter logic here
+    setFilterModalVisible(false);
+  };
+
+  // Function to handle filter modal Cancel button click
+  const handleFilterModalCancel = () => {
+    setFilterModalVisible(false);
+  };
 
   useEffect(() => {
     const getFileData = async () => {
@@ -90,6 +119,12 @@ const DynamicEditableTable = () => {
         if (response && response.data.data.data) {
           const fileData = response.data;
           const sampleObject = fileData.data.data;
+          setSelectedFileName(response.data.data.title)
+          // Extract column names excluding "id"
+          const columnNames = Object.keys(sampleObject[1]).filter((col) => col !== "id");
+
+          // Set columns for the filter modal dropdown
+          setFilterColumns(columnNames);
           const details = {
             uploaded_by_username: fileData.data.uploaded_by_username,
             category_name: fileData.data.category_name,
@@ -287,7 +322,7 @@ const DynamicEditableTable = () => {
 
   const detailsContent = (
     <Descriptions>
-        <Descriptions.Item label="Uploaded By">
+      <Descriptions.Item label="Uploaded By">
         {fileDetails.uploaded_by_username}
       </Descriptions.Item>
       <Descriptions.Item label="Category Name">
@@ -296,7 +331,7 @@ const DynamicEditableTable = () => {
       <Descriptions.Item label="Module Name">
         {fileDetails.module_name}
       </Descriptions.Item>
-    
+
       <Descriptions.Item label="Uploaded At">
         {new Date(fileDetails.uploaded_at).toLocaleString('en-US', {
           year: 'numeric',
@@ -320,20 +355,18 @@ const DynamicEditableTable = () => {
 
   return (
     <>
-    
-
       <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
-  <Switch
-    checked={showFileDetails}
-    onChange={setShowFileDetails}
-    style={{width: "10px", marginRight: 8 }}
-  />
-  <span>Show File Details</span>
-</div>
-  
+        <Switch
+          checked={showFileDetails}
+          onChange={setShowFileDetails}
+          style={{ width: "10px", marginRight: 8 }}
+        />
+        <span>Show File Details</span>
+      </div>
+
       {showFileDetails && detailsContent}
-  
-      <div style={{ marginBottom: 16, display: "flex", justifyContent: "flex-start" }}>
+
+      <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between" }}>
         <Button
           type="primary"
           size="large"
@@ -341,6 +374,9 @@ const DynamicEditableTable = () => {
           onClick={() => setDownloadModalVisible(true)}
         >
           Download
+        </Button>
+        <Button type="default" size="large" icon={<FilterOutlined />} onClick={handleFilterButtonClick} style={{ width: "200px" }} >
+          Filter
         </Button>
       </div>
       <Form form={form} component={false}>
@@ -370,6 +406,129 @@ const DynamicEditableTable = () => {
         onCancel={() => setDownloadModalVisible(false)}
         onDownload={handleDownload}
       />
+
+      <Modal
+        title="Filter Settings"
+        open={filterModalVisible}
+        onOk={handleFilterModalOk}
+        onCancel={handleFilterModalCancel}
+      >
+        <Form>
+          <Form.Item label="File Name">
+            <Input type="text" value={selectedFileName} disabled />
+          </Form.Item>
+          <Form.Item label="Filter Type">
+            <Radio.Group onChange={(e) => setFilterType(e.target.value)} value={filterType}>
+              <Row gutter={8}>
+                <Col span={8}>
+                  <Radio value="value">Value</Radio>
+                </Col>
+                <Col span={8}>
+                  <Radio value="range">Range</Radio>
+                </Col>
+                <Col span={8}>
+                  <Radio value="date">Date</Radio>
+                </Col>
+              </Row>
+            </Radio.Group>
+          </Form.Item>
+
+
+          <Form.Item label="Column Name">
+            <Select
+              style={{ width: '100%' }}
+              onChange={(value) => setSelectedColumn(value)}
+              value={selectedColumn}
+            >
+              {filterColumns.map((column) => (
+                <Select.Option key={column} value={column}>
+                  {column}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          {filterType === 'range' && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Form.Item label="Min">
+                  <Input
+                    type="text"
+                    value={filterValueFrom}
+                    onChange={(e) => setFilterValueFrom(e.target.value)}
+                    placeholder="Min"
+                    style={{ width: "150px" }}
+                  />
+                </Form.Item>
+                <Form.Item label="Max">
+                  <Input
+                    type="text"
+                    value={filterValueTo}
+                    onChange={(e) => setFilterValueTo(e.target.value)}
+                    placeholder="Max"
+                    style={{ width: "150px" }}
+                  />
+                </Form.Item>
+              </div>
+            </>
+          )}
+
+          {/* {filterType === 'date' && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Form.Item label="From">
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    value={filterValueFrom}
+                    onChange={(date, dateString) => setFilterValueFrom(dateString)}
+                    placeholder="From Date"
+                  />
+                </Form.Item>
+                <Form.Item label="To">
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    value={filterValueTo}
+                    onChange={(date, dateString) => setFilterValueTo(dateString)}
+                    placeholder="To Date"
+                  />
+                </Form.Item>
+              </div>
+            </>
+          )} */}
+          {filterType === 'date' && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Form.Item label="Date Range">
+                  <DatePicker.RangePicker
+                    style={{ width: "100%" }}
+                    value={[
+                      filterValueFrom ? moment(filterValueFrom, 'YYYY-MM-DD') : null,
+                      filterValueTo ? moment(filterValueTo, 'YYYY-MM-DD') : null,
+                    ]}
+                    onChange={(dates, dateStrings) => {
+                      setFilterValueFrom(dateStrings[0]);
+                      setFilterValueTo(dateStrings[1]);
+                    }}
+                    format="YYYY-MM-DD"
+                    placeholder={['From Date', 'To Date']}
+                  />
+                </Form.Item>
+              </div>
+            </>
+          )}
+
+          {filterType === 'value' && (
+            <Form.Item label="Value">
+              <Input
+                type="text"
+                value={filterValue}
+                onChange={(e) => setFilterValue(e.target.value)}
+                placeholder="Enter value"
+              />
+            </Form.Item>
+          )}
+        </Form>
+      </Modal>
     </>
   );
 };
