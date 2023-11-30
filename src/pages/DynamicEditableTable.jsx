@@ -78,7 +78,7 @@ const DynamicEditableTable = () => {
   const [idxCols, setIdxCols] = useState([]);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const [showFileDetails, setShowFileDetails] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const isEditing = (record) => record.key === editingKey;
 
