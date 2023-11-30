@@ -26,6 +26,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
 
   const location = useLocation(); // Get the current location object
   const [selectedKey, setSelectedKey] = useState("8"); // Set default selectedKey
+  const [pageTitle, setPageTitle] = useState("Home");
 
   useEffect(() => {
     // Function to parse the URL and set the selectedKey based on it
@@ -38,29 +39,43 @@ const BaseLayout = ({ componentToRender: Component }) => {
       switch (currentPath) {
         case "Files":
           setSelectedKey("1");
+          setPageTitle("Files");
           break;
         case "FilesHistory":
           setSelectedKey("2");
+          setPageTitle("Files History");
           break;
         case "Users":
           setSelectedKey("3");
+          setPageTitle("Users");
           break;
         case "Roles":
           setSelectedKey("4");
+          setPageTitle("Roles");
           break;
         case "Modules":
           setSelectedKey("5");
+          setPageTitle("Modules");
           break;
         case "Categories":
           setSelectedKey("6");
+          setPageTitle("Categories");
           break;
         case "ChangePassword":
           setSelectedKey("7");
+          setPageTitle("Change Password");
+          break;
+        case "FileDetails":
+          setPageTitle("File Details");
+          break;
+        case "FileHistoryDetail":
+          setPageTitle("File History");
           break;
         default:
           setSelectedKey("9"); // Default to Home if no match
+          setPageTitle("Home");
           break;
-      }
+      } 
     };
 
     updateSelectedKey(); // Call the function initially
@@ -98,6 +113,12 @@ const BaseLayout = ({ componentToRender: Component }) => {
               width: "70%",
             }}
           />
+          {!collapsed && (
+            <div style={{ color: "#fff", fontSize: "18px", textAlign: "center", marginTop: "10px" }}>
+              FETHERSTILL INC
+            </div>
+          )}
+          <br/>
         </div>
 
         <Menu
@@ -207,11 +228,22 @@ const BaseLayout = ({ componentToRender: Component }) => {
               fontSize: "16px",
               width: 64,
               height: 64,
-              marginRight: 16,
+              marginRight: -17,
               marginTop: 0,
               float: "left",
             }}
           />
+          {collapsed && (
+            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", fontWeight: "bold", float: "left", padding: "16px", marginRight:"-20px"}}>
+              FETHERSTILL INC
+            </div>
+          )}
+
+          {(
+            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", float: "right", padding: "16px", marginRight:"10px"}}>
+              {pageTitle}
+            </div>
+          )}
         </Header>
 
         <Content
