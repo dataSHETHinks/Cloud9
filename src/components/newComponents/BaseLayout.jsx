@@ -16,9 +16,13 @@ import {
 import { Layout, Menu, Button, theme } from "antd";
 import logoImage from "../../assets/companylogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
+import CustomLoader from "../CustomLoader";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BaseLayout = ({ componentToRender: Component }) => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -89,15 +93,23 @@ const BaseLayout = ({ componentToRender: Component }) => {
   const logoTransitionClass = collapsed ? "logo-collapsed" : "logo-expanded";
 
   const handleLogout = async (e) => {
-    const result = await AuthAPI.logout();
+    setIsLoading(true);
+    try {
+      const result = await AuthAPI.logout();
 
-    if (result.success) {
-      localStorage.removeItem("accessToken");
-      navigate("/login/");
-    } else {
-      // Logout failed, handle the error
-      console.error(result.error);
+      if (result.success) {
+        localStorage.removeItem("accessToken");
+        toast.success("You have been logged out.");
+        navigate("/login/");
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
+        localStorage.removeItem("accessToken");
+        navigate("/login/");
+      }
     }
+    setIsLoading(false);
   };
 
   return (
@@ -254,6 +266,11 @@ const BaseLayout = ({ componentToRender: Component }) => {
             background: colorBgContainer,
           }}
         >
+          {isLoading ? (
+            <div className="centered-loader">
+              <CustomLoader />
+            </div>
+          ) : null}
           {Component && <Component />}
         </Content>
       </Layout>

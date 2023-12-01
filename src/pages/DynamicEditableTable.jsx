@@ -21,6 +21,7 @@ import api from "../apiConfig";
 import "../App.css";
 import FileAPI from "../api/FileComponentApis/FileAPI";
 import { toast } from "react-toastify";
+import CustomLoader from "../components/CustomLoader";
 import { FilterOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -42,7 +43,7 @@ const EditableCell = ({
           name={dataIndex}
           style={{ margin: 0 }}
           rules={[{ required: true, message: `Please Input ${title}!` }]}
-        // initialValue={record[dataIndex]}
+          // initialValue={record[dataIndex]}
         >
           {inputNode}
         </Form.Item>
@@ -66,7 +67,10 @@ const DownloadModal = ({ visible, onCancel, onDownload }) => {
       onCancel={onCancel}
       onOk={handleDownload}
     >
-      <Radio.Group onChange={(e) => setDownloadType(e.target.value)} value={downloadType}>
+      <Radio.Group
+        onChange={(e) => setDownloadType(e.target.value)}
+        value={downloadType}
+      >
         <Radio value="csv">Download as CSV</Radio>
         <Radio value="xlsx">Download as Excel</Radio>
       </Radio.Group>
@@ -86,6 +90,7 @@ const DynamicEditableTable = () => {
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [showFileDetails, setShowFileDetails] = useState(false);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [filterType, setFilterType] = useState('value');
   const [selectedColumn, setSelectedColumn] = useState('');
   const [filterValueFrom, setFilterValueFrom] = useState('');
@@ -203,6 +208,7 @@ const DynamicEditableTable = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const getFileData = async () => {
       try {
         const response = await api("GET", `/data/get_file_data/?id=${id}`);
@@ -231,7 +237,7 @@ const DynamicEditableTable = () => {
             key: key,
             width: 150,
             editable: true,
-            align: 'center',
+            align: "center",
           }));
 
           // Insert 'idx' column configuration at the beginning
@@ -259,11 +265,21 @@ const DynamicEditableTable = () => {
           toast.error("Empty or invalid response data");
         }
       } catch (error) {
-        toast.error("GET Request Error:", error);
+        if (error.code === "ERR_NETWORK") {
+        } else if (
+          error.response.status === 400 ||
+          error.response.status === 404 ||
+          error.response.status === 401
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       }
     };
 
     getFileData();
+    setIsLoading(false);
   }, [id]);
 
   const editRow = (record) => {
@@ -280,8 +296,8 @@ const DynamicEditableTable = () => {
   };
 
   const save = async (key) => {
+    setIsLoading(true);
     try {
-      console.log("inside save");
       const values = await form.validateFields(); // Capture validated form values
       const newData = [...dataSource];
       const index = newData.findIndex((item) => key === item.key);
@@ -299,15 +315,20 @@ const DynamicEditableTable = () => {
         const fileId = id; // Assuming fileId is a property in your item object
         const rowNum = item.key; // Assuming rowNum is a property in your item object
 
-        const result = await FileAPI.updateFileData(fileId, rowNum, JSON.stringify(values));
-        if (result.success) {
-          toast.success(result.response.data.message)
-        } else {
-          if (result.isLogout) {
+        try {
+          const result = await FileAPI.updateFileData(
+            fileId,
+            rowNum,
+            JSON.stringify(values)
+          );
+          if (result.success) {
+            toast.success(result.response.data.message);
+          }
+        } catch (error) {
+          toast.error(error.error);
+          if (error.isLogout) {
             localStorage.removeItem("accessToken");
             navigate("/login/");
-          } else {
-            toast.error(result.error.response.data.error);
           }
         }
       } else {
@@ -316,48 +337,63 @@ const DynamicEditableTable = () => {
         setEditingKey("");
       }
     } catch (errInfo) {
+      toast.error("Something went wrong while updating data.");
       console.log("Validate Failed:", errInfo);
     }
+    setIsLoading(false);
   };
 
   const handleDownload = (downloadType) => {
+    setIsLoading(true);
     const requestData = {
       export_type: downloadType,
       file_id: id, // Assuming 'id' is a variable in your component
     };
 
-    const contentType = downloadType === 'csv' ? 'text/csv' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    const contentType =
+      downloadType === "csv"
+        ? "text/csv"
+        : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     api("POST", "/data/export_file/", requestData, contentType, "blob")
       .then((response) => {
-        const extension = downloadType === 'csv' ? 'csv' : 'xlsx';
+        const extension = downloadType === "csv" ? "csv" : "xlsx";
         // Check if response.headers is available
         // Create a Blob from the response data
         let blob;
 
-        if (extension === 'csv') {
-          blob = new Blob([response], { type: 'text/csv' });
+        if (extension === "csv") {
+          blob = new Blob([response], { type: "text/csv" });
         } else {
-          blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          blob = new Blob([response], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
           // blob = new Blob([response], { type: 'text/csv' });
         }
 
         // Create a link element and trigger the download
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         link.download = `exported_data.${extension}`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        console.log("File downloaded successfully:", response);
       })
       .catch((error) => {
-        console.error("File download error:", error);
+        if (error.code === "ERR_NETWORK") {
+        } else if (
+          error.response.status === 401 ||
+          error.response.status === 415
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       })
       .finally(() => {
         setDownloadModalVisible(false);
       });
+    setIsLoading(false);
   };
 
   const mergedColumns = columns.map((col) => {
@@ -424,21 +460,21 @@ const DynamicEditableTable = () => {
       </Descriptions.Item>
 
       <Descriptions.Item label="Uploaded At">
-        {new Date(fileDetails.uploaded_at).toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
+        {new Date(fileDetails.uploaded_at).toLocaleString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
         })}
       </Descriptions.Item>
       <Descriptions.Item label="Modified At">
-        {new Date(fileDetails.modified_at).toLocaleString('en-US', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
+        {new Date(fileDetails.modified_at).toLocaleString("en-US", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
         })}
       </Descriptions.Item>
     </Descriptions>
@@ -446,6 +482,10 @@ const DynamicEditableTable = () => {
 
   return (
     <>
+      {isLoading ? (
+        <div className="centered-loader">
+          <CustomLoader />
+        </div>
       <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
         <Switch
           checked={showFileDetails}
