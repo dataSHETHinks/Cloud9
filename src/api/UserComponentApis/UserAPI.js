@@ -63,11 +63,28 @@ class UserAPI {
         isLogout: false,
       });
     } catch (error) {
-      return Promise.reject({
-        success: false,
-        error,
-        isLogout: error.response && error.response.status === 401,
-      });
+      if (error.code === "ERR_NETWORK") {
+        return Promise.reject({
+          success: false,
+          error: "Server did not respond. Contact admin or try again later.",
+          isLogout: true,
+        });
+      } else if (
+        error.response.status === 400 ||
+        error.response.status === 403
+      ) {
+        return Promise.reject({
+          success: false,
+          error: error.response.data.error,
+          isLogout: false,
+        });
+      } else {
+        return Promise.reject({
+          success: false,
+          error: "Something went wrong. Please check with admin.",
+          isLogout: false,
+        });
+      }
     }
   }
 

@@ -98,56 +98,70 @@ const DashboardHome = () => {
     //     toast.error(result.error);
     //   }
     // }
+    setIsLoading(true);
     try {
       const response = await api("GET", "/data/get_file_names/", {});
-      console.log(response.data.data);
       setAllFiles(response.data.data);
     } catch (error) {
-      console.error("GET Request Error:", error);
+      if (error.code === "ERR_NETWORK") {
+        toast.error(
+          "Server did not respond. Contact admin or try again later."
+        );
+      } else if (error.response.status === 404) {
+        toast.error("No file names found.");
+      } else {
+        toast.error("Something went wrong.");
+      }
     }
+    setIsLoading(false);
   };
 
   const getAllRoles = async () => {
-    const result = await RoleAPI.getUserRoles();
-    if (result.success) {
-      setAllRoles(result.response.data || []);
-    } else {
-      if (result.isLogout) {
+    setIsLoading(true);
+    try {
+      const result = await RoleAPI.getUserRoles();
+      if (result.success) {
+        setAllRoles(result.response.data || []);
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
         localStorage.removeItem("accessToken");
         navigate("/login/");
-      } else {
-        toast.error(result.error);
       }
-      console.error("POST Request Error:", result.error);
     }
+    setIsLoading(false);
   };
 
   const getAllUsers = async () => {
-    const result = await UserAPI.getUserList();
-    if (result.success) {
-      console.log(result.response.data.user_list);
-      const users = result.response.data.user_list || [];
+    setIsLoading(true);
+    try {
+      const result = await UserAPI.getUserList();
+      if (result.success) {
+        console.log(result.response.data.user_list);
+        const users = result.response.data.user_list || [];
 
-      // Count total users, deleted users, and staff users
-      const totalUsers = users.length;
-      const deletedUsers = users.filter((user) => user.is_deleted).length;
-      const staffUsers = users.filter((user) => user.is_staff).length;
+        // Count total users, deleted users, and staff users
+        const totalUsers = users.length;
+        const deletedUsers = users.filter((user) => user.is_deleted).length;
+        const staffUsers = users.filter((user) => user.is_staff).length;
 
-      // Update the state using the state updater function
-      setTotalUsersCount(() => totalUsers);
-      setDeletedUsersCount(() => deletedUsers);
-      setStaffUsersCount(() => staffUsers);
+        // Update the state using the state updater function
+        setTotalUsersCount(() => totalUsers);
+        setDeletedUsersCount(() => deletedUsers);
+        setStaffUsersCount(() => staffUsers);
 
-      // Update the state using the state updater function
-      setAllUsers(() => users);
-    } else {
-      if (result.isLogout) {
+        // Update the state using the state updater function
+        setAllUsers(() => users);
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
         localStorage.removeItem("accessToken");
         navigate("/login/");
-      } else {
-        toast.error(result.error.response.data.error);
       }
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {

@@ -3,7 +3,10 @@ import { Table, Button, Modal, Select } from "antd";
 import { Link } from "react-router-dom";
 import api from "../apiConfig";
 import AddNewFileForm from "../components/FileComponents/AddNewFileForm";
-
+import CustomLoader from "../components/CustomLoader";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../App.css";
 
 const { Option } = Select;
 
@@ -71,8 +74,9 @@ const FilePage = () => {
   const [allFiles, setAllFiles] = useState([]);
   const [modules, setModules] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedModule, setSelectedModule] = useState('none');
-  const [selectedCategory, setSelectedCategory] = useState('none');
+  const [selectedModule, setSelectedModule] = useState("none");
+  const [selectedCategory, setSelectedCategory] = useState("none");
+  const [isLoading, setIsLoading] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -91,40 +95,86 @@ const FilePage = () => {
   };
 
   const handleFilter = async () => {
-    try {
-      if (selectedModule === 'none' && selectedCategory === 'none') {
-        // If both are 'None', do not apply any filters
+    if (selectedModule === "none" && selectedCategory === "none") {
+      // If both are 'None', do not apply any filters
+      setIsLoading(true);
+      try {
         const response = await api("GET", "/data/get_file_names/", {});
         setAllFiles(response.data.data);
-      } else {
-        const moduleParam = selectedModule !== 'none' ? `module_id=${selectedModule}` : '';
-        const categoryParam = selectedCategory !== 'none' ? `category_id=${selectedCategory}` : '';
-        const params = [moduleParam, categoryParam].filter(Boolean).join('&');
+      } catch (error) {
+        if (error.code === "ERR_NETWORK") {
+          toast.error(
+            "Server did not respond. Contact admin or try again later."
+          );
+        } else if (error.response.status === 404) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
+      }
+      setIsLoading(false);
+    } else {
+      const moduleParam =
+        selectedModule !== "none" ? `module_id=${selectedModule}` : "";
+      const categoryParam =
+        selectedCategory !== "none" ? `category_id=${selectedCategory}` : "";
+      const params = [moduleParam, categoryParam].filter(Boolean).join("&");
 
+      setIsLoading(true);
+      try {
         const response = await api("GET", `/data/filter_file_data/?${params}`);
         setAllFiles(response.data);
+      } catch (error) {
+        if (error.code === "ERR_NETWORK") {
+          toast.error(
+            "Server did not respond. Contact admin or try again later."
+          );
+        } else if (
+          error.response.status === 400 ||
+          error.response.status === 401
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       }
-    } catch (error) {
-      console.error("GET Request Error:", error);
+
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    setIsLoading(true);
     // Fetch all files when the component mounts
     const getAllFiles = async () => {
       try {
         const response = await api("GET", "/data/get_file_names/", {});
         setAllFiles(response.data.data);
       } catch (error) {
-        console.error("GET Request Error:", error);
+        if (error.code === "ERR_NETWORK") {
+          toast.error(
+            "Server did not respond. Contact admin or try again later."
+          );
+        } else if (
+          error.response.status === 404 ||
+          error.response.staus === 401
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       }
     };
 
     // Fetch modules and categories when the component mounts
     const getModulesAndCategories = async () => {
+      setIsLoading(true);
       try {
         const modulesResponse = await api("GET", "/data/get_file_modules/");
-        const categoriesResponse = await api("GET", "/data/get_file_categories/");
+        const categoriesResponse = await api(
+          "GET",
+          "/data/get_file_categories/"
+        );
 
         // Extract unique module names and category names
         const uniqueModules = modulesResponse.data.data;
@@ -133,12 +183,25 @@ const FilePage = () => {
         setModules(uniqueModules);
         setCategories(uniqueCategories);
       } catch (error) {
-        console.error("GET Request Error:", error);
+        if (error.code === "ERR_NETWORK") {
+          toast.error(
+            "Server did not respond. Contact admin or try again later."
+          );
+        } else if (
+          error.response.status === 404 ||
+          error.response.status === 401
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       }
     };
+    setIsLoading(false);
 
     getAllFiles();
     getModulesAndCategories();
+    setIsLoading(false);
   }, []);
 
   const handleFileUpload = (values, selectedFile) => {
@@ -157,42 +220,58 @@ const FilePage = () => {
       for (let pair of formData.entries()) {
         console.log(pair[0] + ", " + pair[1]); // Check formData contents
       }
-
+      setIsLoading(true);
       api("POST", "/data/upload_file/", formData, "multipart/form-data")
         .then((response) => {
+          setIsLoading(false);
           window.location.reload();
         })
         .catch((error) => {
-          console.error("POST Request Error:", error);
+          if (error.code === "ERR_NETWORK") {
+            toast.error("Server did not respond. Please contact admin.");
+          } else if (
+            error.response.status === 404 ||
+            error.response.status === 415
+          ) {
+            toast.error(error.response.data.error);
+          } else {
+            toast.error("Something went wrong.");
+          }
         });
+      setIsLoading(false);
     }
   };
 
   // Extracting relevant data for display
-  const displayData = allFiles.map(file => ({
+  const displayData = allFiles.map((file) => ({
     id: file.id,
     title: file.title,
     category_name: file.category_name,
     uploaded_by_username: file.uploaded_by_username,
-    uploaded_at: new Date(file.uploaded_at).toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
+    uploaded_at: new Date(file.uploaded_at).toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
     }),
-    modified_at: new Date(file.modified_at).toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
+    modified_at: new Date(file.modified_at).toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
     }),
     module_name: file.module_name,
   }));
 
   return (
     <div>
+      {isLoading ? (
+        <div className="centered-loader">
+          <CustomLoader />
+        </div>
+      ) : null}
       <div style={{ textAlign: "right" }}>
         <Select
           style={{ width: 150, marginRight: 16 }}
@@ -220,15 +299,17 @@ const FilePage = () => {
             </Option>
           ))}
         </Select>
-        <Button type="primary"
+        <Button
+          type="primary"
           size="large"
-          style={{ width: "200px", justifyContent: "left" }} onClick={handleFilter}>
+          style={{ width: "200px", justifyContent: "left" }}
+          onClick={handleFilter}
+        >
           Filter
         </Button>
-      
-        </div>
-        <br/>
-        <div style={{ textAlign: "left" }}>
+      </div>
+      <br />
+      <div style={{ textAlign: "left" }}>
         <Button
           type="primary"
           size="large"

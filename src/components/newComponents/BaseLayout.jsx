@@ -84,6 +84,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
 
       if (result.success) {
         localStorage.removeItem("accessToken");
+        toast.success("You have been logged out.");
         navigate("/login/");
       }
     } catch (error) {

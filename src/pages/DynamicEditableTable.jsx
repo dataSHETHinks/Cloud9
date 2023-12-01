@@ -17,6 +17,7 @@ import api from "../apiConfig";
 import "../App.css";
 import FileAPI from "../api/FileComponentApis/FileAPI";
 import { toast } from "react-toastify";
+import CustomLoader from "../components/CustomLoader";
 
 const EditableCell = ({
   editing,
@@ -82,10 +83,12 @@ const DynamicEditableTable = () => {
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const [showFileDetails, setShowFileDetails] = useState(false);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const isEditing = (record) => record.key === editingKey;
 
   useEffect(() => {
+    setIsLoading(true);
     const getFileData = async () => {
       try {
         const response = await api("GET", `/data/get_file_data/?id=${id}`);
@@ -136,11 +139,21 @@ const DynamicEditableTable = () => {
           toast.error("Empty or invalid response data");
         }
       } catch (error) {
-        toast.error("GET Request Error:", error);
+        if (error.code === "ERR_NETWORK") {
+        } else if (
+          error.response.status === 400 ||
+          error.response.status === 404 ||
+          error.response.status === 401
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       }
     };
 
     getFileData();
+    setIsLoading(false);
   }, [id]);
 
   const editRow = (record) => {
@@ -157,8 +170,8 @@ const DynamicEditableTable = () => {
   };
 
   const save = async (key) => {
+    setIsLoading(true);
     try {
-      console.log("inside save");
       const values = await form.validateFields(); // Capture validated form values
       const newData = [...dataSource];
       const index = newData.findIndex((item) => key === item.key);
@@ -176,19 +189,20 @@ const DynamicEditableTable = () => {
         const fileId = id; // Assuming fileId is a property in your item object
         const rowNum = item.key; // Assuming rowNum is a property in your item object
 
-        const result = await FileAPI.updateFileData(
-          fileId,
-          rowNum,
-          JSON.stringify(values)
-        );
-        if (result.success) {
-          toast.success(result.response.data.message);
-        } else {
-          if (result.isLogout) {
+        try {
+          const result = await FileAPI.updateFileData(
+            fileId,
+            rowNum,
+            JSON.stringify(values)
+          );
+          if (result.success) {
+            toast.success(result.response.data.message);
+          }
+        } catch (error) {
+          toast.error(error.error);
+          if (error.isLogout) {
             localStorage.removeItem("accessToken");
             navigate("/login/");
-          } else {
-            toast.error(result.error.response.data.error);
           }
         }
       } else {
@@ -197,11 +211,14 @@ const DynamicEditableTable = () => {
         setEditingKey("");
       }
     } catch (errInfo) {
+      toast.error("Something went wrong while updating data.");
       console.log("Validate Failed:", errInfo);
     }
+    setIsLoading(false);
   };
 
   const handleDownload = (downloadType) => {
+    setIsLoading(true);
     const requestData = {
       export_type: downloadType,
       file_id: id, // Assuming 'id' is a variable in your component
@@ -235,15 +252,22 @@ const DynamicEditableTable = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        console.log("File downloaded successfully:", response);
       })
       .catch((error) => {
-        console.error("File download error:", error);
+        if (error.code === "ERR_NETWORK") {
+        } else if (
+          error.response.status === 401 ||
+          error.response.status === 415
+        ) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Something went wrong.");
+        }
       })
       .finally(() => {
         setDownloadModalVisible(false);
       });
+    setIsLoading(false);
   };
 
   const mergedColumns = columns.map((col) => {
@@ -332,6 +356,11 @@ const DynamicEditableTable = () => {
 
   return (
     <>
+      {isLoading ? (
+        <div className="centered-loader">
+          <CustomLoader />
+        </div>
+      ) : null}
       <div
         style={{
           marginBottom: 16,
