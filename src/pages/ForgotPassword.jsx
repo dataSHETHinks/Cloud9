@@ -106,7 +106,7 @@ function ForgotPassword() {
           >
             {!enterCode && (
               <Form.Item
-                label="Username or Email"
+                label="Username"
                 name="usernameOrEmail"
                 rules={[
                   {

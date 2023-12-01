@@ -245,15 +245,15 @@ const BaseLayout = ({ componentToRender: Component }) => {
               float: "left",
             }}
           />
-          {collapsed && (
+          { (
             <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", fontWeight: "bold", float: "left", padding: "16px", marginRight:"-20px"}}>
-              FETHERSTILL INC
+              {pageTitle}
             </div>
           )}
 
           {(
-            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", float: "right", padding: "16px", marginRight:"10px"}}>
-              {pageTitle}
+            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", fontWeight:"bold", float: "right", padding: "16px", marginRight:"10px"}}>
+              FETHERSTILL INC.
             </div>
           )}
         </Header>
