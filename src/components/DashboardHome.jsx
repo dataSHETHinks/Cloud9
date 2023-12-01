@@ -6,6 +6,7 @@ import { Card, Col, Row, Statistic, Table } from "antd";
 import RoleAPI from "../api/RoleComponentApis/RoleAPI";
 import api from "../apiConfig";
 import CustomLoader from "./CustomLoader";
+import { Link } from "react-router-dom";
 
 const DashboardHome = () => {
   const navigate = useNavigate();
@@ -52,6 +53,46 @@ const DashboardHome = () => {
     },
   ];
 
+  const file_columns = [
+    {
+      title: "#",
+      dataIndex: "index",
+      key: "index",
+      align: "center",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Title",
+      dataIndex: "title",
+      align: "center",
+      sorter: (a, b) => a.title.localeCompare(b.title),
+      sortDirections: ["ascend", "descend"],
+    },
+
+    {
+      title: "Uploaded By",
+      dataIndex: "uploaded_by_username",
+      align: "center",
+      sorter: (a, b) =>
+        a.uploaded_by_username.localeCompare(b.uploaded_by_username),
+      sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: "Uploaded At",
+      dataIndex: "uploaded_at",
+      align: "center",
+      sorter: (a, b) => new Date(a.uploaded_at) - new Date(b.uploaded_at),
+      sortDirections: ["ascend", "descend"],
+    },
+
+    {
+      title: "Action",
+      dataIndex: "id",
+      align: "center",
+      render: (id) => <Link to={`/FileDetails/${id}`}>View Details</Link>,
+    },
+  ];
+
   const userColumns = [
     // {
     //   title: "#",
@@ -89,17 +130,6 @@ const DashboardHome = () => {
   };
 
   const getAllFiles = async () => {
-    // const result = await FileAPI.listAllFiles();
-    // if (result.success) {
-    //   setAllFiles(result.response.data);
-    // } else {
-    //   if (result.isLogout) {
-    //     localStorage.removeItem("accessToken");
-    //     navigate("/login/");
-    //   } else {
-    //     toast.error(result.error);
-    //   }
-    // }
     setIsLoading(true);
     try {
       const response = await api("GET", "/data/get_file_names/", {});
@@ -109,8 +139,11 @@ const DashboardHome = () => {
         toast.error(
           "Server did not respond. Contact admin or try again later."
         );
-      } else if (error.response.status === 404) {
-        toast.error("No file names found.");
+      } else if (
+        error.response.status === 404 ||
+        error.response.staus === 401
+      ) {
+        toast.error(error.response.data.error);
       } else {
         toast.error("Something went wrong.");
       }
@@ -204,10 +237,17 @@ const DashboardHome = () => {
           <CustomLoader />
         </div>
       ) : null}
-      <div style={{ margin: "20px" }}>
+      <div>
         {user && (
-          <p style={{ fontSize: "24px", textAlign: "left" }}>
-            Welcome, {user.username}
+          <p
+            style={{
+              fontSize: "24px",
+              textAlign: "left",
+              marginTop: "-10px",
+              marginLeft: "10px",
+            }}
+          >
+            Welcome {user.first_name}
           </p>
         )}
 
@@ -229,6 +269,10 @@ const DashboardHome = () => {
                 bordered={false}
                 style={{
                   fontWeight: "bold",
+                  marginTop: "-20px",
+                  width: "900px",
+                  fontSize: "18px",
+                  textAlign: "center",
                 }}
               >
                 <Row style={{ justifyContent: "center" }} gutter={16}>
@@ -254,16 +298,16 @@ const DashboardHome = () => {
               <p
                 style={{
                   fontSize: "18px",
-                  textAlign: "left",
-                  marginBottom: "10px",
+                  textAlign: "center",
+                  marginBottom: "20px",
                 }}
               >
-                Roles
+                Last Uploaded Files
               </p>
               <div style={{ maxHeight: "200px", overflowY: "auto" }}>
                 <Table
-                  dataSource={allRoles}
-                  columns={roleColumns}
+                  dataSource={allFiles}
+                  columns={file_columns}
                   pagination={false}
                 />
               </div>
@@ -288,15 +332,33 @@ const DashboardHome = () => {
                 title="User Statistics"
                 bordered={false}
                 style={{
-                  width: 350,
+                  width: 250,
                   backgroundColor: "#f4f4f4",
                   fontWeight: "bold",
+                  marginTop: "-35px",
+                  marginLeft: "20px",
                 }}
               >
                 <Statistic title="Total Users" value={totalUsersCount} />
-                <Statistic title="Deleted Users" value={deletedUsersCount} />
-                <Statistic title="Staff Users" value={staffUsersCount} />
+                {/* <Statistic title="Deleted Users" value={deletedUsersCount} />
+                <Statistic title="Staff Users" value={staffUsersCount} /> */}
               </Card>
+              <p
+                style={{
+                  fontSize: "18px",
+                  marginRight: "175px",
+                  marginBottom: "10px",
+                  marginTop: "50px",
+                }}
+              >
+                Roles
+              </p>
+              <Table
+                dataSource={allRoles}
+                columns={roleColumns}
+                pagination={false}
+                style={{ width: 250, marginLeft: 20, marginTop: 20 }}
+              />
             </div>
           </div>
         </div>
