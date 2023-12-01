@@ -63,7 +63,7 @@ function ChangePassword() {
       </Form.Item>
 
       <Form.Item
-        label="Cofirm Password"
+        label="Confirm Password"
         name="confirmNewPassword"
         rules={[
           {
