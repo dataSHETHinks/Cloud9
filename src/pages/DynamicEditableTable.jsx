@@ -86,7 +86,7 @@ const DynamicEditableTable = () => {
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [showFileDetails, setShowFileDetails] = useState(false);
   const navigate = useNavigate();
-  const [filterType, setFilterType] = useState('range');
+  const [filterType, setFilterType] = useState('value');
   const [selectedColumn, setSelectedColumn] = useState('');
   const [filterValueFrom, setFilterValueFrom] = useState('');
   const [filterValueTo, setFilterValueTo] = useState('');
@@ -100,9 +100,100 @@ const DynamicEditableTable = () => {
     setFilterModalVisible(true);
   };
 
+  const handleClearFilterClick = async () => {
+    try {
+      const response = await api("GET", `/data/get_file_data/?id=${id}`);
+
+      if (response && response.data.data.data) {
+        const fileData = response.data;
+        const sampleObject = fileData.data.data;
+
+        // Extract column names excluding "id"
+        const columnNames = Object.keys(sampleObject[1])
+
+        // Set columns for the table
+        const newColumns = columnNames.map((key) => ({
+          title: key,
+          dataIndex: key,
+          key: key,
+          width: 150,
+          editable: true,
+          align: 'center',
+        }));
+
+        setColumns(newColumns);
+
+        // Set dataSource for the table
+        const dataSource = Object.entries(sampleObject).map(([key, item]) => ({
+          ...item,
+          key,
+          index: key,
+        }));
+
+        setDataSource(dataSource);
+
+        // Reset filter values in the state
+        setFilterType('value');
+        setSelectedColumn('');
+        setFilterValueFrom('');
+        setFilterValueTo('');
+        setFilterValue('');
+
+      } else {
+        toast.error("Empty or invalid response data");
+      }
+    } catch (error) {
+      toast.error("GET Request Error:", error);
+    }
+  };
+
+
   // Function to handle filter modal Ok button click
   const handleFilterModalOk = () => {
-    // Implement your filter logic here
+    let filter_value = "";
+    // Set the filter_value based on the filter type
+    if (filterType === 'date' || filterType === 'range') {
+      filter_value = `${filterValueFrom}-${filterValueTo}`;
+    } else {
+      filter_value = filterValue;
+    }
+
+    try {
+      // Make the API call to filter_by_column
+      api("GET", `/data/filter_by_column/?id=${id}&column_name=${selectedColumn}&filter_type=${filterType}&filter_value=${filter_value}`).then((response) => {
+        const fileData = response.data.filtered_data;
+
+        // Extract column names excluding "id"
+        const columnNames = Object.keys(fileData[Object.keys(fileData)[0]]);
+
+        // Set columns for the table
+        const newColumns = columnNames.map((key) => ({
+          title: key,
+          dataIndex: key,
+          key: key,
+          width: 150,
+          editable: true,
+          align: 'center',
+        }));
+
+        setColumns(newColumns);
+
+        // Set dataSource for the table
+        const dataSource = Object.entries(fileData).map(([key, item]) => ({
+          ...item,
+          key,
+          index: key,
+        }));
+
+        setDataSource(dataSource);
+      }).catch((error) => {
+        console.log(error);
+        console.error("Error in filtering data");
+      });
+    } catch (error) {
+      // Handle API call error
+      console.error("API call error:", error);
+    }
     setFilterModalVisible(false);
   };
 
@@ -375,9 +466,12 @@ const DynamicEditableTable = () => {
         >
           Download
         </Button>
-        <Button type="default" size="large" icon={<FilterOutlined />} onClick={handleFilterButtonClick} style={{ width: "200px" }} >
-          Filter
-        </Button>
+        <div style={{ display: "flex" }}>
+          <Button type="default" size="large" icon={<FilterOutlined />} onClick={handleFilterButtonClick} style={{ width: "150px", marginRight: "20px" }} >
+            Filter
+          </Button>
+          <Button type="primary" size="large" style={{ width: "100px" }} onClick={handleClearFilterClick}>Clear</Button>
+        </div>
       </div>
       <Form form={form} component={false}>
         <Table
@@ -389,7 +483,7 @@ const DynamicEditableTable = () => {
           }}
           bordered
           dataSource={dataSource}
-          columns={[operationColumn, idxCols, ...mergedColumns]}
+          columns={[operationColumn, ...mergedColumns]}
           rowClassName="editable-row"
           pagination={false}
           onRow={(record) => ({
@@ -420,15 +514,15 @@ const DynamicEditableTable = () => {
           <Form.Item label="Filter Type">
             <Radio.Group onChange={(e) => setFilterType(e.target.value)} value={filterType}>
               <Row gutter={8}>
-                <Col span={8}>
+                <Col span={10}>
                   <Radio value="value">Value</Radio>
                 </Col>
                 <Col span={8}>
                   <Radio value="range">Range</Radio>
                 </Col>
-                <Col span={8}>
+                {/* <Col span={8}>
                   <Radio value="date">Date</Radio>
-                </Col>
+                </Col> */}
               </Row>
             </Radio.Group>
           </Form.Item>
@@ -439,6 +533,7 @@ const DynamicEditableTable = () => {
               style={{ width: '100%' }}
               onChange={(value) => setSelectedColumn(value)}
               value={selectedColumn}
+              placeholder="Select a column"
             >
               {filterColumns.map((column) => (
                 <Select.Option key={column} value={column}>
@@ -473,28 +568,6 @@ const DynamicEditableTable = () => {
             </>
           )}
 
-          {/* {filterType === 'date' && (
-            <>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Form.Item label="From">
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    value={filterValueFrom}
-                    onChange={(date, dateString) => setFilterValueFrom(dateString)}
-                    placeholder="From Date"
-                  />
-                </Form.Item>
-                <Form.Item label="To">
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    value={filterValueTo}
-                    onChange={(date, dateString) => setFilterValueTo(dateString)}
-                    placeholder="To Date"
-                  />
-                </Form.Item>
-              </div>
-            </>
-          )} */}
           {filterType === 'date' && (
             <>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
