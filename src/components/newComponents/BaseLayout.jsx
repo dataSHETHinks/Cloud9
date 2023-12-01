@@ -39,23 +39,23 @@ const BaseLayout = ({ componentToRender: Component }) => {
     const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
     if (userFromLocalStorage) {
       const roles = userFromLocalStorage.roles || [];
+      console.log("Roles", roles);
+      roles.forEach(role => {
+        const {
+          can_modify_category,
+          can_modify_files,
+          can_modify_module,
+          can_modify_roles,
+          can_modify_user,
+        } = role;
 
-      const {
-        can_modify_category,
-        can_modify_files,
-        can_modify_module,
-        can_modify_roles,
-        can_modify_user,
-      } = roles;
-
-      setCanModifyCategory(!can_modify_category); // Convert to boolean
-      setCanModifyFiles(!can_modify_files);
-      setCanModifyModule(!can_modify_module);
-      setCanModifyRoles(!can_modify_roles);
-      setCanModifyUser(!can_modify_user);
-      console.log("setCanModifyCategory", canModifyUser);
-      console.log("set", canModifyModule);
-      setUserRoles(roles);
+        setCanModifyCategory(can_modify_category); // Convert to boolean
+        setCanModifyFiles(can_modify_files);
+        setCanModifyModule(can_modify_module);
+        setCanModifyRoles(can_modify_roles);
+        setCanModifyUser(can_modify_user);
+        setUserRoles(roles);
+      });
     }
     // Function to parse the URL and set the selectedKey based on it
     const updateSelectedKey = () => {
@@ -161,7 +161,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
 
               case "1":
                 if (canModifyFiles) {
-                   handleNavigate("/Files");
+                  handleNavigate("/Files");
                 }
 
                 break;
@@ -219,7 +219,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
               icon: <UsergroupAddOutlined />,
               label: "Users",
               link: "/Users",
-              disabled: canModifyUser, // Disable if the user doesn't have permission
+              disabled: !canModifyUser, // Disable if the user doesn't have permission
             },
             {
               key: "4",
@@ -233,7 +233,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
               icon: <MergeCellsOutlined />,
               label: "Modules",
               link: "/Modules/",
-              disabled: canModifyModule, // Disable if the user doesn't have permission
+              disabled: !canModifyModule, // Disable if the user doesn't have permission
             },
             {
               key: "6",
