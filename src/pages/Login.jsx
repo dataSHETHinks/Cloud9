@@ -50,7 +50,9 @@ function Login() {
         </div>
       ) : null}
       <div className="login-container">
-        <div className="left-side"></div>
+        <div className="left-side">
+        <div className="company-name">FETHERSTILL INC.</div>
+        </div>
         <div className="right-side">
           <div className="login-form w-50 p-3">
             <form onSubmit={handleLogin}>
