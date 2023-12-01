@@ -16,6 +16,7 @@ import {
 import { Layout, Menu, Button, theme } from "antd";
 import logoImage from "../../assets/companylogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
+import UserAPI from "../../api/UserComponentApis/UserAPI";
 import CustomLoader from "../CustomLoader";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,8 +32,35 @@ const BaseLayout = ({ componentToRender: Component }) => {
   const location = useLocation(); // Get the current location object
   const [selectedKey, setSelectedKey] = useState("8"); // Set default selectedKey
   const [pageTitle, setPageTitle] = useState("Home");
+  const [userRoles, setUserRoles] = useState([]);
+  const [canModifyCategory, setCanModifyCategory] = useState(false);
+  const [canModifyFiles, setCanModifyFiles] = useState(false);
+  const [canModifyModule, setCanModifyModule] = useState(false);
+  const [canModifyRoles, setCanModifyRoles] = useState(false);
+  const [canModifyUser, setCanModifyUser] = useState(false);
 
   useEffect(() => {
+    const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+    if (userFromLocalStorage) {
+      const roles = userFromLocalStorage.roles || [];
+      console.log("Roles", roles);
+      roles.forEach(role => {
+        const {
+          can_modify_category,
+          can_modify_files,
+          can_modify_module,
+          can_modify_roles,
+          can_modify_user,
+        } = role;
+
+        setCanModifyCategory(can_modify_category); // Convert to boolean
+        setCanModifyFiles(can_modify_files);
+        setCanModifyModule(can_modify_module);
+        setCanModifyRoles(can_modify_roles);
+        setCanModifyUser(can_modify_user);
+        setUserRoles(roles);
+      });
+    }
     // Function to parse the URL and set the selectedKey based on it
     const updateSelectedKey = () => {
       const paths = location.pathname.split("/").filter(Boolean); // Split the URL path
@@ -79,10 +107,10 @@ const BaseLayout = ({ componentToRender: Component }) => {
           setSelectedKey("9"); // Default to Home if no match
           setPageTitle("Home");
           break;
-      } 
+      }
     };
+    updateSelectedKey();
 
-    updateSelectedKey(); // Call the function initially
   }, [location.pathname]);
 
   const { Header, Sider, Content } = Layout;
@@ -130,7 +158,8 @@ const BaseLayout = ({ componentToRender: Component }) => {
               FETHERSTILL INC
             </div>
           )}
-          <br/>
+          {console.log("userRoles" + userRoles)}
+          <br />
         </div>
 
         <Menu
@@ -139,24 +168,29 @@ const BaseLayout = ({ componentToRender: Component }) => {
           selectedKeys={[selectedKey]}
           defaultSelectedKeys={["8"]}
           onClick={({ key }) => {
+
             switch (key) {
+
               case "1":
-                handleNavigate("/Files");
+                if (canModifyFiles) {
+                  handleNavigate("/Files");
+                }
+
                 break;
               case "2":
-                handleNavigate("/FilesHistory");
+                if (canModifyFiles) handleNavigate("/FilesHistory");
                 break;
               case "3":
-                handleNavigate("/Users");
+                if (canModifyUser) handleNavigate("/Users");
                 break;
               case "4":
-                handleNavigate("/Roles");
+                if (canModifyRoles) handleNavigate("/Roles");
                 break;
               case "5":
-                handleNavigate("/Modules");
+                if (canModifyModule) handleNavigate("/Modules");
                 break;
               case "6":
-                handleNavigate("/Categories");
+                if (canModifyCategory) handleNavigate("/Categories");
                 break;
               case "7":
                 handleNavigate("/ChangePassword");
@@ -183,36 +217,42 @@ const BaseLayout = ({ componentToRender: Component }) => {
               icon: <FileTextOutlined />,
               label: "Files",
               link: "/Files",
+              disabled: !canModifyFiles, // Disable if the user doesn't have permission
             },
             {
               key: "2",
               icon: <HistoryOutlined />,
               label: "Files History",
               link: "/FilesHistory",
+              disabled: !canModifyFiles, // Disable if the user doesn't have permission
             },
             {
               key: "3",
               icon: <UsergroupAddOutlined />,
               label: "Users",
               link: "/Users",
+              disabled: !canModifyUser, // Disable if the user doesn't have permission
             },
             {
               key: "4",
               icon: <ClusterOutlined />,
               label: "Roles",
               link: "/Roles/",
+              disabled: !canModifyRoles, // Disable if the user doesn't have permission
             },
             {
               key: "5",
               icon: <MergeCellsOutlined />,
               label: "Modules",
               link: "/Modules/",
+              disabled: !canModifyModule, // Disable if the user doesn't have permission
             },
             {
               key: "6",
               icon: <UnorderedListOutlined />,
               label: "Categories",
               link: "/Categories",
+              disabled: !canModifyCategory, // Disable if the user doesn't have permission
             },
             {
               key: "7",
@@ -226,7 +266,6 @@ const BaseLayout = ({ componentToRender: Component }) => {
               label: "Log Out",
               // link: "/Files",
             },
-            // Add other menu items with their corresponding links here
           ]}
         />
       </Sider>
@@ -245,6 +284,7 @@ const BaseLayout = ({ componentToRender: Component }) => {
               float: "left",
             }}
           />
+
           { (
             <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", fontWeight: "bold", float: "left", padding: "16px", marginRight:"-20px"}}>
               {pageTitle}

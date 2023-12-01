@@ -70,10 +70,12 @@ const DashboardHome = () => {
   ];
 
   const getUserDetails = async () => {
+
     setIsLoading(true);
     try {
       const result = await UserAPI.getUserDetails();
       if (result.success) {
+        localStorage.setItem("user", JSON.stringify(result.response.data));
         setUser(result.response.data);
       }
     } catch (error) {
