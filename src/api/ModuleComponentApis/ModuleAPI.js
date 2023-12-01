@@ -20,7 +20,9 @@ class ModuleAPI {
 
   static async addNewModule(moduleName) {
     try {
-      const response = await api("POST", "data/add_new_module/", { name: moduleName });
+      const response = await api("POST", "data/add_new_module/", {
+        name: moduleName,
+      });
       return Promise.resolve({
         success: true,
         response,
@@ -29,11 +31,11 @@ class ModuleAPI {
     } catch (error) {
       return Promise.reject({
         success: false,
-        error,
+        error: error.response.data.error,
         isLogout: error.response && error.response.status === 401,
       });
     }
   }
-  }
+}
 
 export default ModuleAPI;

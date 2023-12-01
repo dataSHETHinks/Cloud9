@@ -1,17 +1,17 @@
 // UserAdd.js
-import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Select, Button } from 'antd';
-import UserAPI from '../../api/UserComponentApis/UserAPI';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
-import RoleAPI from '../../api/RoleComponentApis/RoleAPI';
+import React, { useEffect, useState } from "react";
+import { Modal, Form, Input, Select, Button } from "antd";
+import UserAPI from "../../api/UserComponentApis/UserAPI";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import RoleAPI from "../../api/RoleComponentApis/RoleAPI";
 
 const AddUser = () => {
-
   const navigate = useNavigate();
   const [newUserVisible, setNewUserVisible] = useState(false);
   const [form] = Form.useForm();
   const [userRoles, setUserRoles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getUserRoles();
@@ -26,33 +26,41 @@ const AddUser = () => {
   };
 
   const getUserRoles = async () => {
-    const result = await RoleAPI.getUserRoles();
-    if (result.success) {
-
-      setUserRoles(result.response.data || []);
-    } else {
-      if (result.isLogout) {
+    setIsLoading(true);
+    try {
+      const result = await RoleAPI.getUserRoles();
+      if (result.success) {
+        setUserRoles(result.response.data || []);
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
         localStorage.removeItem("accessToken");
         navigate("/login/");
-      } else {
-        toast.error(result.error);
       }
     }
-  }
+    setIsLoading(false);
+  };
 
   const addUsers = async (values) => {
-    const result = await UserAPI.addNewUser(values.username, values.email, values.password, values.role);
-    if (result.success) {
-      window.location.reload();
-    } else {
-      if (result.isLogout) {
+    try {
+      const result = await UserAPI.addNewUser(
+        values.username,
+        values.email,
+        values.password,
+        values.role
+      );
+      if (result.success) {
+        window.location.reload();
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
         localStorage.removeItem("accessToken");
         navigate("/login/");
-      } else {
-        toast.error(result.error);
       }
     }
-  }
+  };
 
   const handleAddUserSubmit = async () => {
     try {
@@ -61,14 +69,19 @@ const AddUser = () => {
       form.resetFields();
       setNewUserVisible(false);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
     }
   };
 
   return (
     <>
-      <div style={{ textAlign: 'left', marginRight: "20px" }}>
-        <Button type="primary" size="large" style={{ width: "240px", justifyContent: "left" }} onClick={showAddUserModal}>
+      <div style={{ textAlign: "left", marginRight: "20px" }}>
+        <Button
+          type="primary"
+          size="large"
+          style={{ width: "240px", justifyContent: "left" }}
+          onClick={showAddUserModal}
+        >
           + Add New User
         </Button>
       </div>
@@ -82,15 +95,17 @@ const AddUser = () => {
           <Button key="cancel" onClick={handleAddUserCancel}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={handleAddUserSubmit} style={{ marginInlineStart: 0 }}>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleAddUserSubmit}
+            style={{ marginInlineStart: 0 }}
+          >
             Submit
           </Button>,
         ]}
       >
-        <Form
-          form={form}
-          layout="vertical"
-        >
+        <Form form={form} layout="vertical">
           <Form.Item
             label="Username"
             name="username"
@@ -120,9 +135,7 @@ const AddUser = () => {
             name="role"
             rules={[{ required: true, message: "Please select the role!" }]}
           >
-            <Select
-              placeholder="Select Role"
-            >
+            <Select placeholder="Select Role">
               {userRoles.map((role) => (
                 <Select.Option key={role.id} value={role.id}>
                   {role.title}
@@ -130,7 +143,6 @@ const AddUser = () => {
               ))}
             </Select>
           </Form.Item>
-
         </Form>
       </Modal>
     </>

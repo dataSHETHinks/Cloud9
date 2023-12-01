@@ -17,9 +17,13 @@ import { Layout, Menu, Button, theme } from "antd";
 import logoImage from "../../assets/companylogo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserAPI from "../../api/UserComponentApis/UserAPI";
+import CustomLoader from "../CustomLoader";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BaseLayout = ({ componentToRender: Component }) => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -117,15 +121,23 @@ const BaseLayout = ({ componentToRender: Component }) => {
   const logoTransitionClass = collapsed ? "logo-collapsed" : "logo-expanded";
 
   const handleLogout = async (e) => {
-    const result = await AuthAPI.logout();
+    setIsLoading(true);
+    try {
+      const result = await AuthAPI.logout();
 
-    if (result.success) {
-      localStorage.removeItem("accessToken");
-      navigate("/login/");
-    } else {
-      // Logout failed, handle the error
-      console.error(result.error);
+      if (result.success) {
+        localStorage.removeItem("accessToken");
+        toast.success("You have been logged out.");
+        navigate("/login/");
+      }
+    } catch (error) {
+      toast.error(error.error);
+      if (error.isLogout) {
+        localStorage.removeItem("accessToken");
+        navigate("/login/");
+      }
     }
+    setIsLoading(false);
   };
 
   return (
@@ -272,15 +284,16 @@ const BaseLayout = ({ componentToRender: Component }) => {
               float: "left",
             }}
           />
-          {collapsed && (
-            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop: "-15px", fontWeight: "bold", float: "left", padding: "16px", marginRight: "-20px" }}>
-              FETHERSTILL INC
+
+          { (
+            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", fontWeight: "bold", float: "left", padding: "16px", marginRight:"-20px"}}>
+              {pageTitle}
             </div>
           )}
 
           {(
-            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop: "-15px", float: "right", padding: "16px", marginRight: "10px" }}>
-              {pageTitle}
+            <div style={{ color: "#000", fontFamily: "Arial, sans-serif", fontSize: "18px", marginTop : "-15px", fontWeight:"bold", float: "right", padding: "16px", marginRight:"10px"}}>
+              FETHERSTILL INC.
             </div>
           )}
         </Header>
@@ -293,6 +306,11 @@ const BaseLayout = ({ componentToRender: Component }) => {
             background: colorBgContainer,
           }}
         >
+          {isLoading ? (
+            <div className="centered-loader">
+              <CustomLoader />
+            </div>
+          ) : null}
           {Component && <Component />}
         </Content>
       </Layout>

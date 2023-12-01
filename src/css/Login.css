@@ -14,9 +14,17 @@
   background: url('../assets/companylogo.png') no-repeat center center;
   background-size: cover;
   background-size: 350px 350px;
+  margin-bottom: 60px;
   /* background-color: #f7f7f7; Light Grayish Background for the left side */
 }
 
+.company-name {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 440px;
+  margin-left: 20px;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
 /* Logo */
 .left-side img {
   width: 150px; /* Adjust the size as needed */
