@@ -43,7 +43,7 @@ const EditableCell = ({
           name={dataIndex}
           style={{ margin: 0 }}
           rules={[{ required: true, message: `Please Input ${title}!` }]}
-          // initialValue={record[dataIndex]}
+        // initialValue={record[dataIndex]}
         >
           {inputNode}
         </Form.Item>
@@ -486,16 +486,18 @@ const DynamicEditableTable = () => {
         <div className="centered-loader">
           <CustomLoader />
         </div>
-      <div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
+      ) : null}
+      < div style={{ marginBottom: 16, display: "flex", alignItems: "flex-end", justifyContent: "flex-end" }}>
         <Switch
           checked={showFileDetails}
           onChange={setShowFileDetails}
           style={{ width: "10px", marginRight: 8 }}
         />
         <span>Show File Details</span>
-      </div>
+      </div >
 
-      {showFileDetails && detailsContent}
+      {showFileDetails && detailsContent
+      }
 
       <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between" }}>
         <Button

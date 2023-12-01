@@ -99,7 +99,7 @@ const UserList = (params) => {
               roles && roles.length > 0 ? (<div>
                 {roles.map((role, index) => (
                   <span key={index}>
-                    {index+1}. {role}
+                    {role.title}
                     <br />
                   </span>
                 ))}
