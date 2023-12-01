@@ -71,6 +71,8 @@ const DashboardHome = () => {
   const getUserDetails = async () => {
     const result = await UserAPI.getUserDetails();
     if (result.success) {
+      console.log(result.response);
+      localStorage.setItem("user", JSON.stringify(result.response.data));
       setUser(result.response.data);
     } else {
       if (result.isLogout) {
