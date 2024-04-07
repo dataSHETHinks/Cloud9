@@ -62,7 +62,7 @@ const AddRole = () => {
 
     return (
         <div>
-            <div style={{ textAlign: 'left', marginRight: "20px" }}>
+            <div style={{ textAlign: 'left' }}>
                 <Button type="primary" size="large"
                     style={{ width: "240px", justifyContent: "left" }} onClick={showModal}>
                     + Add User Role
