@@ -7,17 +7,14 @@ import ListUsers from "../components/UserComponents/UserList";
 import AddUser from "../components/UserComponents/AddUser";
 import AssignedChangeUserRole from "../components/RoleComponents/AssignedChangeUserRole";
 
-
-const { Column } = Table;
-const { confirm } = Modal;
-
 const UsersPage = (params) => {
   return (
     <>
-       <div className="row" style={{ display: "flex" }}>
+      <div className="row" style={{ display: "flex" }}>
         <AddUser />
+        <AssignedChangeUserRole/>
       </div>
-       <ListUsers />
+      <ListUsers />
     </>
   );
 };

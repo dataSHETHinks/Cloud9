@@ -96,7 +96,14 @@ const UserList = (params) => {
             key="roles"
             align='center'
             render={(roles) =>
-              roles && roles.length > 0 ? roles : <span style={{ color: "red" }}>Not Assigned</span>
+              roles && roles.length > 0 ? (<div>
+                {roles.map((role, index) => (
+                  <span key={index}>
+                    {index+1}. {role}
+                    <br />
+                  </span>
+                ))}
+              </div>) : <span style={{ color: "red" }}>Not Assigned</span>
             }
           />
           <Column

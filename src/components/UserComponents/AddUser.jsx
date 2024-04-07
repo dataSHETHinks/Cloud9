@@ -1,5 +1,5 @@
 // UserAdd.js
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Button } from 'antd';
 import UserAPI from '../../api/UserComponentApis/UserAPI';
 import { toast } from 'react-toastify';
@@ -13,7 +13,7 @@ const AddUser = () => {
   const [form] = Form.useForm();
   const [userRoles, setUserRoles] = useState([]);
 
-  useEffect(() =>{
+  useEffect(() => {
     getUserRoles();
   }, []);
 
@@ -37,12 +37,12 @@ const AddUser = () => {
       } else {
         toast.error(result.error);
       }
+    }
   }
-}
 
-  const addUsers = async(values) => {
+  const addUsers = async (values) => {
     const result = await UserAPI.addNewUser(values.username, values.email, values.password, values.role);
-    if(result.success){
+    if (result.success) {
       window.location.reload();
     } else {
       if (result.isLogout) {
@@ -56,71 +56,71 @@ const AddUser = () => {
 
   const handleAddUserSubmit = async () => {
     try {
-        const values = await form.validateFields();
-        addUsers(values);
-        form.resetFields();
-        setNewUserVisible(false);
+      const values = await form.validateFields();
+      addUsers(values);
+      form.resetFields();
+      setNewUserVisible(false);
     } catch (error) {
-        console.error('Error submitting form:', error);
+      console.error('Error submitting form:', error);
     }
   };
 
   return (
     <>
-      <div style={{ textAlign: 'left' }}>
+      <div style={{ textAlign: 'left', marginRight: "20px" }}>
         <Button type="primary" size="large" style={{ width: "240px", justifyContent: "left" }} onClick={showAddUserModal}>
           + Add New User
         </Button>
       </div>
 
-      <Modal 
-            title="Add New User" 
-            open={newUserVisible} 
-            onCancel={handleAddUserCancel} 
-            onOk={handleAddUserSubmit}
-            footer={[
-                  <Button key="cancel" onClick={handleAddUserCancel}>
-                    Cancel
-                  </Button>,
-                  <Button key="submit" type="primary" onClick={handleAddUserSubmit} style={{ marginInlineStart: 0 }}>
-                    Submit
-                  </Button>,
-              ]}
+      <Modal
+        title="Add New User"
+        open={newUserVisible}
+        onCancel={handleAddUserCancel}
+        onOk={handleAddUserSubmit}
+        footer={[
+          <Button key="cancel" onClick={handleAddUserCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleAddUserSubmit} style={{ marginInlineStart: 0 }}>
+            Submit
+          </Button>,
+        ]}
       >
-        <Form 
-          form={form} 
+        <Form
+          form={form}
           layout="vertical"
         >
-          <Form.Item 
-            label="Username" 
-            name="username" 
+          <Form.Item
+            label="Username"
+            name="username"
             rules={[{ required: true, message: "Please input the username!" }]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item 
-            label="Email" 
-            name="email" 
+          <Form.Item
+            label="Email"
+            name="email"
             rules={[{ required: true, message: "Please input the email!" }]}
           >
             <Input type="email" />
           </Form.Item>
 
-          <Form.Item 
-            label="Password" 
-            name="password" 
+          <Form.Item
+            label="Password"
+            name="password"
             rules={[{ required: true, message: "Please input the password!" }]}
           >
             <Input.Password />
           </Form.Item>
 
-          <Form.Item 
-            label="Role" 
-            name="role" 
+          <Form.Item
+            label="Role"
+            name="role"
             rules={[{ required: true, message: "Please select the role!" }]}
           >
-            <Select 
+            <Select
               placeholder="Select Role"
             >
               {userRoles.map((role) => (

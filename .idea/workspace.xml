@@ -16,9 +16,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2Y9VfgDkRpORhqM0tXJ94uDpUXy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -29,7 +29,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Krunali-Implement-Module",
+    "git-widget-placeholder": "development",
     "last_opened_file_path": "C:/Users/dkrue/Absolute_Zero/Business-4-Frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -48,6 +48,7 @@
       <option name="presentableId" value="Default" />
       <updated>1699937887248</updated>
       <workItem from="1699937888378" duration="804000" />
+      <workItem from="1701283925334" duration="55000" />
     </task>
     <servers />
   </component>
